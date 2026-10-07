@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tin học 10 – Bài 11: Ứng xử trong môi trường số</title>
+<style>
+:root{--navy:#0f1f3d;--navy2:#1b315c;--blue:#2563eb;--sky:#e8f0fe;--orange:#f97316;--green:#16a34a;--red:#dc2626;--yellow:#f59e0b;--violet:#7c3aed;--bg:#f3f6fb;--card:#fff;--ink:#16223a;--mute:#5b6781;--line:#dbe3ef;--r:14px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:16px}
+h1,h2,h3{line-height:1.25;margin:0 0 .5em;text-wrap:balance}
+button{font:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+header.top{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;padding:8px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:800;letter-spacing:.3px;margin-right:auto}
+.brand small{display:block;font-weight:500;opacity:.75;font-size:12px}
+.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:99px;padding:4px 11px;font-size:13px;white-space:nowrap}
+button.pill:hover{background:rgba(255,255,255,.22)}
+.pill.demo{background:#fde68a;color:#713f12;border-color:#fde68a;font-weight:700}
+.pill.wait{background:#fed7aa;color:#7c2d12;border-color:#fed7aa}
+.steps{background:var(--navy2);display:flex;gap:4px;padding:6px 10px;overflow-x:auto}
+.steps button{flex:1;min-width:120px;border:0;border-radius:8px;padding:7px 8px;background:rgba(255,255,255,.08);color:#c9d6f0;font-size:12.5px;text-align:left}
+.steps button b{display:block;font-size:11px;opacity:.8}
+.steps button.on{background:var(--orange);color:#fff}
+.steps button.ok{background:rgba(22,163,74,.35);color:#fff}
+.steps button:disabled{opacity:.45;cursor:not-allowed}
+.bar{height:5px;background:#24406f}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#86efac);transition:width .4s}
+main{max-width:960px;margin:0 auto;padding:16px 14px 90px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:0 0 16px;box-shadow:0 1px 2px rgba(15,31,61,.05)}
+.hero{background:linear-gradient(135deg,var(--navy),#1d4ed8);color:#fff;border:0;text-align:center;padding:34px 18px}
+.hero h1{font-size:clamp(26px,5vw,40px);margin:.2em 0}
+.hero .sub{letter-spacing:3px;font-size:13px;opacity:.85}
+.hero blockquote{margin:18px auto;max-width:560px;font-size:17px;font-style:italic;border-left:4px solid var(--orange);padding:6px 14px;text-align:left;background:rgba(255,255,255,.08);border-radius:0 10px 10px 0}
+.meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.form{max-width:420px;margin:0 auto;display:grid;gap:10px}
+select,input[type=text],input[type=password],textarea{width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+label{font-weight:600;font-size:14px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font-weight:700;background:var(--blue);color:#fff}
+.btn:hover{filter:brightness(1.08)}.btn:disabled{background:#a9b6cc;cursor:not-allowed}
+.btn.go{background:var(--orange);font-size:17px;padding:13px 20px}
+.btn.ghost{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
+.btn.sm{padding:6px 12px;font-size:14px}
+.btn.red{background:var(--red)}.btn.green{background:var(--green)}.btn.gray{background:#64748b}
+.ptitle{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:12px}
+.ptitle h2{font-size:24px;margin:0}.ptitle span{color:var(--mute);font-size:14px}
+.act{border-left:5px solid var(--blue)}
+.act.done{border-left-color:var(--green)}
+.acth{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.acth h3{margin:0;font-size:18px;flex:1;min-width:200px}
+.tag{background:var(--sky);color:#1e40af;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700}
+.tag.ok{background:#dcfce7;color:#166534}
+.ask{margin:.3em 0 .8em}
+.hint0{font-size:13px;color:var(--mute);margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;text-align:left;color:var(--ink)}
+.chip:hover{border-color:var(--blue)}
+.chip.on{border-color:var(--blue);background:var(--sky);box-shadow:0 0 0 3px rgba(37,99,235,.18)}
+.chip.bad{border-color:var(--red);background:#fee2e2;text-decoration:line-through;opacity:.7}
+.chip.good{border-color:var(--green);background:#dcfce7}
+.chip:disabled{cursor:default}
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.grp{border:2px dashed var(--line);border-radius:12px;padding:8px;background:#fafcff}
+.grpbtn{width:100%;border:0;border-radius:8px;padding:9px;font-weight:700;background:var(--navy);color:#fff}
+.grpbtn:hover{background:var(--blue)}
+.placed{display:grid;gap:5px;margin-top:6px;font-size:13.5px}
+.placed span{background:#fff;border:1px solid var(--line);border-radius:7px;padding:4px 7px}
+.opts{display:grid;gap:8px}
+.fb{border-radius:10px;padding:10px 12px;margin-top:12px;border:1.5px solid}
+.fb.ok{background:#f0fdf4;border-color:#86efac}.fb.hint{background:#fffbeb;border-color:#fcd34d}
+.fb.key{background:#fff7ed;border-color:#fdba74}.fb.rev{background:#eff6ff;border-color:#93c5fd}.fb.warn{background:#fef2f2;border-color:#fca5a5}
+.fb .btn{margin-top:8px}
+.law{display:block;margin-top:6px;font-size:14px;color:#7c2d12}
+.phone{max-width:400px;margin:0 auto 14px;background:#fff;border:2px solid var(--navy);border-radius:22px;overflow:hidden;box-shadow:0 8px 20px rgba(15,31,61,.15)}
+.phone .ph{background:var(--navy);color:#fff;padding:7px 14px;font-size:13px;display:flex;justify-content:space-between}
+.post{padding:12px}
+.user{display:flex;gap:8px;align-items:center;font-weight:700;font-size:14px}
+.ava{width:32px;height:32px;border-radius:50%;background:var(--sky);display:grid;place-items:center}
+.video{margin:8px 0;aspect-ratio:16/9;background:repeating-linear-gradient(45deg,#1e293b,#1e293b 12px,#334155 12px,#334155 24px);border-radius:10px;display:grid;place-items:center;color:#fff;font-size:13px;text-align:center;padding:8px}
+.react{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 0;margin:6px 0}
+.cmt{font-size:13.5px;background:#f1f5f9;border-radius:10px;padding:6px 10px;margin:5px 0}
+.compose{border:1.5px solid var(--line);border-radius:10px;padding:10px;background:#f8fafc;margin:8px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.spread{margin-top:10px;font-size:15px}.spread .dots{font-size:12px;line-height:1.1;word-break:break-all;max-height:90px;overflow:hidden}
+.flow{display:flex;flex-direction:column;align-items:center;gap:2px;margin:6px 0}
+.flow div{background:var(--navy);color:#fff;border-radius:10px;padding:8px 16px;font-weight:700;text-align:center;min-width:220px}
+.flow div:last-child{background:var(--red)}.flow.good div:last-child{background:var(--green)}
+.flow i{font-style:normal;color:var(--mute)}
+.think{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.think div{border-radius:12px;padding:12px;color:#fff}
+.think b{font-size:18px;display:block}
+.t1{background:var(--blue)}.t2{background:var(--red)}.t3{background:var(--violet)}.t4{background:var(--green)}
+details{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0;background:#fff}
+summary{font-weight:700;cursor:pointer}
+.note{font-size:13.5px;color:var(--mute);background:#f8fafc;border-left:4px solid var(--yellow);padding:8px 10px;border-radius:0 8px 8px 0;margin-top:8px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.box{border-radius:12px;padding:14px;border:2px solid}
+.box.use{border-color:var(--blue);background:var(--sky)}.box.own{border-color:var(--orange);background:#fff7ed}
+.tree{text-align:center}
+.tree .rootn{display:inline-block;background:var(--navy);color:#fff;font-weight:800;border-radius:12px;padding:10px 22px}
+.tree .line{width:2px;height:16px;background:var(--navy);margin:0 auto}
+.tree .two{text-align:left;margin-top:0}
+.kw{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.kw span{background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:14px}
+.tpl{font-family:ui-monospace,Menlo,Consolas,monospace;background:#0f172a;color:#e2e8f0;border-radius:10px;padding:12px;font-size:14px;white-space:pre-wrap}
+.check{display:flex;gap:8px;align-items:flex-start;font-weight:500;margin:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;flex:none}
+.und{display:flex;gap:8px;flex-wrap:wrap}.und button{border:2px solid var(--line);background:#fff;border-radius:12px;padding:8px 14px;font-size:20px}
+.und button.on{border-color:var(--orange);background:#fff7ed}
+.mmgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.mmgrid fieldset{border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin:0;display:grid;gap:6px}
+.mmgrid legend{font-weight:700;font-size:14px;padding:0 4px}
+svg.mm{width:100%;height:auto;background:#f8fafc;border:1px solid var(--line);border-radius:12px;margin-top:10px}
+.navb{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:10px;justify-content:center;align-items:center;z-index:15}
+.navb span{font-size:13px;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:9px 16px;border-radius:99px;z-index:60;font-weight:700;animation:pop .3s}
+@keyframes pop{from{opacity:0;transform:translate(-50%,10px)}}
+.ov{position:fixed;inset:0;background:rgba(15,31,61,.6);z-index:50;display:grid;place-items:center;padding:14px;overflow:auto}
+.modal{background:#fff;border-radius:16px;padding:20px;max-width:460px;width:100%}
+.modal.wide{max-width:1000px;align-self:start}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:10px 0}
+.stat{background:var(--sky);border-radius:12px;padding:10px;text-align:center}.stat b{display:block;font-size:22px;font-variant-numeric:tabular-nums}.stat span{font-size:12.5px;color:var(--mute)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f1f5f9}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tw{overflow-x:auto}
+.meter{height:8px;background:#e2e8f0;border-radius:9px;min-width:70px}.meter i{display:block;height:100%;border-radius:9px;background:var(--orange)}
+.badge{font-size:54px}
+.refs a{color:var(--blue)}
+@media (max-width:560px){.steps button{min-width:96px}.card{padding:14px}.brand small{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">TIN HỌC 10 · BÀI 11<small>Ứng xử trong môi trường số</small></div>
+  <span class="pill" id="who" hidden></span>
+  <span class="pill" id="xp" hidden></span>
+  <span class="pill" id="sync"></span>
+  <button class="pill" id="swap" data-do="swap" hidden>Đổi học sinh</button>
+  <button class="pill" data-do="teacher">👨‍🏫 TEACHER MODE</button>
+</header>
+<nav class="steps" id="steps" hidden aria-label="Các trang bài học"></nav>
+<div class="bar" id="bar" hidden><i style="width:0"></i></div>
+<main id="main"></main>
+<div class="navb" id="navb" hidden></div>
+<div id="layer"></div>
+
+<script>
+"use strict";
+/* ================= CONFIG ================= */
+const CONFIG = {
+  lessonId: "TIN10_BAI11",
+  lessonName: "Bài 11. Ứng xử trong môi trường số",
+  subject: "Tin học",
+  grade: "10",
+  teacherName: "Huỳnh Văn Diễn",
+  schoolYear: "2026-2027",
+  expectedMinutes: 90,
+  fastFinishMinutes: 10,
+  googleScriptUrl: "PASTE_GOOGLE_APPS_SCRIPT_URL_HERE"
+};
+const DEMO = !/^https:\/\/script\.google\.com\/.+\/exec$/.test(CONFIG.googleScriptUrl.trim());
+/* Demo authentication KHÔNG phải bảo mật production. Khi đã kết nối Apps Script, mã giáo viên chỉ được kiểm tra trong Code.gs. */
+const DEMO_TEACHER_CODE = "GV2026";
+const DEMO_ROSTER = [
+  {id:"10A01",name:"Nguyễn Minh An",cls:"10A1"},{id:"10A02",name:"Trần Gia Bảo",cls:"10A1"},{id:"10A03",name:"Lê Ngọc Châu",cls:"10A1"},
+  {id:"10A04",name:"Phạm Quốc Duy",cls:"10A1"},{id:"10A05",name:"Võ Thanh Hà",cls:"10A1"},
+  {id:"10B01",name:"Huỳnh Khánh Linh",cls:"10A2"},{id:"10B02",name:"Đặng Hoàng Nam",cls:"10A2"},{id:"10B03",name:"Bùi Thảo Vy",cls:"10A2"}
+];
+
+/* ================= TIỆN ÍCH ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const PT = [10, 7, 4, 0];
+const truthy = v => v === true || /^(true|1|x|có|co|yes)$/i.test(String(v).trim());
+const keyOf = id => `${CONFIG.lessonId}_${CONFIG.schoolYear}_${id}`;
+const fmtT = s => { s = Math.round(+s || 0); return Math.floor(s / 60) + "′" + String(s % 60).padStart(2, "0") + "″"; };
+function toast(t) { const d = document.createElement("div"); d.className = "toast"; d.setAttribute("role", "status"); d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2200); }
+function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+/* ================= NỘI DUNG HOẠT ĐỘNG ================= */
+const LAWMSG = `<span class="law">⚖️ Cần xem xét mức độ, hậu quả và quy định pháp luật áp dụng.</span>`;
+const ACT = {
+/* ---------- TRANG 1 ---------- */
+B11_ETHICS_CASE: {type:"multi", title:"Hành động nào đang có vấn đề?", ask:"Quan sát bài đăng phía trên. Chọn <b>tất cả</b> hành động có vấn đề rồi bấm Kiểm tra.",
+  o:["👊 Nhóm nữ sinh đánh bạn","🎥 Đứng xem, quay phim mà không can ngăn","⬆️ Đăng video lên mạng xã hội","😡 Bình luận xúc phạm, thiếu thiện ý","🔁 Chia sẻ tiếp video","🙋 Báo cho thầy cô / người lớn biết"],
+  a:[0,1,2,3,4], h:"Ai đã làm nạn nhân tổn thương thêm, trực tiếp hoặc gián tiếp? Có 5 lựa chọn đúng.", k:"Bạo lực – không can ngăn – phát tán – bình luận ác ý – chia sẻ tiếp.",
+  e:"Cả 5 hành động đầu đều có vấn đề. Chỉ việc báo cho thầy cô/người lớn là ứng xử đúng. Không chỉ người đánh bạn, mà người quay, người đăng, người bình luận và người chia sẻ đều góp phần gây hậu quả."},
+B11_CASE_CLASSIFY: {type:"sort", title:"Đạo đức hay pháp luật?", ask:"Phân loại từng hành vi trong tình huống.",
+  groups:["🟡 Vi phạm đạo đức","🔴 Có thể vi phạm pháp luật","🟢 Ứng xử phù hợp"],
+  cards:[
+   {t:"Đánh bạn",a:[0,1],law:1,k:"mức độ – hậu quả – độ tuổi",e:"Đánh bạn ít nhất là vi phạm đạo đức. Nếu người đánh đủ tuổi chịu trách nhiệm hình sự và gây thương tích nặng thì có thể bị xử lí theo pháp luật."},
+   {t:"Đứng xem, quay phim, không can ngăn",a:[0],h:"Hành vi này thờ ơ trước bạo lực.",k:"thờ ơ – cổ vũ gián tiếp",e:"Không can ngăn mà còn quay phim là thờ ơ, gián tiếp cổ vũ bạo lực học đường."},
+   {t:"Đưa video đánh bạn lên mạng xã hội",a:[0,1],law:1,k:"phát tán – cổ vũ bạo lực",e:"Theo SGK, đưa video như vậy lên mạng, gián tiếp cổ vũ bạo lực học đường là vi phạm đạo đức; tùy nội dung và hậu quả, có thể còn vi phạm pháp luật."},
+   {t:"Bình luận sỉ nhục nạn nhân",a:[0,1],law:1,k:"xúc phạm danh dự, nhân phẩm",e:"Tùy mức độ, xúc phạm người khác trên mạng có thể là vi phạm đạo đức hoặc vi phạm pháp luật."},
+   {t:"Can ngăn và báo cho thầy cô",a:[2],k:"bảo vệ nạn nhân",e:"Đây là cách ứng xử có trách nhiệm."},
+   {t:"Không chia sẻ, bấm Báo cáo video",a:[2],k:"không tiếp tay phát tán",e:"Không chia sẻ tiếp và báo cáo nội dung xấu giúp ngăn video lan rộng."}]},
+B11_INTERNET_FACTOR: {type:"choice", title:"Vì sao sự việc trở nên trầm trọng?", ask:"Yếu tố nào của Internet đã khiến sự việc nghiêm trọng hơn?",
+  o:["Tin đưa lên mạng phát tán nhanh, rộng, lưu trữ lâu dài; người dùng còn có thể ẩn danh","Mạng chậm nên ít người xem được video","Chỉ bạn bè thân mới xem được bài đăng","Bài đăng trên mạng tự biến mất sau vài giờ"], a:0,
+  h:"So sánh: chuyện xảy ra ở sân trường và chuyện bị đưa lên mạng, khác nhau ở số người biết và thời gian tồn tại.", k:"NHANH – RỘNG – LÂU DÀI – ẨN DANH.",
+  e:"Trên không gian mạng, giao tiếp có thể ẩn danh nên kẻ xấu mạnh bạo hơn; tin bài được phát tán nhanh, rộng và lưu trữ lâu dài nên ảnh hưởng của hành vi xấu có xu hướng trầm trọng hơn."},
+B11_BEHAVIOR_SORT: {type:"sort", tag:"Game", title:"Phân loại hành vi", ask:"Chọn thẻ → chọn nhóm.",
+  groups:["⚠️ Rủi ro / Không phù hợp","⚖️ Có thể liên quan pháp luật","🌱 Ứng xử tích cực"],
+  cards:[
+   {t:"📰 Đăng tin sai",a:[1,0],law:1,k:"nội dung – hậu quả",e:"Đưa tin không phù hợp (kể cả chia sẻ lại) có thể là vi phạm đạo đức hay pháp luật, tùy nội dung và hậu quả."},
+   {t:"🔐 Đăng số điện thoại người khác",a:[1,0],law:1,k:"thông tin cá nhân – không được phép",e:"Công bố thông tin cá nhân khi không được phép, gây ảnh hưởng uy tín, danh dự của người khác là hành vi vi phạm pháp luật."},
+   {t:"📨 Gửi quảng cáo liên tục dù người nhận từ chối",a:[0,1],law:1,k:"thư rác – quấy nhiễu",e:"Quảng cáo bằng tin nhắn tự nó không xấu, nhưng gửi nhiều khi người nhận đã từ chối thì trở thành quấy nhiễu (thư rác, tin nhắn rác)."},
+   {t:"©️ Sao chép phần mềm",a:[1],h:"Phần mềm là tác phẩm có chủ sở hữu.",k:"bản quyền – quyền sao chép",e:"Sao chép phần mềm khi không được phép là vi phạm bản quyền."},
+   {t:"😡 Bình luận xúc phạm",a:[0,1],law:1,k:"thiếu văn hóa – danh dự",e:"Ứng xử thiếu văn hóa; tùy mức độ có thể vi phạm đạo đức hay pháp luật."},
+   {t:"🎣 Lừa đảo",a:[1],h:"Hành vi này gây thiệt hại tài sản cho người khác.",k:"chiếm đoạt – thiệt hại",e:"Lừa đảo qua mạng ngày càng tinh vi và có thể gây thiệt hại rất lớn; đây là hành vi vi phạm pháp luật."},
+   {t:"💬 Tranh luận lịch sự",a:[2],k:"tôn trọng người đối thoại",e:"Tôn trọng người đối thoại là ứng xử có văn hóa."},
+   {t:"✅ Kiểm chứng trước khi chia sẻ",a:[2],k:"kiểm tra nguồn",e:"Kiểm chứng giúp em không tiếp tay cho tin giả."}]},
+/* ---------- TRANG 2 ---------- */
+B11_BEFORE_POST: {type:"post", tag:"Mô phỏng", title:"Soạn bài đăng", ask:"Em vừa đọc được tin này trong một nhóm chat. Em sẽ bấm nút nào?"},
+B11_NEWS_SHARE: {type:"reflect", title:"Chỉ chia sẻ lại thì có sao không?", min:20,
+  ask:"Một người chỉ <b>chia sẻ lại</b> tin sai chứ không phải người tạo ra tin. Người đó có hoàn toàn vô trách nhiệm không? Chọn ý kiến và viết lí do.",
+  opts:["Không có trách nhiệm gì","Vẫn có trách nhiệm","Còn tùy trường hợp"],
+  reveal:`<b>CHIA SẺ cũng là PHÁT TÁN.</b> Việc chia sẻ một tin giả chính là tiếp tay cho hành vi tung tin giả; chia sẻ một tin vi phạm pháp luật cũng là vi phạm pháp luật.<br>Ví dụ trong SGK: một người chia sẻ tin "từ 28/3/2020 toàn Thành phố Hồ Chí Minh bị phong tỏa 14 ngày". Người này nói mình chỉ đưa lại chứ không bịa, nhưng vẫn sai vì đã phát tán thông tin chưa kiểm chứng, gây hoang mang.`},
+B11_THINK_FILTER: {type:"sort", title:"Áp dụng bộ lọc 4 câu", ask:"Với mỗi bài đăng, chọn câu hỏi mà bài đăng <b>vướng rõ nhất</b>, hoặc chọn «Qua cả 4».",
+  groups:["1️⃣ ĐÚNG?","2️⃣ HỢP PHÁP?","3️⃣ TÔN TRỌNG?","4️⃣ CẦN THIẾT?","✅ Qua cả 4"],
+  cards:[
+   {t:"Chia sẻ tin «mai cả trường được nghỉ» nghe từ nhóm chat, chưa có thông báo của trường",a:[0],h:"Tin này đã có nguồn chính thức chưa?",k:"chưa kiểm chứng",e:"Chưa kiểm chứng thì chưa qua câu hỏi ĐÚNG?"},
+   {t:"Đăng ảnh bảng điểm kèm họ tên, số điện thoại của một bạn để trêu",a:[2,1],h:"Bài đăng này ảnh hưởng tới ai?",k:"danh dự – quyền riêng tư",e:"Công bố thông tin cá nhân của người khác khi không được phép là thiếu tôn trọng và có thể vi phạm pháp luật."},
+   {t:"Đăng link tải phần mềm đã bẻ khóa cho cả lớp dùng",a:[1],h:"Phần mềm này có chủ sở hữu không?",k:"bản quyền – bẻ khóa",e:"Phát tán phần mềm bẻ khóa là vi phạm bản quyền."},
+   {t:"Đăng bài thứ 10 trong ngày than chuyện vặt và gắn thẻ cả lớp",a:[3],h:"Bài đăng mang lại giá trị gì cho người đọc?",k:"giá trị – làm phiền",e:"Không sai, không phạm luật, nhưng không cần thiết và làm phiền người khác."},
+   {t:"Chia sẻ lịch kiểm tra từ trang chính thức của trường",a:[4],h:"Nguồn chính thức, nội dung hữu ích.",k:"nguồn chính thức – hữu ích",e:"Thông tin đúng, hợp pháp, không ảnh hưởng ai và có ích. Đăng được."}]},
+B11_LAW_CASE: {type:"choice", title:"Tình huống pháp luật", ask:"Đầu năm 2021, một cá nhân đăng tin sai về hành trình đi lại của một bệnh nhân Covid-19, làm cả khu dân cư hoang mang. Hành vi này thuộc nhóm bị cấm nào?",
+  o:["Đưa thông tin sai sự thật gây hoang mang trong Nhân dân","Quảng cáo hàng hóa thuộc danh mục cấm","Gửi thư rác","Không vi phạm vì chỉ là tin trên mạng"], a:0,
+  h:"Hậu quả trực tiếp của tin này với khu dân cư là gì?", k:"SAI SỰ THẬT – GÂY HOANG MANG.",
+  e:"Luật An ninh mạng cấm sử dụng không gian mạng để đưa thông tin sai sự thật gây hoang mang trong Nhân dân. Em không cần thuộc số điều; hãy nhớ nguyên tắc: tin sai gây hoang mang là vi phạm pháp luật."},
+/* ---------- TRANG 3 ---------- */
+B11_DEEPFAKE: {type:"multi", tag:"Tình huống", title:"Cuộc gọi video nhờ chuyển tiền", ask:"Em nhận một cuộc gọi video từ tài khoản của người quen, nhờ chuyển tiền gấp. Đánh dấu <b>tất cả</b> dấu hiệu đáng ngờ.",
+  o:["Nội dung thúc giục, đòi chuyển ngay","Giọng nói / khẩu hình miệng không tự nhiên","Yêu cầu chuyển tiền","Tài khoản nhận tiền mang tên người khác","Không cho thời gian để xác minh","Người gọi dùng đúng ảnh đại diện quen thuộc"],
+  a:[0,1,2,3,4], h:"Ảnh đại diện có dễ bị lấy lại không? Có 5 dấu hiệu đúng.", k:"THÚC GIỤC – KHÔNG TỰ NHIÊN – CHUYỂN TIỀN – TÀI KHOẢN LẠ – KHÔNG CHO XÁC MINH.",
+  e:"Ảnh đại diện quen thuộc không chứng minh được gì vì rất dễ sao chép. Năm dấu hiệu còn lại đều là cảnh báo lừa đảo, kể cả khi hình ảnh trông giống người quen (Deepfake)."},
+B11_DEEPFAKE_ACT: {type:"choice", title:"Em nên làm gì?", ask:"Trước cuộc gọi đáng ngờ đó, cách xử lí nào an toàn nhất?",
+  o:["Chuyển một ít trước cho đỡ ngại","Gọi trực tiếp qua số điện thoại đã biết (hoặc gặp mặt) để xác minh","Nhắn lại vào chính tài khoản đó để hỏi cho chắc","Chia sẻ video lên nhóm lớp để mọi người cùng xem"], a:1,
+  h:"Nếu tài khoản đã bị chiếm, hỏi lại trên chính tài khoản đó có đáng tin không?", k:"XÁC MINH QUA KÊNH KHÁC, SỐ ĐIỆN THOẠI ĐÃ BIẾT.",
+  e:"Phải gọi điện thoại trực tiếp bằng số di động đã biết để xác thực người quen, thay vì tin hoàn toàn vào video trên mạng."},
+B11_AI_VERIFY: {type:"ailab", tag:"AI Research Mini-Lab", title:"AI có nói đúng không?", ask:"Nhiệm vụ: tìm hiểu <i>AI/Deepfake có thể bị lợi dụng để tạo tin giả và lừa đảo như thế nào?</i> Dùng chatbot AI nếu thầy cho phép, sau đó ghi kết quả vào đây."},
+B11_AI_TRUST: {type:"choice", title:"Tin AI đến đâu?", ask:"Chatbot AI trả lời rất trôi chảy và tự tin. Em nên làm gì với câu trả lời đó?",
+  o:["Chép nguyên vào bài vì AI biết mọi thứ","Coi là gợi ý, tự đánh giá và đối chiếu với SGK hoặc nguồn đáng tin cậy rồi mới dùng","Chia sẻ ngay cho bạn bè vì nghe hợp lí","Không bao giờ dùng AI nữa"], a:1,
+  h:"Trôi chảy có đồng nghĩa với chính xác không?", k:"AI GỢI Ý – CON NGƯỜI ĐÁNH GIÁ – NGUỒN KHÁC KIỂM CHỨNG.",
+  e:"AI không phải nguồn sự thật tuyệt đối. Công nghệ không có lỗi, trách nhiệm nằm ở ý thức người dùng: kiểm chứng trước khi tin và trước khi chia sẻ."},
+/* ---------- TRANG 4 ---------- */
+B11_AI_AUTHOR: {type:"reflect", tag:"Tranh luận", title:"AI làm, em là tác giả?", min:20,
+  ask:"🎨 Em dùng AI tạo một bức tranh. 📝 Em dùng AI viết một bài thơ. Em có thể ghi <b>«Tôi hoàn toàn tự sáng tác»</b> không? Chọn và giải thích, sau đó trao đổi với bạn bên cạnh.",
+  opts:["Có","Không","Còn tùy"],
+  reveal:`Quyền tác giả là quyền đối với tác phẩm do mình <b>sáng tạo ra</b> hoặc sở hữu. Khi AI tạo phần lớn sản phẩm, ghi «hoàn toàn tự sáng tác» là không trung thực, gần với hành vi <b>mạo danh tác giả</b>.<br>Bản quyền của sản phẩm do AI tạo ra hiện còn là «vùng xám» pháp lí và luật nhiều nước chưa bảo hộ. Quy tắc an toàn: <b>dùng AI thì ghi rõ đã dùng AI</b>, và đọc điều khoản sử dụng của công cụ.`},
+B11_AUTHOR_RIGHTS: {type:"sort", title:"Quyền nào thuộc nhánh nào?", ask:"Sau khi khám phá sơ đồ phía trên, xếp từng quyền vào đúng nhánh.",
+  groups:["👤 QUYỀN NHÂN THÂN","💰 QUYỀN TÀI SẢN"], h:"Quyền này gắn với tên tuổi, danh dự của tác giả hay gắn với việc khai thác tác phẩm?",
+  cards:[
+   {t:"✍️ Đặt tên cho tác phẩm",a:[0],k:"gắn với tác giả",e:"Quyền nhân thân."},
+   {t:"📄 Sao chép tác phẩm",a:[1],k:"khai thác kinh tế",e:"Quyền tài sản."},
+   {t:"👤 Đứng tên thật hoặc bút danh",a:[0],k:"tên tác giả",e:"Quyền nhân thân."},
+   {t:"🔁 Làm tác phẩm phái sinh",a:[1],k:"tạo biến thể để khai thác",e:"Quyền tài sản. Ví dụ: dịch sách, cải biên phần mềm cho điện thoại."},
+   {t:"📢 Công bố tác phẩm",a:[0],k:"quyết định công bố",e:"Quyền nhân thân: công bố hoặc cho phép người khác công bố."},
+   {t:"📡 Truyền đạt tác phẩm đến công chúng",a:[1],k:"phân phối",e:"Quyền tài sản."},
+   {t:"🛡 Bảo vệ sự toàn vẹn, không cho cắt xén, xuyên tạc",a:[0],k:"danh dự, uy tín tác giả",e:"Quyền nhân thân."},
+   {t:"💿 Cho thuê bản sao chương trình máy tính",a:[1],k:"cho thuê = khai thác",e:"Quyền tài sản."}]},
+B11_COPYRIGHT_SORT: {type:"sort", tag:"Game", title:"Bản quyền hay không?", ask:"Chọn tình huống → chọn đánh giá.",
+  groups:["✅ PHÙ HỢP","⚠️ CẦN XEM GIẤY PHÉP","❌ VI PHẠM"], h:"Hỏi: người này có được chủ sở hữu cho phép không?",
+  cards:[
+   {t:"Sao chép phần mềm trả phí cho bạn",a:[2],k:"sao chép không được phép",e:"Sao chép tác phẩm khi không được phép của chủ sở hữu quyền tác giả là vi phạm."},
+   {t:"Mua licence 1 máy nhưng cài 2 máy",a:[2],k:"licence tính theo số máy",e:"Quyền sử dụng phần mềm tính theo số máy được cài đặt. Cài thêm máy thứ hai là vi phạm bản quyền."},
+   {t:"Crack phần mềm «chỉ để thử»",a:[2],k:"vô hiệu hóa biện pháp bảo vệ",e:"Phá khóa là cố ý vô hiệu hóa biện pháp kĩ thuật bảo vệ quyền tác giả. Dù không dùng vẫn là vi phạm."},
+   {t:"Dùng nhờ phần mềm đang cài hợp lệ trên máy của bạn",a:[0],k:"không sao chép, không cài thêm",e:"Em không sao chép hay cài thêm bản nào nên không vi phạm."},
+   {t:"Tải tác phẩm của người khác lên mạng khi chưa xin phép",a:[2],k:"truyền đạt đến công chúng",e:"Đăng tải tác phẩm khi không được chủ sở hữu cho phép là vi phạm."},
+   {t:"Mạo danh mình là tác giả",a:[2],k:"quyền nhân thân",e:"Mạo danh tác giả là vi phạm quyền nhân thân."},
+   {t:"Sửa tác phẩm của người khác rồi đăng như sản phẩm của mình",a:[2],k:"toàn vẹn + mạo danh",e:"Vừa xâm phạm sự toàn vẹn của tác phẩm, vừa mạo danh tác giả."},
+   {t:"Dùng phần mềm nguồn mở đúng giấy phép",a:[0],k:"đúng giấy phép",e:"Tuân thủ đúng giấy phép là sử dụng hợp lệ."},
+   {t:"Mượn tài khoản khóa học trực tuyến của bạn để cùng học",a:[1,2],k:"điều khoản sử dụng",e:"Cần xem điều khoản: tài khoản thường chỉ cấp cho một người dùng, khi đó dùng chung là vi phạm."},
+   {t:"Lấy ảnh tìm được trên mạng để làm slide thuyết trình",a:[1],h:"Ảnh trên mạng có phải lúc nào cũng dùng tự do?",k:"giấy phép ảnh – ghi nguồn",e:"Tùy giấy phép của ảnh. Hãy kiểm tra giấy phép, ưu tiên ảnh được phép dùng và luôn ghi nguồn."}]},
+B11_LICENSE: {type:"choice", title:"Mua Windows = mua Microsoft?", ask:"Gia đình em mua một bản Windows có bản quyền. Vậy gia đình em có trở thành chủ sở hữu bản quyền Windows không?",
+  o:["Có","Không"], a:1, h:"Em mua được quyền gì: quyền dùng hay quyền kinh doanh phần mềm đó?", k:"Mua quyền SỬ DỤNG phần mềm không có nghĩa là mua BẢN QUYỀN phần mềm.",
+  e:"Việc mua quyền sử dụng phần mềm không đồng nghĩa với việc trở thành chủ sở hữu bản quyền của phần mềm đó. Mua Windows, Word, Excel chỉ là mua quyền sử dụng; bản quyền vẫn thuộc Microsoft."},
+B11_AI_INTEGRITY: {type:"sort", title:"AI làm – em nộp?", ask:"Phân loại từng cách làm bài.",
+  groups:["🔴 THIẾU TRUNG THỰC","🟡 CẦN LÀM RÕ","🟢 MINH BẠCH"], h:"Người chấm có biết đúng phần nào do AI làm không?",
+  cards:[
+   {t:"A. AI viết toàn bộ bài, học sinh nộp và ghi «Tôi tự viết»",a:[0],k:"mạo danh",e:"Nhận bài do AI viết là của mình là mạo danh tác giả, vi phạm liêm chính."},
+   {t:"B. AI gợi ý ý tưởng, học sinh tự viết và ghi «Có sử dụng AI hỗ trợ ý tưởng»",a:[2],k:"ghi rõ vai trò AI",e:"Nêu rõ AI hỗ trợ phần nào là minh bạch."},
+   {t:"C. AI tạo ảnh, học sinh dùng trong bài và ghi tên công cụ đã sử dụng",a:[2],k:"ghi công cụ",e:"Ghi rõ công cụ AI đã dùng là minh bạch."},
+   {t:"D. AI viết phần lớn, học sinh sửa vài câu và chỉ ghi «có tham khảo Internet»",a:[1,0],k:"ghi chưa đúng mức độ",e:"Ghi chú mơ hồ, chưa phản ánh đúng mức độ AI tham gia. Cần làm rõ, nếu không sẽ thành thiếu trung thực."}]},
+/* ---------- TRANG 5 ---------- */
+B11_FINAL_Q1: {type:"choice", tag:"Câu 1 · Đạo đức", title:"Nhận xét xúc phạm", ask:"Đăng trên mạng xã hội nhận xét có tính xúc phạm một người khác là hành vi:",
+  o:["Vi phạm pháp luật","Vi phạm đạo đức","Tùy theo mức độ, có thể vi phạm đạo đức hay pháp luật","Không vi phạm gì"], a:2,
+  h:"Mọi lời xúc phạm có mức độ giống nhau không?", k:"TÙY MỨC ĐỘ – HẬU QUẢ.", e:"Tùy mức độ và hậu quả, hành vi có thể vi phạm đạo đức hay vi phạm pháp luật."},
+B11_FINAL_Q2: {type:"choice", tag:"Câu 2 · Pháp luật · Đúng/Sai", title:"«Không biết là không có lỗi»", ask:"Bình dùng phần mềm lậu và nói: «Trước đây mình không biết, mà không biết là không có lỗi». Quan niệm này:",
+  o:["Đúng","Sai"], a:1, h:"Pháp luật áp dụng cho mọi người hay chỉ cho người đã đọc luật?", k:"KHÔNG BIẾT LUẬT KHÔNG MIỄN TRỪ TRÁCH NHIỆM.",
+  e:"Sai. Không biết quy định không làm hành vi vi phạm trở thành hợp lệ. Mỗi người có trách nhiệm tìm hiểu quy định khi sử dụng sản phẩm số."},
+B11_FINAL_Q3: {type:"choice", tag:"Câu 3 · Đưa tin", title:"Chỉ đưa lại tin", ask:"Một người chia sẻ tin «toàn thành phố sẽ bị phong tỏa 14 ngày» và nói mình chỉ đưa lại chứ không bịa. Người này sai ở đâu?",
+  o:["Không sai vì không phải người tạo tin","Sai vì đã phát tán tin chưa kiểm chứng; chia sẻ tin sai cũng là tiếp tay tung tin giả","Chỉ sai nếu có trên 100 lượt chia sẻ","Chỉ sai nếu dùng tên thật"], a:1,
+  h:"Nhớ lại nguyên tắc ở Trang 2.", k:"CHIA SẺ cũng là PHÁT TÁN.", e:"Việc chia sẻ một tin vi phạm pháp luật cũng là vi phạm pháp luật. Trước khi chia sẻ phải kiểm chứng."},
+B11_FINAL_Q4: {type:"choice", tag:"Câu 4 · Quyền riêng tư · Tình huống", title:"Số điện thoại của bạn", ask:"Một bạn nhờ em đăng số điện thoại và địa chỉ nhà của bạn Minh lên nhóm công khai để «mọi người tiện liên lạc». Minh chưa biết việc này. Em nên:",
+  o:["Đăng ngay vì có ích cho cả nhóm","Hỏi ý kiến Minh trước; Minh không đồng ý thì không đăng","Đăng nhưng xóa sau một ngày","Đăng bằng tài khoản phụ"], a:1,
+  h:"Thông tin này thuộc về ai?", k:"THÔNG TIN CÁ NHÂN – PHẢI ĐƯỢC PHÉP.", e:"Công bố thông tin cá nhân của người khác khi không được phép là hành vi sai và có thể vi phạm pháp luật."},
+B11_FINAL_Q5: {type:"sort", tag:"Câu 5 · Bản quyền · Ghép", title:"Hành vi nào xâm phạm quyền nào?", ask:"Ghép mỗi hành vi với loại quyền bị xâm phạm chủ yếu.",
+  groups:["👤 Quyền nhân thân","💰 Quyền tài sản"], h:"Hành vi này đụng tới tên tuổi, danh dự của tác giả hay tới việc khai thác tác phẩm?",
+  cards:[
+   {t:"Mạo danh tác giả",a:[0],k:"đứng tên",e:"Xâm phạm quyền đứng tên: quyền nhân thân."},
+   {t:"Sao chép lậu đĩa cài đặt phần mềm",a:[1],k:"sao chép",e:"Xâm phạm quyền sao chép: quyền tài sản."},
+   {t:"Cắt xén, xuyên tạc tác phẩm",a:[0],k:"toàn vẹn",e:"Xâm phạm sự toàn vẹn của tác phẩm: quyền nhân thân."},
+   {t:"Bán thẻ nhớ chứa video âm nhạc sưu tầm không phép",a:[1],k:"sao chép, phân phối",e:"Sao chép và phân phối để thu lợi: quyền tài sản."}]},
+B11_FINAL_Q6: {type:"choice", tag:"Câu 6 · Licence", title:"Đĩa CD của Lan", ask:"Lan mua một phần mềm có bản quyền trên đĩa CD (licence cho 1 máy). Cài xong máy mình, Lan cài thêm cho máy của bạn thân. Nhận xét nào đúng?",
+  o:["Không ai vi phạm vì Lan đã trả tiền","Lan vi phạm bản quyền vì licence chỉ cho một máy","Chỉ người bạn vi phạm","Chỉ cửa hàng bán đĩa vi phạm"], a:1,
+  h:"Lan đã mua quyền dùng cho mấy máy?", k:"Mua quyền SỬ DỤNG theo SỐ MÁY, không phải mua BẢN QUYỀN.", e:"Mua quyền sử dụng cho một máy rồi cài cho máy thứ hai là vi phạm bản quyền."},
+B11_FINAL_Q7: {type:"order", tag:"Câu 7 · AI/Deepfake · Sắp xếp", title:"4 bước khi nhận cuộc gọi đáng ngờ", ask:"Bấm lần lượt các bước theo đúng thứ tự.",
+  items:["Dừng lại, chưa chuyển tiền","Kiểm tra các dấu hiệu bất thường","Gọi lại bằng số điện thoại đã biết để xác minh","Chỉ hành động khi đã chắc chắn"], show:[2,0,3,1],
+  h:"Bước đầu tiên luôn là không làm gì vội.", k:"DỪNG → KIỂM CHỨNG → XÁC MINH → MỚI HÀNH ĐỘNG.", e:"DỪNG → KIỂM CHỨNG → XÁC MINH → MỚI HÀNH ĐỘNG."},
+B11_FINAL_Q8: {type:"choice", explain:true, tag:"Câu 8 · Liêm chính AI · Chọn và giải thích", title:"Dòng ghi chú nào minh bạch?", ask:"Em dùng chatbot AI để gợi ý dàn ý, phần còn lại tự viết. Dòng ghi chú cuối bài nào phù hợp nhất?",
+  o:["«Bài do em hoàn toàn tự làm.»","«Công cụ AI hỗ trợ: [tên chatbot] – dùng để gợi ý dàn ý.»","«Nguồn: Internet.»","Không cần ghi gì"], a:1,
+  h:"Người đọc cần biết em dùng công cụ nào và dùng để làm gì.", k:"AI HỖ TRỢ → CẦN MINH BẠCH.", e:"Ghi rõ tên công cụ và mục đích sử dụng là minh bạch."}
+};
+const PAGES = [null,
+ {t:"Thế giới số – Đúng hay sai?", s:"Thế giới số", m:15, acts:["B11_ETHICS_CASE","B11_CASE_CLASSIFY","B11_INTERNET_FACTOR","B11_BEHAVIOR_SORT"]},
+ {t:"Trước khi bấm «Đăng»", s:"Trước khi Đăng", m:18, acts:["B11_BEFORE_POST","B11_NEWS_SHARE","B11_THINK_FILTER","B11_LAW_CASE"]},
+ {t:"AI, Deepfake và trách nhiệm số", s:"AI & Deepfake", m:18, acts:["B11_DEEPFAKE","B11_DEEPFAKE_ACT","B11_AI_VERIFY","B11_AI_TRUST"]},
+ {t:"Bản quyền – Ai là chủ sở hữu?", s:"Bản quyền", m:24, acts:["B11_AI_AUTHOR","B11_AUTHOR_RIGHTS","B11_COPYRIGHT_SORT","B11_LICENSE","B11_AI_INTEGRITY"]},
+ {t:"Thử thách công dân số", s:"Thử thách", m:15, acts:["B11_FINAL_Q1","B11_FINAL_Q2","B11_FINAL_Q3","B11_FINAL_Q4","B11_FINAL_Q5","B11_FINAL_Q6","B11_FINAL_Q7","B11_FINAL_Q8"]}
+];
+const ALL = Object.keys(ACT), MAXSCORE = ALL.length * 10;
+const DIFFS = ["Đạo đức hay pháp luật","Tin giả","Quyền riêng tư","Bản quyền","Licence","AI/Deepfake"];
+const MMB = [["a","⚖️ Đạo đức – Pháp luật","#d97706",150,62],["b","📱 Đăng & Chia sẻ","#2563eb",550,62],["c","©️ Bản quyền","#16a34a",150,298],["d","🤖 AI có trách nhiệm","#7c3aed",550,298]];
+const AI_PROMPT = "Công nghệ AI như Deepfake có thể bị lợi dụng để tạo tin giả hoặc lừa đảo như thế nào? Hãy nêu 3 dấu hiệu học sinh có thể dùng để nhận biết.";
+
+/* ================= TRẠNG THÁI + LOCALSTORAGE ================= */
+let S = null, view = 0, ROSTER = [], saveT = 0;
+function blank(st) {
+  return {studentId: st.id, name: st.name, cls: st.cls, studentKey: keyOf(st.id), page: 1, maxPage: 1, answers: {}, completedActivities: [],
+    score: 0, xp: 0, startTime: Date.now(), mindmap: {a:["","",""], b:["","",""], c:["","",""], d:["","",""]}, exitTicket: {diff: []}, syncQueue: [], acts: {}, done: false, fast: false, fastAck: false, duration: 0};
+}
+function A(id) { if (!S.acts[id]) S.acts[id] = {t0: Date.now(), st: {}}; return S.acts[id]; }
+function recalc() {
+  let sc = 0, xp = 0; S.completedActivities = []; S.answers = {};
+  for (const id of ALL) { const a = S.acts[id]; if (a && a.done) { sc += +a.score || 0; xp += +a.xp || 0; S.completedActivities.push(id); S.answers[id] = a.answer; } }
+  S.score = Math.round(sc * 10) / 10; S.xp = Math.round(xp);
+}
+function save() { if (!S) return; lsSet("b11:" + S.studentKey, S); lsSet("b11:last", S.studentKey); }
+function saveSoon() { clearTimeout(saveT); saveT = setTimeout(save, 400); }
+
+/* ================= ĐỒNG BỘ + HÀNG ĐỢI OFFLINE ================= */
+async function apiGet(params) {
+  const r = await fetch(CONFIG.googleScriptUrl.trim() + "?" + new URLSearchParams(params), {redirect: "follow"});
+  return r.json();
+}
+async function apiPost(body) {
+  const r = await fetch(CONFIG.googleScriptUrl.trim(), {method: "POST", redirect: "follow", headers: {"Content-Type": "text/plain;charset=utf-8"}, body: JSON.stringify(body)});
+  return r.json();
+}
+function enqueue(p) {
+  Object.assign(p, {lessonId: CONFIG.lessonId, schoolYear: CONFIG.schoolYear, studentKey: S.studentKey, studentId: S.studentId, name: S.name, cls: S.cls,
+    progress: S.maxPage, totalScore: S.score, totalXp: S.xp, clientTime: new Date().toISOString()});
+  S.syncQueue.push(p); save(); flush();
+}
+let flushing = false;
+async function flush() {
+  if (!S) return setSync();
+  if (DEMO) { if (S.syncQueue.length) { S.syncQueue = []; save(); } return setSync(); }
+  if (flushing || !S.syncQueue.length) return setSync();
+  flushing = true;
+  try {
+    while (S.syncQueue.length) {
+      const item = S.syncQueue[0], j = await apiPost(item);
+      if (j && j.ok) S.syncQueue.shift();
+      else { item._tries = (item._tries || 0) + 1; if (item._tries >= 3) { console.warn("Bỏ qua yêu cầu bị máy chủ từ chối", item, j); S.syncQueue.shift(); } else { save(); break; } }
+      save();
+    }
+  } catch (e) { /* mất mạng: giữ nguyên hàng đợi */ }
+  flushing = false; setSync();
+}
+function setSync() {
+  const el = $("#sync"), n = S ? S.syncQueue.length : 0;
+  el.className = "pill" + (DEMO ? " demo" : n ? " wait" : "");
+  el.textContent = DEMO ? "🟡 DEMO MODE" : n ? `☁ Đang chờ đồng bộ (${n})` : "✅ Đã đồng bộ";
+}
+window.addEventListener("online", flush);
+setInterval(flush, 20000);
+
+/* ================= KHUNG HOẠT ĐỘNG ================= */
+function finish(id, r) {
+  const a = A(id); if (a.done) return;
+  a.done = true; a.answer = r.answer; a.correct = !!r.correct; a.attempts = r.attempts || 1; a.score = r.score;
+  a.xp = Math.round(r.score) + 5; a.time = Math.round((Date.now() - a.t0) / 1000);
+  recalc(); save();
+  enqueue({action: "submit", activityId: id, answer: JSON.stringify(r.answer).slice(0, 4000), correct: a.correct, attempts: a.attempts, score: a.score, xp: a.xp, timeSpent: a.time});
+  toast(`+${a.xp} XP`); chrome();
+}
+function ladder(st, h, k, answerHTML) {
+  st.w = (st.w || 0) + 1;
+  if (st.w >= 3) return {c: "rev", h: `✅ <b>Đáp án:</b> ${answerHTML}`};
+  if (st.w === 2) return {c: "key", h: `🔍 <b>Từ khóa cần nhớ:</b> ${k || "đọc lại phần giải thích ở hoạt động trước."}`, retry: 1};
+  return {c: "hint", h: `💡 <b>Gợi ý:</b> ${h || "Hãy nghĩ về hậu quả đối với người khác và việc có được phép hay không."}`, retry: 1};
+}
+const fbHTML = (id, f) => !f ? "" : `<div class="fb ${f.c}" role="status">${f.h}${f.retry ? `<br><button class="btn sm ghost" data-act="${id}" data-do="retry">THỬ LẠI</button>` : ""}</div>`;
+function actHTML(id) {
+  const q = ACT[id], a = A(id);
+  let body;
+  if (a.done && a.restored) body = `<p class="hint0">Đã khôi phục kết quả từ máy chủ. Điểm: <b>${a.score}/10</b>.</p>`;
+  else body = (q.ask ? `<p class="ask">${q.ask}</p>` : "") + R[q.type](id, q, a);
+  return `<div class="acth"><span class="tag">${q.tag || "Hoạt động"}</span><h3>${q.title}</h3>${a.done ? `<span class="tag ok">✔ ${a.score}/10 điểm</span>` : ""}</div>${body}`;
+}
+function renderAct(id) { const el = document.getElementById("act-" + id); if (el) { el.className = "card act" + (A(id).done ? " done" : ""); el.innerHTML = actHTML(id); } }
+const R = {}, H = {};
+
+/* ----- sort: chọn thẻ → chọn nhóm ----- */
+R.sort = (id, q, a) => {
+  const st = a.st; st.d = st.d || {};
+  const left = q.cards.map((c, i) => i).filter(i => !(st.d[i] && st.d[i].ok));
+  let h = left.length ? `<p class="hint0">① Chọn một thẻ → ② Chọn nhóm. Còn ${left.length}/${q.cards.length} thẻ.</p><div class="chips">` +
+    left.map(i => `<button class="chip ${st.sel === i ? "on" : ""}" aria-pressed="${st.sel === i}" data-act="${id}" data-do="pick" data-v="${i}">${q.cards[i].t}</button>`).join("") + `</div>` : "";
+  h += `<div class="groups">` + q.groups.map((g, gi) => `<div class="grp"><button class="grpbtn" ${left.length ? "" : "disabled"} data-act="${id}" data-do="put" data-v="${gi}">${g}</button><div class="placed">` +
+    q.cards.map((c, i) => st.d[i] && st.d[i].ok && st.d[i].g === gi ? `<span>${st.d[i].w >= 3 ? "👁" : "✔"} ${c.t}</span>` : "").join("") + `</div></div>`).join("") + `</div>`;
+  return h + fbHTML(id, st.fb);
+};
+H.sort = (id, q, d, v) => {
+  const a = A(id), st = a.st; v = +v;
+  if (d === "pick") { st.sel = v; st.fb = null; }
+  else if (d === "retry") st.fb = null;
+  else if (d === "put") {
+    if (st.sel == null || (st.d[st.sel] && st.d[st.sel].ok)) { st.fb = {c: "hint", h: "Hãy chọn một thẻ trước."}; return; }
+    const i = st.sel, c = q.cards[i], rec = st.d[i] = st.d[i] || {w: 0};
+    const tail = c.e + (c.law ? LAWMSG : "");
+    if (c.a.includes(v)) { rec.ok = true; rec.g = v; st.sel = null; st.fb = {c: "ok", h: `✅ <b>${c.t}</b> → ${q.groups[v]}<br>${tail}`}; }
+    else {
+      const f = ladder(rec, c.h || q.h, c.k, `<b>${c.t}</b> → ${q.groups[c.a[0]]}<br>${tail}`);
+      if (rec.w >= 3) { rec.ok = true; rec.g = c.a[0]; st.sel = null; }
+      st.fb = f;
+    }
+    if (q.cards.every((c, i) => st.d[i] && st.d[i].ok)) {
+      const ws = q.cards.map((c, i) => st.d[i].w);
+      finish(id, {answer: q.cards.map((c, i) => ({card: c.t, group: q.groups[st.d[i].g], wrong: st.d[i].w})), correct: ws.every(w => !w),
+        attempts: ws.reduce((s, w) => s + w, 0) + 1, score: Math.round(ws.reduce((s, w) => s + PT[Math.min(w, 3)], 0) / ws.length * 10) / 10});
+    }
+  }
+};
+/* ----- choice: một lựa chọn (+ giải thích) ----- */
+R.choice = (id, q, a) => {
+  const st = a.st, x = st.x || [];
+  let h = `<div class="opts">` + q.o.map((o, i) => `<button class="chip ${st.ok && i === q.a ? "good" : x.includes(i) ? "bad" : ""}" ${st.ok || x.includes(i) ? "disabled" : ""} data-act="${id}" data-do="opt" data-v="${i}">${o}</button>`).join("") + `</div>` + fbHTML(id, st.fb);
+  if (q.explain && st.ok) h += a.done ? `<p class="hint0">Giải thích của em: ${esc(st.why)}</p>` :
+    `<label for="why-${id}" style="display:block;margin-top:12px">Giải thích bằng một câu: vì sao cần ghi như vậy?</label><textarea id="why-${id}" data-act="${id}" data-k="why">${esc(st.why || "")}</textarea><button class="btn sm" style="margin-top:8px" data-act="${id}" data-do="explain">GỬI GIẢI THÍCH</button>${st.err ? `<div class="fb warn">${st.err}</div>` : ""}`;
+  return h;
+};
+H.choice = (id, q, d, v) => {
+  const a = A(id), st = a.st;
+  const fin = () => finish(id, {answer: {first: q.o[st.first], final: q.o[q.a], why: st.why || ""}, correct: !st.w, attempts: (st.w || 0) + 1, score: PT[Math.min(st.w || 0, 3)]});
+  if (d === "retry") st.fb = null;
+  else if (d === "opt" && !st.ok) {
+    v = +v; if (st.first == null) st.first = v;
+    if (v === q.a) { st.ok = true; st.fb = {c: "ok", h: "✅ <b>Chính xác.</b> " + q.e}; if (!q.explain) fin(); }
+    else { st.x = (st.x || []).concat(v); st.fb = ladder(st, q.h, q.k, `<b>${q.o[q.a]}</b><br>${q.e}`); if (st.w >= 3) { st.ok = true; if (!q.explain) fin(); } }
+  } else if (d === "explain") {
+    if ((st.why || "").trim().length < 10) st.err = "Hãy viết ít nhất một câu giải thích (từ 10 kí tự).";
+    else { st.err = ""; fin(); }
+  }
+};
+/* ----- multi: chọn nhiều ----- */
+R.multi = (id, q, a) => {
+  const st = a.st, sel = st.sel || [];
+  return `<div class="opts">` + q.o.map((o, i) => `<button class="chip ${st.ok ? (q.a.includes(i) ? "good" : "") : sel.includes(i) ? "on" : ""}" aria-pressed="${sel.includes(i)}" ${st.ok ? "disabled" : ""} data-act="${id}" data-do="tog" data-v="${i}">${st.ok ? "" : sel.includes(i) ? "☑ " : "☐ "}${o}</button>`).join("") + `</div>` +
+    (st.ok ? "" : `<button class="btn sm" style="margin-top:10px" data-act="${id}" data-do="check">KIỂM TRA</button>`) + fbHTML(id, st.fb);
+};
+H.multi = (id, q, d, v) => {
+  const a = A(id), st = a.st; st.sel = st.sel || [];
+  if (d === "tog" && !st.ok) { v = +v; st.sel = st.sel.includes(v) ? st.sel.filter(x => x !== v) : st.sel.concat(v); st.fb = null; }
+  else if (d === "retry") st.fb = null;
+  else if (d === "check" && !st.ok) {
+    if (!st.sel.length) { st.fb = {c: "hint", h: "Hãy chọn ít nhất một mục."}; return; }
+    if (st.first == null) st.first = st.sel.slice();
+    const good = st.sel.length === q.a.length && q.a.every(x => st.sel.includes(x));
+    if (good) { st.ok = true; st.fb = {c: "ok", h: "✅ <b>Chính xác.</b> " + q.e}; }
+    else { st.fb = ladder(st, q.h, q.k, q.e); if (st.w >= 3) st.ok = true; }
+    if (st.ok) finish(id, {answer: {first: st.first.map(i => q.o[i])}, correct: !st.w, attempts: (st.w || 0) + 1, score: PT[Math.min(st.w || 0, 3)]});
+  }
+};
+/* ----- order: sắp thứ tự ----- */
+R.order = (id, q, a) => {
+  const st = a.st, seq = st.seq || [];
+  if (st.ok) return `<div class="flow good">` + q.items.map((t, i) => `<div>${i + 1}. ${t}</div>`).join("<i>↓</i>") + `</div>` + fbHTML(id, st.fb);
+  return `<div class="chips">` + q.show.map(i => `<button class="chip ${seq.includes(i) ? "on" : ""}" ${seq.includes(i) ? "disabled" : ""} data-act="${id}" data-do="add" data-v="${i}">${seq.includes(i) ? `<b>${seq.indexOf(i) + 1}.</b> ` : ""}${q.items[i]}</button>`).join("") +
+    `</div><button class="btn sm ghost" data-act="${id}" data-do="retry">XẾP LẠI</button>` + fbHTML(id, st.fb && !st.fb.retry ? st.fb : st.fb ? {c: st.fb.c, h: st.fb.h} : null);
+};
+H.order = (id, q, d, v) => {
+  const a = A(id), st = a.st; st.seq = st.seq || [];
+  if (d === "retry") { st.seq = []; st.fb = null; }
+  else if (d === "add" && !st.ok) {
+    if (st.seq.length === 0) st.fb = null;
+    st.seq.push(+v);
+    if (st.seq.length === q.items.length) {
+      if (!st.first) st.first = st.seq.slice();
+      if (st.seq.every((x, i) => x === i)) { st.ok = true; st.fb = {c: "ok", h: "✅ <b>Chính xác.</b> " + q.e}; }
+      else { st.fb = ladder(st, q.h, q.k, q.e); st.seq = []; if (st.w >= 3) st.ok = true; }
+      if (st.ok) finish(id, {answer: {first: st.first.map(i => q.items[i])}, correct: !st.w, attempts: (st.w || 0) + 1, score: PT[Math.min(st.w || 0, 3)]});
+    }
+  }
+};
+/* ----- reflect: suy nghĩ trước, chốt sau ----- */
+R.reflect = (id, q, a) => {
+  const st = a.st;
+  if (a.done) return `<p class="hint0">Lựa chọn của em: <b>${esc(q.opts[st.opt])}</b>. Lí do: ${esc(st.txt)}</p><div class="fb rev">${q.reveal}</div>`;
+  return `<div class="chips">` + q.opts.map((o, i) => `<button class="chip ${st.opt === i ? "on" : ""}" aria-pressed="${st.opt === i}" data-act="${id}" data-do="opt" data-v="${i}">${o}</button>`).join("") +
+    `</div><label for="tx-${id}">Lí do của em</label><textarea id="tx-${id}" data-act="${id}" data-k="txt" placeholder="Viết suy nghĩ của em trước khi xem phần chốt">${esc(st.txt || "")}</textarea>
+    <button class="btn sm" style="margin-top:8px" data-act="${id}" data-do="send">GỬI VÀ XEM PHẦN CHỐT</button>${st.err ? `<div class="fb warn">${st.err}</div>` : ""}`;
+};
+H.reflect = (id, q, d, v) => {
+  const a = A(id), st = a.st;
+  if (d === "opt") st.opt = +v;
+  else if (d === "send") {
+    if (st.opt == null) st.err = "Hãy chọn một ý kiến.";
+    else if ((st.txt || "").trim().length < q.min) st.err = `Hãy viết lí do (từ ${q.min} kí tự).`;
+    else { st.err = ""; finish(id, {answer: {opinion: q.opts[st.opt], reason: st.txt.trim()}, correct: true, attempts: 1, score: 10}); }
+  }
+};
+/* ----- post: mô phỏng trước khi đăng ----- */
+R.post = (id, q, a) => {
+  const st = a.st, btn = (v, t, c) => `<button class="btn sm ${c}" data-act="${id}" data-do="post" data-v="${v}">${t}</button>`;
+  const out = {
+    now: `<div class="spread" id="spread" aria-live="polite"></div>`, share: `<div class="spread" id="spread" aria-live="polite"></div>`,
+    check: `<div class="fb ok">🔎 Em mở trang chính thức của trường và hỏi giáo viên chủ nhiệm: <b>không có thông báo nghỉ học nào</b>. Tin này chưa được xác minh, không nên đăng hay chia sẻ.</div>`,
+    stop: `<div class="fb ok">✋ Em đã dừng lại. Tin không lan thêm từ em. Bước tiếp theo nên làm: kiểm tra nguồn chính thức.</div>`};
+  return `<div class="phone"><div class="ph"><span>📱 SOẠN BÀI ĐĂNG</span><span>🔋 82%</span></div><div class="post">
+    <div class="user"><span class="ava">🙂</span>${esc(S.name)}</div>
+    <div class="compose">Nghe nói ngày mai trường được nghỉ vì bão, mọi người khỏi đi học nha! 🎉<br><small style="color:var(--mute)">(nguồn: «nghe trong nhóm chat lớp bên»)</small></div>
+    <div class="row">${btn("now", "ĐĂNG NGAY", "red")}${btn("share", "CHIA SẺ", "")}${btn("check", "KIỂM TRA NGUỒN", "green")}${btn("stop", "DỪNG LẠI", "gray")}</div></div></div>` +
+    (st.first ? `<p class="hint0">Lựa chọn đầu tiên của em: <b>${({now: "Đăng ngay", share: "Chia sẻ", check: "Kiểm tra nguồn", stop: "Dừng lại"})[st.first]}</b>. Em có thể bấm các nút khác để xem hệ quả.</p>` : "") + (out[st.last] || "");
+};
+H.post = (id, q, d, v) => {
+  const a = A(id), st = a.st; if (d !== "post") return;
+  st.last = v;
+  if (!st.first) { st.first = v; const good = v === "check" || v === "stop"; finish(id, {answer: {first: v}, correct: good, attempts: 1, score: good ? 10 : 4}); }
+  if (v === "now" || v === "share") setTimeout(runSpread, 30);
+};
+function runSpread() {
+  const steps = [[1, "1 người thấy bài"], [5, "5 người đã xem"], [20, "20 người đã đọc và nhắn cho nhau"], [100, "100 lượt chia sẻ"]]; let i = 0;
+  const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
+  (function tick() {
+    const el = $("#spread"); if (!el) return;
+    if (reduce) i = steps.length - 1;
+    el.innerHTML = `<b>${steps[i][1]}</b><div class="dots">${"👤".repeat(steps[i][0])}</div>`;
+    if (++i < steps.length) setTimeout(tick, 800);
+    else el.innerHTML += `<div class="fb warn">⚠️ <b>Thông tin chưa được xác minh.</b> Sáng hôm sau nhiều bạn nghỉ học vì tin của em. Gỡ bài lúc này không thu hồi được các lượt chia sẻ.</div>`;
+  })();
+}
+/* ----- ailab: AI Research Mini-Lab ----- */
+R.ailab = (id, q, a) => {
+  const st = a.st, dis = a.done ? "disabled" : "";
+  const inp = (k, l) => `<label for="ai-${k}">${l}</label><input type="text" id="ai-${k}" ${dis} data-act="${id}" data-k="${k}" value="${esc(st[k] || "")}">`;
+  const chk = (k, l) => `<label class="check"><input type="checkbox" ${dis} data-act="${id}" data-k="${k}" ${st[k] ? "checked" : ""}>${l}</label>`;
+  return `<p class="hint0">Prompt mẫu (có thể sao chép vào chatbot). Từ khóa gợi ý: «Lừa đảo bằng AI», «Đạo đức AI».</p>
+    <div class="tpl" id="aiPrompt">${AI_PROMPT}</div><button class="btn sm ghost" style="margin:8px 0 14px" data-do="copy">📋 SAO CHÉP PROMPT</button>
+    <div class="form" style="max-width:none">${inp("s1", "Dấu hiệu 1")}${inp("s2", "Dấu hiệu 2")}${inp("s3", "Dấu hiệu 3")}
+    <label for="ai-src">Em đã kiểm chứng câu trả lời AI bằng nguồn nào? (bắt buộc)</label>
+    <textarea id="ai-src" ${dis} data-act="${id}" data-k="src" placeholder="Ví dụ: đối chiếu với mục 1 SGK trang 56 (lừa đảo qua mạng), bản tin cảnh báo của cơ quan chức năng...">${esc(st.src || "")}</textarea>
+    ${chk("c1", "Em không nhập thông tin cá nhân vào AI.")}${chk("c2", "Em hiểu AI có thể trả lời sai.")}${chk("c3", "Em đã đối chiếu với SGK hoặc nguồn đáng tin cậy.")}</div>
+    ${a.done ? `<div class="fb ok">✅ Đã ghi nhận. ${st.c1 && st.c2 && st.c3 ? "Em đã thực hiện đủ 3 cam kết khi dùng AI." : "Lưu ý: em chưa đánh dấu đủ 3 cam kết. Hãy trao đổi với thầy nếu còn băn khoăn."}<br>So sánh thêm: các dấu hiệu em ghi có khớp với những vụ mượn tiền qua cuộc gọi video giả mạo không?</div>` :
+      `<button class="btn sm" style="margin-top:10px" data-act="${id}" data-do="send">GỬI KẾT QUẢ</button>${st.err ? `<div class="fb warn">${st.err}</div>` : ""}`}`;
+};
+H.ailab = (id, q, d) => {
+  const a = A(id), st = a.st; if (d !== "send") return;
+  const t = k => (st[k] || "").trim();
+  if (!t("s1") || !t("s2") || !t("s3")) st.err = "Hãy ghi đủ 3 dấu hiệu.";
+  else if (t("src").length < 8) st.err = "Hãy ghi rõ nguồn em đã dùng để kiểm chứng câu trả lời của AI.";
+  else { st.err = ""; finish(id, {answer: {signs: [t("s1"), t("s2"), t("s3")], source: t("src"), noPersonal: !!st.c1, aiCanBeWrong: !!st.c2, crossChecked: !!st.c3}, correct: !!(st.c1 && st.c2 && st.c3), attempts: 1, score: 10}); }
+};
+
+/* ================= NỘI DUNG TĨNH CỦA TỪNG TRANG ================= */
+const card = h => `<section class="card">${h}</section>`;
+const act = id => `<section class="card act" id="act-${id}"></section>`;
+const STATIC = {
+ 1: () => card(`<h3>📱 Chuyện xảy ra trên mạng xã hội</h3><p class="hint0">Tình huống trong SGK trang 55, được dựng lại thành một bài đăng giả lập.</p>
+   <div class="phone"><div class="ph"><span>mạng xã hội</span><span>📶 4G</span></div><div class="post">
+   <div class="user"><span class="ava">👤</span>Tài khoản ẩn danh · 2 giờ trước</div>
+   <p style="margin:6px 0;font-size:14px">Cãi nhau trên diễn đàn rồi ra ngoài «giải quyết» nè mọi người 😱</p>
+   <div class="video">▶ VIDEO 00:47<br>Một nhóm nữ sinh đánh một bạn nữ. Các bạn xung quanh không can ngăn mà đứng quay phim.</div>
+   <div class="react"><span>👍 1,2K</span><span>💬 386 bình luận</span><span>🔁 954 chia sẻ</span></div>
+   <div class="cmt"><b>nick_an_danh:</b> Đáng đời, nhìn mặt là thấy ghét 😏</div>
+   <div class="cmt"><b>hong_chuyen:</b> Ai biết trường nào không, tag vô cho vui</div>
+   <div class="cmt"><b>ban_cung_lop:</b> Share mạnh cho cả trường biết!</div></div></div>
+   <p><b>Kết cục:</b> vì quá xấu hổ trước nhiều bình luận thiếu thiện ý, nạn nhân đã bỏ nhà ra đi, không để lại lời nhắn.</p>`) +
+   act("B11_ETHICS_CASE") + act("B11_CASE_CLASSIFY") + act("B11_INTERNET_FACTOR") +
+   card(`<h3>Chốt lại</h3><div class="flow"><div>ỨNG XỬ XẤU TRÊN MẠNG</div><i>↓</i><div>Phát tán nhanh</div><i>↓</i><div>Nhiều người tham gia</div><i>↓</i><div>Khó kiểm soát</div><i>↓</i><div>Hậu quả có thể nghiêm trọng hơn</div></div>`) +
+   act("B11_BEHAVIOR_SORT") +
+   card(`<h3>📌 Ghi nhớ</h3><p>Những hành vi vi phạm đạo đức, pháp luật và văn hóa khi sử dụng mạng:</p><div class="kw"><span>📰 Đưa tin không phù hợp</span><span>🔐 Công bố thông tin cá nhân không được phép</span><span>📨 Phát tán thư, tin nhắn rác</span><span>©️ Vi phạm bản quyền</span><span>😢 Bắt nạt qua mạng</span><span>🎣 Lừa đảo qua mạng</span><span>😡 Ứng xử thiếu văn hóa</span></div>`),
+ 2: () => act("B11_BEFORE_POST") + act("B11_NEWS_SHARE") +
+   card(`<h3>🧠 THINK BEFORE POST – Bộ lọc 4 câu</h3><div class="think">
+   <div class="t1"><b>1. ĐÚNG?</b>Thông tin đã được kiểm chứng chưa?</div><div class="t2"><b>2. HỢP PHÁP?</b>Nội dung có vi phạm quy định không?</div>
+   <div class="t3"><b>3. TÔN TRỌNG?</b>Có ảnh hưởng danh dự, quyền riêng tư của người khác không?</div><div class="t4"><b>4. CẦN THIẾT?</b>Việc đăng có thực sự mang lại giá trị không?</div></div>
+   <p style="margin:12px 0 0;text-align:center;font-weight:700">TRƯỚC KHI ĐĂNG → KIỂM TRA → CÂN NHẮC → CHỊU TRÁCH NHIỆM</p>`) +
+   act("B11_THINK_FILTER") +
+   card(`<h3>⚖️ Góc pháp luật</h3><p class="hint0">Mở khi cần. Mục tiêu là hiểu nguyên tắc, không phải học thuộc số điều và ngày tháng.</p>
+   <details><summary>Luật Công nghệ thông tin (2006)</summary>Cấm cung cấp, trao đổi, truyền đưa, lưu trữ, sử dụng thông tin số nhằm: kích động bạo lực; xuyên tạc, vu khống, xúc phạm uy tín của tổ chức, danh dự, nhân phẩm của công dân; quảng cáo hàng hóa, dịch vụ bị cấm...</details>
+   <details><summary>Luật An ninh mạng (2018)</summary>Cấm dùng không gian mạng để đưa thông tin sai sự thật gây hoang mang trong Nhân dân, gây thiệt hại cho hoạt động kinh tế – xã hội; xúi giục, lôi kéo, kích động người khác phạm tội...</details>
+   <details><summary>Quy định về thông tin sai sự thật và xử phạt</summary>Nghị định 15/2020/NĐ-CP nêu cụ thể các hành vi bị xử phạt trên mạng xã hội: cung cấp, <b>chia sẻ</b> thông tin giả mạo, sai sự thật, xuyên tạc, vu khống, xúc phạm; chia sẻ thông tin bịa đặt gây hoang mang; chia sẻ tác phẩm khi chưa được chủ thể quyền sở hữu trí tuệ đồng ý...</details>
+   <details><summary>Thư rác và dịch vụ Internet</summary>SGK nhắc tới Nghị định 90/2008/NĐ-CP về chống thư rác và Nghị định 72/2013/NĐ-CP về quản lí, cung cấp, sử dụng dịch vụ Internet.</details>
+   <details><summary>Bộ Quy tắc ứng xử trên mạng xã hội (2021)</summary>Khuyến khích dùng tên thật, chia sẻ thông tin tích cực, gương người tốt việc tốt, quảng bá hình ảnh đất nước, con người và văn hóa Việt Nam; tuân thủ quy định của nhà cung cấp dịch vụ mạng xã hội.</details>
+   <details><summary>Thông tin bổ sung theo nguồn hiện hành</summary>Sau khi SGK xuất bản, một số văn bản đã được thay thế hoặc sửa đổi (ví dụ quy định về chống thư rác, về dịch vụ Internet và thông tin trên mạng, về xử phạt vi phạm quyền tác giả). Nội dung bài học vẫn giữ theo SGK; khi cần áp dụng thực tế, hãy tra văn bản đang có hiệu lực ở mục Nguồn tham khảo cuối trang.</details>
+   <div class="note">Quy định pháp luật có thể được sửa đổi, bổ sung. Học sinh nên tham khảo văn bản pháp luật hiện hành từ nguồn chính thức.</div>`) +
+   act("B11_LAW_CASE") +
+   card(`<h3>📌 Ghi nhớ</h3><p>Khi đưa tin lên mạng, hãy xem nội dung có vi phạm quy định của pháp luật hay không. <b>Chia sẻ một tin vi phạm pháp luật cũng là vi phạm pháp luật.</b> Ngay cả khi tin không phạm luật, vẫn phải tính đến hậu quả về mặt đạo đức: một tin vô hại với người này có thể mang lại tai họa cho người khác.</p>`),
+ 3: () => card(`<h3>🤖 AI có nói đúng không?</h3><div class="phone"><div class="ph"><span>📹 Cuộc gọi video đến</span><span>00:21</span></div><div class="post">
+   <div class="user"><span class="ava">👩</span>Dì Lan (tài khoản quen)</div>
+   <div class="video">Hình ảnh hơi giật, khẩu hình không khớp tiếng</div>
+   <div class="cmt">«Con ơi dì đang kẹt lắm, chuyển gấp cho dì 2 triệu vào số tài khoản này nha, tên người khác cũng được, dì mượn tài khoản bạn. Chuyển liền đi, dì không nói lâu được!»</div></div></div>`) +
+   act("B11_DEEPFAKE") + act("B11_DEEPFAKE_ACT") +
+   card(`<h3>Mẹo nhớ</h3><div class="flow good"><div>DỪNG</div><i>↓</i><div>KIỂM CHỨNG</div><i>↓</i><div>XÁC MINH</div><i>↓</i><div>MỚI HÀNH ĐỘNG</div></div>
+   <p class="note">Tin giả ngày nay không chỉ là chữ viết mà còn là hình ảnh, giọng nói, video mạo danh. Vô tình chia sẻ một video AI giả mạo cũng là tiếp tay phát tán.</p>`) +
+   act("B11_AI_VERIFY") +
+   card(`<h3>AI ≠ nguồn sự thật tuyệt đối</h3><div class="flow good"><div>AI gợi ý</div><i>↓</i><div>Con người đánh giá</div><i>↓</i><div>Nguồn khác kiểm chứng</div><i>↓</i><div>Con người quyết định</div></div>`) +
+   act("B11_AI_TRUST"),
+ 4: () => act("B11_AI_AUTHOR") +
+   card(`<h3>🗺 Khám phá quyền tác giả</h3><p class="hint0">Bấm vào từng nhánh để mở. <b>Quyền tác giả</b> là quyền của tổ chức, cá nhân đối với tác phẩm do mình sáng tạo ra hoặc sở hữu (bài thơ, bức tranh, chương trình máy tính, sưu tập dữ liệu...).</p>
+   <div class="tree"><span class="rootn">QUYỀN TÁC GIẢ</span><div class="line"></div><div class="two">
+   <details><summary>👤 QUYỀN NHÂN THÂN</summary><div class="kw"><span>✍️ Đặt tên</span><span>👤 Đứng tên</span><span>📢 Công bố</span><span>🛡 Bảo vệ tính toàn vẹn</span></div><p class="hint0" style="margin-top:8px">Gắn với tên tuổi, danh dự, uy tín của tác giả.</p></details>
+   <details><summary>💰 QUYỀN TÀI SẢN</summary><div class="kw"><span>📄 Sao chép</span><span>🔁 Tác phẩm phái sinh</span><span>📡 Truyền đạt đến công chúng</span><span>💿 Cho thuê, khai thác</span></div><p class="hint0" style="margin-top:8px">Gắn với việc khai thác, sử dụng tác phẩm.</p></details></div></div>
+   <p class="note">«Bản quyền» và «quyền tác giả» không hoàn toàn tương đồng nhưng thực tế thường dùng chung. Văn bản pháp luật Việt Nam dùng thuật ngữ chính thức là <b>quyền tác giả</b>. Vi phạm quyền nhân thân hay quyền tài sản đều là vi phạm bản quyền.</p>`) +
+   act("B11_AUTHOR_RIGHTS") + act("B11_COPYRIGHT_SORT") +
+   card(`<h3>Licence ≠ mua bản quyền</h3><div class="two">
+   <div class="box use"><b>💳 MUA QUYỀN SỬ DỤNG (licence)</b><br>→ Em được dùng<br>→ theo điều kiện licence (ví dụ: số máy được cài)<br><small>Ví dụ: mua Windows, Word, Excel.</small></div>
+   <div class="box own"><b>©️ SỞ HỮU QUYỀN</b><br>→ quyền khai thác rộng hơn, được kinh doanh tác phẩm<br>→ tùy thỏa thuận pháp lí<br><small>Ví dụ trong SGK: Google mua YouTube.</small></div></div>
+   <p class="note">Sản phẩm số dễ sao chép với chi phí rất thấp và dễ phát tán trên quy mô lớn, nên vi phạm bản quyền có thể gây thiệt hại rất lớn cho người đầu tư.</p>`) +
+   act("B11_LICENSE") + act("B11_AI_INTEGRITY") +
+   card(`<h3>Quy tắc: AI HỖ TRỢ → CẦN MINH BẠCH</h3><p>Mẫu ghi chú cuối bài làm:</p><div class="tpl">Tài liệu/công cụ AI hỗ trợ:
+[Tên công cụ] – dùng để [mục đích].</div>`),
+ 5: () => card(`<h3>🌐 DIGITAL CITIZEN CHALLENGE</h3><p style="margin:0">8 câu, mỗi câu một dạng. Sai lần 1 có gợi ý, sai lần 2 có từ khóa, sai lần 3 hiện đáp án.</p>`) + PAGES[5].acts.map(act).join("") + exitHTML() + refsHTML()
+};
+function refsHTML() {
+  const a = (u, t) => `<li><a href="${u}" target="_blank" rel="noopener noreferrer">${t}</a></li>`;
+  return card(`<h3>📚 Nguồn tham khảo</h3><ul class="refs">
+   <li>Tin học 10, bộ Kết nối tri thức với cuộc sống, Bài 11 (trang 55–61).</li><li>Kế hoạch bài dạy Tin học 10 – Bài 11, GV ${CONFIG.teacherName}.</li>
+   ${a("https://vbpl.vn", "Cơ sở dữ liệu quốc gia về văn bản pháp luật (tra văn bản đang có hiệu lực)")}
+   ${a("https://vanban.chinhphu.vn", "Cổng Thông tin điện tử Chính phủ – Hệ thống văn bản")}
+   ${a("https://cov.gov.vn", "Cục Bản quyền tác giả")}
+   ${a("https://ipvietnam.gov.vn", "Cục Sở hữu trí tuệ")}</ul>
+   <div class="note">Thông tin bổ sung theo nguồn hiện hành. Quy định pháp luật có thể được sửa đổi, bổ sung; hãy tham khảo văn bản hiện hành từ nguồn chính thức.</div>`);
+}
+
+/* ================= EXIT TICKET + SƠ ĐỒ TƯ DUY ================= */
+function mmSVG(mm) {
+  mm = mm || {};
+  let s = `<svg class="mm" viewBox="0 0 700 360" role="img" aria-label="Sơ đồ tư duy tổng kết"><g font-family="system-ui,sans-serif">`;
+  for (const [k, t, c, x, y] of MMB) {
+    s += `<path d="M350 180 Q ${(350 + x) / 2} ${y} ${x} ${y}" stroke="${c}" stroke-width="3" fill="none"/>`;
+    (mm[k] || []).filter(w => w && String(w).trim()).slice(0, 3).forEach((w, i) => {
+      const yy = y < 180 ? y + 40 + i * 24 : y - 40 - i * 24;
+      s += `<rect x="${x - 110}" y="${yy - 14}" width="220" height="21" rx="6" fill="#fff" stroke="${c}"/><text x="${x}" y="${yy + 1}" text-anchor="middle" font-size="12.5" fill="#16223a">${esc(String(w).trim().slice(0, 30))}</text>`;
+    });
+    s += `<rect x="${x - 125}" y="${y - 18}" width="250" height="36" rx="18" fill="${c}"/><text x="${x}" y="${y + 5}" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">${t}</text>`;
+  }
+  return s + `<rect x="215" y="155" width="270" height="50" rx="14" fill="#0f1f3d"/><text x="350" y="186" text-anchor="middle" fill="#fff" font-size="14.5" font-weight="800">ỨNG XỬ TRONG MÔI TRƯỜNG SỐ</text></g></svg>`;
+}
+function exitHTML() {
+  const e = S.exitTicket, dis = S.done ? "disabled" : "";
+  return `<section class="card" id="exit"><div class="acth"><span class="tag">Exit Ticket</span><h3>Trước khi rời lớp</h3>${S.done ? `<span class="tag ok">✔ Đã nộp</span>` : ""}</div>
+  <div class="form" style="max-width:none">
+  <label for="ex-learned">1. Điều quan trọng nhất em học được hôm nay?</label><textarea id="ex-learned" ${dis} data-exit="learned">${esc(e.learned || "")}</textarea>
+  <div><label>2. Tình huống nào em thấy khó phân biệt nhất?</label>${DIFFS.map(d => `<label class="check"><input type="checkbox" ${dis} data-exit="diff" value="${d}" ${(e.diff || []).includes(d) ? "checked" : ""}>${d}</label>`).join("")}</div>
+  <label for="ex-app">3. Nếu thấy một tin gây sốc trên mạng, ba việc em sẽ làm trước khi chia sẻ là gì?</label><textarea id="ex-app" ${dis} data-exit="app">${esc(e.app || "")}</textarea>
+  <div><label>4. Mức độ hiểu bài của em</label><div class="und" id="undBox">${["😕","😐","🙂","😊","🤩"].map((m, i) => `<button ${dis} class="${e.und === i + 1 ? "on" : ""}" aria-pressed="${e.und === i + 1}" aria-label="Mức ${i + 1}" data-do="und" data-v="${i + 1}">${i + 1} ${m}</button>`).join("")}</div></div>
+  <label for="ex-q">5. Điều em muốn thầy giải thích thêm? (không bắt buộc)</label><textarea id="ex-q" ${dis} data-exit="q">${esc(e.q || "")}</textarea></div></section>
+  <section class="card"><div class="acth"><span class="tag">Exit Ticket</span><h3>🧠 1 phút tổng kết</h3></div><p class="hint0">Điền tối đa 3 từ khóa cho mỗi nhánh. Mỗi nhánh cần ít nhất 1 từ khóa.</p>
+  <div class="mmgrid">${MMB.map(([k, t]) => `<fieldset><legend>${t}</legend>${[0, 1, 2].map(i => `<input type="text" maxlength="30" ${dis} aria-label="${t} – từ khóa ${i + 1}" placeholder="Từ khóa ${i + 1}" data-mm="${k}${i}" value="${esc((S.mindmap[k] || [])[i] || "")}">`).join("")}</fieldset>`).join("")}</div>
+  <div id="mmPrev">${mmSVG(S.mindmap)}</div>
+  <div id="exitErr"></div>
+  ${S.done ? "" : `<p style="text-align:center;margin:14px 0 0"><button class="btn go" data-do="exitSend">NỘP EXIT TICKET VÀ HOÀN THÀNH 🏁</button></p>`}</section>`;
+}
+function submitExit() {
+  const e = S.exitTicket, err = [];
+  const undone = PAGES[5].acts.filter(id => !A(id).done).length;
+  if (undone) err.push(`Còn ${undone} câu thử thách chưa hoàn thành.`);
+  if ((e.learned || "").trim().length < 10) err.push("Câu 1: hãy viết điều em học được (từ 10 kí tự).");
+  if (!(e.diff || []).length) err.push("Câu 2: chọn ít nhất một mục.");
+  if ((e.app || "").trim().length < 15) err.push("Câu 3: hãy nêu ba việc em sẽ làm.");
+  if (!e.und) err.push("Câu 4: chọn mức độ hiểu.");
+  if (MMB.some(([k]) => !(S.mindmap[k] || []).some(w => w && w.trim()))) err.push("Sơ đồ tư duy: mỗi nhánh cần ít nhất 1 từ khóa.");
+  if (err.length) { $("#exitErr").innerHTML = `<div class="fb warn">${err.join("<br>")}</div>`; return; }
+  const dur = Math.round((Date.now() - S.startTime) / 1000);
+  if (dur < CONFIG.fastFinishMinutes * 60) {
+    S.fast = true; save();
+    if (!S.fastAck) { modal(`<h2>⚠️ EM ĐANG HOÀN THÀNH BÀI RẤT NHANH.</h2><p>Hãy xem lại:</p><ul><li>hoạt động tình huống;</li><li>phần AI/Deepfake;</li><li>bản quyền;</li><li>Exit Ticket.</li></ul>
+      <div class="row"><button class="btn ghost" data-do="fastReview">XEM LẠI</button><button class="btn" data-do="fastOk">TÔI ĐÃ KIỂM TRA</button></div>`); return; }
+  }
+  S.done = true; S.duration = dur; recalc(); save();
+  const mm = {}; MMB.forEach(([k]) => mm[k] = (S.mindmap[k] || []).map(w => (w || "").trim()).filter(Boolean));
+  enqueue({action: "exit", learned: e.learned.trim(), difficultPart: e.diff.join("; "), application: e.app.trim(), understanding: e.und, question: (e.q || "").trim(), mindmapJSON: JSON.stringify(mm), durationSeconds: dur, fastFinish: S.fast});
+  enqueue({action: "complete", durationSeconds: dur, fastFinish: S.fast});
+  go(6);
+}
+
+/* ================= GIAO DIỆN CHUNG ================= */
+function chrome() {
+  const on = !!S;
+  $("#who").hidden = $("#xp").hidden = $("#swap").hidden = !on;
+  $("#steps").hidden = $("#bar").hidden = !on || view === 0;
+  if (on) {
+    $("#who").textContent = `👤 ${S.name} · ${S.cls}`;
+    $("#xp").textContent = `⭐ ${S.xp} XP · ${S.score}/${MAXSCORE}`;
+    $("#steps").innerHTML = PAGES.slice(1).map((p, i) => { const n = i + 1, ok = p.acts.every(id => S.acts[id] && S.acts[id].done);
+      return `<button class="${view === n ? "on" : ok ? "ok" : ""}" ${n > S.maxPage ? "disabled" : ""} ${view === n ? 'aria-current="page"' : ""} data-do="go" data-v="${n}"><b>TRANG ${n}${ok ? " ✔" : ""}</b>${p.s}</button>`; }).join("");
+    $("#bar i").style.width = Math.round(S.completedActivities.length / ALL.length * 100) + "%";
+  }
+  const nb = $("#navb");
+  if (on && view >= 1 && view <= 4) {
+    const left = PAGES[view].acts.filter(id => !(S.acts[id] && S.acts[id].done)).length;
+    nb.hidden = false;
+    nb.innerHTML = (view > 1 ? `<button class="btn ghost sm" data-do="go" data-v="${view - 1}">← Trang trước</button>` : "") +
+      (left ? `<span>Còn ${left} hoạt động trên trang này</span>` : "") + `<button class="btn" ${left ? "disabled" : ""} data-do="go" data-v="${view + 1}">Trang ${view + 1} →</button>`;
+  } else nb.hidden = true;
+  setSync();
+}
+function go(n) {
+  n = +n; view = n;
+  if (S && n >= 1 && n <= 5) { S.page = n; S.maxPage = Math.max(S.maxPage || 1, n); save(); }
+  render(); window.scrollTo(0, 0);
+}
+function render() {
+  const m = $("#main");
+  if (!S || view === 0) m.innerHTML = checkinHTML();
+  else if (view === 6) m.innerHTML = doneHTML();
+  else {
+    const p = PAGES[view];
+    m.innerHTML = `<div class="ptitle"><h2>Trang ${view}. ${p.t}</h2><span>⏱ khoảng ${p.m} phút</span></div>` + STATIC[view]();
+    p.acts.forEach(renderAct);
+  }
+  chrome();
+}
+function checkinHTML() {
+  const classes = [...new Set(ROSTER.map(r => r.cls))].sort();
+  return `<section class="card hero"><div class="sub">TIN HỌC 10</div><h1>BÀI 11<br>ỨNG XỬ TRONG MÔI TRƯỜNG SỐ</h1><div class="sub">NGHĨA VỤ TÔN TRỌNG BẢN QUYỀN</div>
+   <blockquote>"Trên Internet, một cú nhấn Đăng chỉ mất 1 giây, nhưng hậu quả của nó có thể tồn tại rất lâu."</blockquote>
+   <div class="meta"><span class="pill">👨‍🏫 Giáo viên: ${CONFIG.teacherName}</span><span class="pill">⏱ Thời lượng: ${CONFIG.expectedMinutes} phút</span><span class="pill">📅 ${CONFIG.schoolYear}</span></div></section>
+   <section class="card"><h2 style="text-align:center">Check-in</h2>
+   ${DEMO ? `<p class="note" style="max-width:420px;margin:0 auto 12px">🟡 DEMO MODE: chưa kết nối Google Sheet. Dùng danh sách học sinh mẫu, dữ liệu chỉ lưu trên trình duyệt này.</p>` : ""}
+   <div class="form">${ROSTER.length ? `
+     <label for="selC">Chọn lớp</label><select id="selC"><option value="">-- Lớp --</option>${classes.map(c => `<option>${esc(c)}</option>`).join("")}</select>
+     <label for="selS">Chọn họ tên</label><select id="selS" disabled><option value="">-- Chọn lớp trước --</option></select>
+     <button class="btn go" id="startBtn" data-do="start" disabled>BẮT ĐẦU HÀNH TRÌNH 🌐</button>` :
+     `<div class="fb warn" id="rosterMsg">Đang tải danh sách lớp...</div><button class="btn ghost" data-do="reloadRoster">Tải lại danh sách</button>`}
+   </div></section>`;
+}
+function doneHTML() {
+  const pct = S.score / MAXSCORE, b = pct >= .85 ? ["🏆", "Công dân số gương mẫu"] : pct >= .65 ? ["🥈", "Công dân số có trách nhiệm"] : ["🌱", "Công dân số đang trưởng thành"];
+  return `<section class="card hero"><div class="badge">${b[0]}</div><h1>${b[1]}</h1><p>${esc(S.name)} · ${esc(S.cls)}</p>
+   <div class="meta"><span class="pill">📊 ${S.score}/${MAXSCORE} điểm</span><span class="pill">⭐ ${S.xp} XP</span><span class="pill">🕒 ${fmtT(S.duration)}</span></div>
+   <blockquote>Trước khi đăng → Kiểm tra → Cân nhắc → Chịu trách nhiệm.</blockquote></section>
+   <section class="card"><h3>Sơ đồ tư duy của em</h3>${mmSVG(S.mindmap)}
+   <p class="note" id="doneSync">${DEMO ? "DEMO MODE: kết quả chỉ lưu trên trình duyệt này." : S.syncQueue.length ? "☁ Đang chờ đồng bộ. Hãy giữ trang này mở cho tới khi hiện «Đã đồng bộ»." : "Kết quả đã được gửi cho thầy."}</p>
+   <button class="btn ghost" data-do="go" data-v="1">Xem lại bài học</button></section>`;
+}
+function modal(html, wide) { $("#layer").innerHTML = `<div class="ov"><div class="modal ${wide ? "wide" : ""}" role="dialog" aria-modal="true">${html}</div></div>`; const f = $("#layer input,#layer button"); if (f) f.focus(); }
+function closeModal() { $("#layer").innerHTML = ""; }
+
+/* ================= CHECK-IN + KHÔI PHỤC TIẾN ĐỘ ================= */
+async function loadRoster() {
+  if (DEMO) ROSTER = DEMO_ROSTER;
+  else {
+    try {
+      const j = await apiGet({action: "roster", schoolYear: CONFIG.schoolYear});
+      if (!j.ok) throw new Error(j.error);
+      ROSTER = j.roster; lsSet("b11:roster", ROSTER);
+    } catch (e) { ROSTER = lsGet("b11:roster") || []; }
+  }
+  if (!S) { render(); if (!ROSTER.length && $("#rosterMsg")) $("#rosterMsg").textContent = "Không tải được danh sách lớp. Kiểm tra kết nối mạng hoặc sheet ROSTER rồi bấm Tải lại."; }
+}
+async function startStudent() {
+  const st = ROSTER.find(r => r.id === $("#selS").value); if (!st) return;
+  const btn = $("#startBtn"); btn.disabled = true; btn.textContent = "Đang mở bài...";
+  let s = lsGet("b11:" + keyOf(st.id));
+  if (!s) {
+    s = blank(st);
+    if (!DEMO) try {
+      const j = await Promise.race([apiGet({action: "loadProgress", studentKey: s.studentKey}), new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 12000))]);
+      if (j.ok && j.student) {
+        const t = Date.parse(j.student["Bắt đầu"]); if (t) s.startTime = t;
+        s.maxPage = s.page = Math.min(5, Math.max(1, +j.student["Tiến độ"] || 1));
+        (j.responses || []).forEach(r => { if (ACT[r.ActivityID]) { let ans = r.Answer; try { ans = JSON.parse(r.Answer); } catch (e) {}
+          s.acts[r.ActivityID] = {done: true, restored: true, st: {}, t0: Date.now(), answer: ans, correct: truthy(r.Correct), attempts: +r.Attempts || 1, score: +r.Score || 0, xp: +r.XP || 0, time: +r.TimeSpent || 0}; } });
+        if (j.exit) { const x = j.exit; s.exitTicket = {learned: x.Learned, diff: String(x.DifficultPart || "").split("; ").filter(Boolean), app: x.Application, und: +x.Understanding || 0, q: x.Question};
+          try { const mm = JSON.parse(x.MindmapJSON); MMB.forEach(([k]) => s.mindmap[k] = [0, 1, 2].map(i => (mm[k] || [])[i] || "")); } catch (e) {} }
+        if (truthy(j.student["Hoàn thành"])) { s.done = true; s.duration = +j.student.DurationSeconds || 0; s.fast = truthy(j.student.FastFinish); }
+        toast("Đã khôi phục tiến độ từ máy chủ");
+      }
+    } catch (e) { /* không có mạng: bắt đầu mới, sẽ đồng bộ sau */ }
+  }
+  S = s; recalc(); save(); enqueue({action: "start", startTime: new Date(S.startTime).toISOString()});
+  go(S.done ? 6 : S.page || 1);
+}
+
+/* ================= TEACHER MODE ================= */
+let TD = null, TCLS = "";
+function teacherOpen() {
+  modal(`<h2>👨‍🏫 Teacher Mode</h2><p class="hint0">${DEMO ? "DEMO MODE: mã demo là GV2026. Xác thực demo chạy trên trình duyệt, không phải bảo mật production." : "Mã giáo viên được kiểm tra trên Apps Script (Code.gs)."}</p>
+   <label for="tcode">Mã giáo viên</label><input type="password" id="tcode" autocomplete="off"><div id="terr"></div>
+   <div class="row" style="margin-top:12px"><button class="btn" data-do="tlogin">MỞ DASHBOARD</button><button class="btn ghost" data-do="close">Đóng</button></div>`);
+}
+async function teacherLogin() {
+  const code = $("#tcode").value.trim(), err = $("#terr");
+  if (DEMO) { if (code !== DEMO_TEACHER_CODE) { err.innerHTML = `<div class="fb warn">Sai mã.</div>`; return; } TD = demoData(); }
+  else {
+    err.innerHTML = `<p class="hint0">Đang tải dữ liệu...</p>`;
+    try { const j = await apiGet({action: "teacherData", code, lessonId: CONFIG.lessonId, schoolYear: CONFIG.schoolYear}); if (!j.ok) { err.innerHTML = `<div class="fb warn">${j.error === "unauthorized" ? "Sai mã giáo viên." : "Lỗi máy chủ: " + esc(j.error)}</div>`; return; } TD = j; }
+    catch (e) { err.innerHTML = `<div class="fb warn">Không kết nối được máy chủ.</div>`; return; }
+  }
+  TCLS = ""; dashboard();
+}
+function demoData() {
+  let seed = 11; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280, pick = a => a[Math.floor(rnd() * a.length)];
+  const roster = DEMO_ROSTER.map(r => ({StudentID: r.id, "Họ tên": r.name, "Lớp": r.cls})), students = [], responses = [], exits = [];
+  const kws = {a: ["mức độ", "hậu quả", "tôn trọng"], b: ["kiểm chứng", "chia sẻ = phát tán", "4 câu hỏi"], c: ["licence", "nhân thân", "tài sản"], d: ["minh bạch", "AI có thể sai", "xác minh"]};
+  DEMO_ROSTER.slice(0, 6).forEach((r, i) => {
+    if (S && r.id === S.studentId) return;
+    const done = i < 4, n = done ? ALL.length : 5 + i * 2, sk = keyOf(r.id); let sc = 0, xp = 0;
+    ALL.slice(0, n).forEach(id => { const w = rnd() < (/LICENSE|COPYRIGHT|CASE_CLASSIFY|Q6/.test(id) ? .6 : .25) ? 1 + Math.floor(rnd() * 2) : 0, score = PT[w]; sc += score; xp += score + 5;
+      const ans = id === "B11_AI_VERIFY" ? JSON.stringify({signs: ["thúc giục", "giọng lạ", "tài khoản lạ"], source: "SGK trang 56", noPersonal: rnd() > .2, aiCanBeWrong: rnd() > .15, crossChecked: rnd() > .4}) : "{}";
+      responses.push({StudentKey: sk, StudentID: r.id, ActivityID: id, Answer: ans, Correct: !w, Attempts: w + 1, Score: score, XP: score + 5, TimeSpent: 60 + Math.floor(rnd() * 200)}); });
+    const dur = i === 3 ? 420 : 3600 + Math.floor(rnd() * 1500);
+    students.push({StudentKey: sk, StudentID: r.id, "Họ tên": r.name, "Lớp": r.cls, "Hoàn thành": done, "Tiến độ": done ? 5 : 2 + (i % 3), "Tổng điểm": sc, XP: xp, DurationSeconds: done ? dur : "", FastFinish: done && dur < 600});
+    if (done) exits.push({StudentKey: sk, StudentID: r.id, "Họ tên": r.name, "Lớp": r.cls, Learned: "Chia sẻ cũng là phát tán.", DifficultPart: [pick(DIFFS), pick(DIFFS)].filter((x, j, a) => a.indexOf(x) === j).join("; "),
+      Application: "Dừng lại, kiểm tra nguồn, hỏi người lớn.", Understanding: 3 + Math.floor(rnd() * 3), Question: i % 2 ? "Dùng ảnh trên mạng làm bài tập có vi phạm bản quyền không ạ?" : "", MindmapJSON: JSON.stringify(kws)});
+  });
+  if (S) {
+    students.push({StudentKey: S.studentKey, StudentID: S.studentId, "Họ tên": S.name, "Lớp": S.cls, "Hoàn thành": S.done, "Tiến độ": S.maxPage, "Tổng điểm": S.score, XP: S.xp, DurationSeconds: S.duration || "", FastFinish: S.fast});
+    ALL.forEach(id => { const a = S.acts[id]; if (a && a.done) responses.push({StudentKey: S.studentKey, StudentID: S.studentId, ActivityID: id, Answer: JSON.stringify(a.answer), Correct: a.correct, Attempts: a.attempts, Score: a.score, XP: a.xp, TimeSpent: a.time}); });
+    if (S.done) exits.push({StudentKey: S.studentKey, StudentID: S.studentId, "Họ tên": S.name, "Lớp": S.cls, Learned: S.exitTicket.learned, DifficultPart: S.exitTicket.diff.join("; "), Application: S.exitTicket.app, Understanding: S.exitTicket.und, Question: S.exitTicket.q, MindmapJSON: JSON.stringify(S.mindmap)});
+  }
+  return {roster, students, responses, exits};
+}
+function dashboard() {
+  const f = r => !TCLS || String(r["Lớp"]) === TCLS;
+  const roster = TD.roster.filter(f), students = TD.students.filter(f), keys = new Set(students.map(s => s.StudentKey));
+  const responses = TD.responses.filter(r => keys.has(r.StudentKey)), exits = TD.exits.filter(f);
+  const done = students.filter(s => truthy(s["Hoàn thành"])), avg = (a, k) => a.length ? a.reduce((s, x) => s + (+x[k] || 0), 0) / a.length : 0;
+  const stat = (v, l) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`;
+  const classes = [...new Set(TD.roster.map(r => String(r["Lớp"])))].sort();
+  // Hoạt động khó nhất
+  const byAct = {}; responses.forEach(r => { const o = byAct[r.ActivityID] = byAct[r.ActivityID] || {n: 0, sc: 0, at: 0, ok: 0}; o.n++; o.sc += +r.Score || 0; o.at += +r.Attempts || 0; o.ok += truthy(r.Correct) ? 1 : 0; });
+  const hard = Object.entries(byAct).filter(([id]) => ACT[id] && !["reflect", "ailab"].includes(ACT[id].type)).map(([id, o]) => ({id, n: o.n, sc: o.sc / o.n, at: o.at / o.n, ok: o.ok / o.n})).sort((a, b) => a.sc - b.sc).slice(0, 8);
+  // Nội dung khó + mức hiểu
+  const dc = {}; DIFFS.forEach(d => dc[d] = 0); exits.forEach(e => String(e.DifficultPart || "").split("; ").forEach(d => { if (d in dc) dc[d]++; }));
+  const und = [0, 0, 0, 0, 0]; exits.forEach(e => { const u = +e.Understanding; if (u >= 1 && u <= 5) und[u - 1]++; });
+  const bar = (n, tot) => `<div class="meter"><i style="width:${tot ? Math.round(n / tot * 100) : 0}%"></i></div>`;
+  // AI literacy
+  const ai = {n: 0, wrong: 0, src: 0, priv: 0, cross: 0};
+  responses.filter(r => r.ActivityID === "B11_AI_VERIFY").forEach(r => { let a = {}; try { a = JSON.parse(r.Answer); } catch (e) {} ai.n++; if (a.aiCanBeWrong) ai.wrong++; if ((a.source || "").trim()) ai.src++; if (a.noPersonal) ai.priv++; if (a.crossChecked) ai.cross++; });
+  const integ = responses.filter(r => r.ActivityID === "B11_AI_INTEGRITY" || r.ActivityID === "B11_FINAL_Q8"), integStu = new Set(integ.filter(r => +r.Score >= 7).map(r => r.StudentKey)).size;
+  // Chưa hoàn thành
+  const byId = {}; students.forEach(s => byId[String(s.StudentID)] = s);
+  const notDone = roster.filter(r => !(byId[String(r.StudentID)] && truthy(byId[String(r.StudentID)]["Hoàn thành"])));
+  const qs = exits.filter(e => String(e.Question || "").trim());
+  modal(`<div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">👨‍🏫 Dashboard · ${CONFIG.lessonName}</h2>
+   <div class="row"><select id="tcls" aria-label="Lọc theo lớp" style="width:auto"><option value="">Tất cả lớp</option>${classes.map(c => `<option ${c === TCLS ? "selected" : ""}>${esc(c)}</option>`).join("")}</select><button class="btn sm ghost" data-do="close">Đóng</button></div></div>
+   ${DEMO ? `<p class="note">DEMO MODE: số liệu mẫu kết hợp dữ liệu trên trình duyệt này. Xác thực demo không phải bảo mật production.</p>` : ""}
+   <div class="stats">${stat(students.length + "/" + roster.length, "👥 HS đã vào học")}${stat(done.length, "✅ Hoàn thành")}${stat(students.length - done.length, "⏳ Đang học")}
+   ${stat(avg(students, "Tổng điểm").toFixed(1) + "/" + MAXSCORE, "📊 Điểm trung bình")}${stat(fmtT(avg(done, "DurationSeconds")), "🕒 Thời gian TB")}${stat(done.filter(s => truthy(s.FastFinish)).length, "⚡ FastFinish")}${stat(exits.length ? avg(exits, "Understanding").toFixed(1) + "/5" : "–", "🙂 Mức hiểu TB")}</div>
+   <h3>Hoạt động sai nhiều nhất</h3><div class="tw"><table><tr><th>Hoạt động</th><th>Số bài</th><th>Điểm TB</th><th>Số lần thử TB</th><th>Đúng ngay lần đầu</th></tr>
+   ${hard.map(h => `<tr><td>${ACT[h.id].title}<br><small>${h.id}</small></td><td class="n">${h.n}</td><td class="n">${h.sc.toFixed(1)}/10</td><td class="n">${h.at.toFixed(1)}</td><td class="n">${Math.round(h.ok * 100)}%</td></tr>`).join("") || `<tr><td colspan="5">Chưa có dữ liệu.</td></tr>`}</table></div>
+   <div class="two" style="margin-top:14px"><div><h3>Nội dung học sinh thấy khó nhất</h3><table>${Object.entries(dc).sort((a, b) => b[1] - a[1]).map(([d, n]) => `<tr><td>${d}</td><td class="n">${n}</td><td>${bar(n, exits.length)}</td></tr>`).join("")}</table></div>
+   <div><h3>Mức Understanding</h3><table>${und.map((n, i) => `<tr><td>${i + 1} ${["😕","😐","🙂","😊","🤩"][i]}</td><td class="n">${n}</td><td>${bar(n, exits.length)}</td></tr>`).join("")}</table></div></div>
+   <h3 style="margin-top:14px">🤖 AI LITERACY</h3><div class="stats">${stat(ai.wrong + "/" + ai.n, "HS biết AI có thể sai")}${stat(ai.src + "/" + ai.n, "HS có ghi nguồn kiểm chứng")}${stat(ai.cross + "/" + ai.n, "HS đã đối chiếu SGK/nguồn tin cậy")}${stat(ai.priv + "/" + ai.n, "HS cam kết không nhập thông tin cá nhân")}${stat(integStu + "/" + new Set(integ.map(r => r.StudentKey)).size, "HS hiểu nguyên tắc minh bạch AI")}</div>
+   <h3>Câu hỏi học sinh gửi (${qs.length})</h3>${qs.map(e => `<div class="cmt"><b>${esc(e["Họ tên"])} (${esc(e["Lớp"])}):</b> ${esc(e.Question)}</div>`).join("") || `<p class="hint0">Chưa có câu hỏi.</p>`}
+   <h3 style="margin-top:14px">Mindmap từng học sinh (${exits.length})</h3>${exits.map(e => { let mm = {}; try { mm = JSON.parse(e.MindmapJSON); } catch (x) {} return `<details><summary>${esc(e["Họ tên"])} · ${esc(e["Lớp"])} · mức hiểu ${esc(e.Understanding)}</summary><p class="hint0">Học được: ${esc(e.Learned)}<br>Vận dụng: ${esc(e.Application)}</p>${mmSVG(mm)}</details>`; }).join("") || `<p class="hint0">Chưa có.</p>`}
+   <h3 style="margin-top:14px">Học sinh chưa hoàn thành (${notDone.length})</h3><div class="tw"><table><tr><th>Họ tên</th><th>Lớp</th><th>Trạng thái</th><th>Điểm</th></tr>
+   ${notDone.map(r => { const s = byId[String(r.StudentID)]; return `<tr><td>${esc(r["Họ tên"])}</td><td>${esc(r["Lớp"])}</td><td>${s ? "Đang ở trang " + esc(s["Tiến độ"]) : "Chưa bắt đầu"}</td><td class="n">${s ? esc(s["Tổng điểm"]) : "–"}</td></tr>`; }).join("") || `<tr><td colspan="4">Tất cả đã hoàn thành.</td></tr>`}</table></div>`, true);
+  $("#tcls").onchange = e => { TCLS = e.target.value; dashboard(); };
+}
+
+/* ================= SỰ KIỆN ================= */
+const G = {
+  go: v => { if (S && (+v <= S.maxPage || PAGES[+v - 1].acts.every(id => S.acts[id] && S.acts[id].done))) go(v); },
+  start: startStudent,
+  reloadRoster: loadRoster,
+  swap: () => { if (confirm("Đổi sang học sinh khác? Tiến độ của bạn hiện tại vẫn được lưu trên máy này.")) { save(); S = null; localStorage.removeItem("b11:last"); view = 0; render(); } },
+  teacher: teacherOpen, tlogin: teacherLogin, close: closeModal,
+  copy: async () => { try { await navigator.clipboard.writeText(AI_PROMPT); } catch (e) { const r = document.createRange(); r.selectNodeContents($("#aiPrompt")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand("copy"); } catch (x) {} } toast("Đã sao chép prompt"); },
+  und: v => { if (S.done) return; S.exitTicket.und = +v; save(); document.querySelectorAll("#undBox button").forEach((b, i) => { b.classList.toggle("on", i + 1 === +v); b.setAttribute("aria-pressed", i + 1 === +v); }); },
+  exitSend: submitExit,
+  fastReview: () => { closeModal(); go(1); },
+  fastOk: () => { S.fastAck = true; closeModal(); submitExit(); }
+};
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-do]"); if (!b || b.disabled) return;
+  const id = b.dataset.act, d = b.dataset.do, v = b.dataset.v;
+  if (id && ACT[id]) { H[ACT[id].type](id, ACT[id], d, v); save(); renderAct(id); chrome(); }
+  else if (G[d]) G[d](v);
+});
+document.addEventListener("input", e => {
+  const t = e.target; if (!S) return;
+  if (t.dataset.act && t.dataset.k) { A(t.dataset.act).st[t.dataset.k] = t.type === "checkbox" ? t.checked : t.value; saveSoon(); }
+  else if (t.dataset.exit === "diff") { const s = new Set(S.exitTicket.diff || []); t.checked ? s.add(t.value) : s.delete(t.value); S.exitTicket.diff = DIFFS.filter(d => s.has(d)); saveSoon(); }
+  else if (t.dataset.exit) { S.exitTicket[t.dataset.exit] = t.value; saveSoon(); }
+  else if (t.dataset.mm) { const k = t.dataset.mm[0], i = +t.dataset.mm[1]; S.mindmap[k][i] = t.value; $("#mmPrev").innerHTML = mmSVG(S.mindmap); saveSoon(); }
+});
+document.addEventListener("change", e => {
+  if (e.target.id === "selC") { const c = e.target.value, s = $("#selS"); s.disabled = !c; s.innerHTML = `<option value="">-- Họ tên --</option>` + ROSTER.filter(r => r.cls === c).map(r => `<option value="${esc(r.id)}">${esc(r.name)}</option>`).join(""); $("#startBtn").disabled = true; }
+  else if (e.target.id === "selS") $("#startBtn").disabled = !e.target.value;
+});
+document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "tcode") teacherLogin(); if (e.key === "Escape" && $("#layer .ov") && !$("#layer h2").textContent.includes("RẤT NHANH")) closeModal(); });
+window.addEventListener("beforeunload", save);
+
+/* ================= KHỞI ĐỘNG ================= */
+(function init() {
+  const last = lsGet("b11:last"), s = last && lsGet("b11:" + last);
+  if (s && s.studentKey) { S = s; S.syncQueue = S.syncQueue || []; recalc(); view = S.done ? 6 : S.page || 1; }
+  render(); loadRoster(); flush();
+})();
+</script>
+</body>
+</html>
