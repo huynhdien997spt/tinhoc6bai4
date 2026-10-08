@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tin học 6 – Bài 4. Mạng máy tính</title>
+<style>
+:root{--blue:#1565c0;--blue2:#0d47a1;--sky:#e8f1fd;--orange:#ff8a00;--ink:#1b2a41;--mute:#5d6b82;--ok:#1b9e4b;--bad:#d93025;--line:#cfe0f7}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,#eaf3ff,#fff 45%,#fff5e8);min-height:100vh;line-height:1.5}
+main{max-width:980px;margin:0 auto;padding:16px}
+h1,h2,h3{margin:.2em 0 .5em;line-height:1.25}
+h2{color:var(--blue2)}
+p{margin:.4em 0}
+.card{background:#fff;border-radius:18px;box-shadow:0 6px 24px rgba(21,101,192,.12);padding:22px;margin-bottom:16px}
+.center{text-align:center}
+.btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:10px 18px;background:var(--blue);color:#fff;cursor:pointer;transition:transform .1s,filter .15s;margin:4px}
+.btn:hover{filter:brightness(1.1)}.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.big{font-size:1.1rem;padding:14px 26px}
+.btn.orange{background:var(--orange)}
+.btn.ghost{background:#fff;color:var(--blue);border:2px solid var(--line)}
+.btn.sm{padding:6px 12px;font-size:.85rem}
+.btn.red{background:var(--bad)}.btn.green{background:var(--ok)}
+input[type=text],input[type=password],select,textarea{font:inherit;padding:10px 12px;border:2px solid var(--line);border-radius:10px;width:100%;background:#fff}
+input:focus,select:focus,textarea:focus{outline:3px solid #bcd8ff;border-color:var(--blue)}
+label{font-weight:700;display:block;margin:10px 0 4px}
+#demoBar{background:#fff3cd;color:#7a5200;text-align:center;padding:6px 10px;font-size:.85rem;font-weight:600}
+header{position:sticky;top:0;z-index:20;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:8px 14px}
+.hrow{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;max-width:980px;margin:0 auto;font-size:.92rem;font-weight:600}
+.hrow .btn{margin-left:auto}
+.sync{font-size:.78rem;color:var(--mute);font-weight:500}
+.stages{display:flex;gap:6px;max-width:980px;margin:8px auto 0}
+.stg{flex:1;display:flex;align-items:center;gap:6px;background:#eef2f7;border-radius:999px;padding:4px 8px;font-size:.72rem;color:var(--mute);overflow:hidden;white-space:nowrap}
+.stg i{font-style:normal;flex:none;width:20px;height:20px;border-radius:50%;background:#c9d3e0;color:#fff;display:grid;place-items:center;font-weight:700}
+.stg span{overflow:hidden;text-overflow:ellipsis}
+.stg.done{background:#dff5e6;color:var(--ok)}.stg.done i{background:var(--ok)}
+.stg.cur{background:var(--blue);color:#fff}.stg.cur i{background:var(--orange)}
+.hero{background:linear-gradient(135deg,var(--blue),#1e88e5);color:#fff;border-radius:22px;padding:34px 20px;text-align:center;position:relative;overflow:hidden}
+.hero h1{font-size:2.3rem;margin:.1em 0}.hero .tag{display:inline-block;background:var(--orange);border-radius:999px;padding:4px 16px;font-weight:700;margin:4px}
+.hero .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.18) 2px,transparent 2px);background-size:26px 26px;pointer-events:none}
+.code{font-size:2.4rem;font-weight:800;letter-spacing:2px;color:var(--blue2);background:var(--sky);border:3px dashed var(--blue);border-radius:16px;padding:10px 26px;display:inline-block;margin:10px 0}
+.crumb{font-size:.82rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.5px}
+.hint{color:var(--mute);font-size:.88rem}
+.q{font-weight:700;font-size:1.05rem}
+.note{border-radius:14px;padding:12px 16px;margin:12px 0;background:var(--sky);border-left:6px solid var(--blue);animation:pop .35s}
+.note.ok{background:#e6f7ec;border-color:var(--ok)}.note.bad{background:#fdecea;border-color:var(--bad)}.note.warn{background:#fff3e0;border-color:var(--orange)}
+.note.kc{background:linear-gradient(135deg,#ff9d3c,#ff7a1a);color:#fff;border:0}
+.note.kc h3{color:#fff}.kc .ben{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px}
+.kc .ben div{background:rgba(255,255,255,.22);border-radius:10px;padding:8px;font-weight:700;text-align:center}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.shake{animation:shake .4s}
+.part{margin-top:18px;padding-top:14px;border-top:2px dashed var(--line)}
+.part:first-child{border:0;margin-top:0;padding-top:0}
+.opts{display:grid;gap:8px;margin:8px 0}
+.opts.row{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.opt{font:inherit;text-align:left;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--blue);background:var(--sky)}
+.opt.sel{border-color:var(--blue);background:#dbeafe}
+.opt.right{border-color:var(--ok);background:#e6f7ec}.opt.wrong{border-color:var(--bad);background:#fdecea}
+.opt.glow{border-color:var(--orange);background:#fff3e0;box-shadow:0 0 0 4px rgba(255,138,0,.3);transform:scale(1.02);transition:.5s}
+.fb{margin-top:6px;font-weight:600;min-height:1.2em}.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:48px;padding:10px;background:#f5f8fc;border-radius:12px;margin:8px 0}
+.chip{background:#fff;border:2px solid var(--blue);border-radius:999px;padding:7px 14px;font-weight:600;cursor:grab;user-select:none}
+.chip.pick{background:var(--blue);color:#fff}.chip.placed{border-color:var(--ok);background:#e6f7ec;cursor:default}
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.zone{border:2px dashed #9dbde8;border-radius:14px;padding:10px;min-height:96px;background:#fbfdff;cursor:pointer}
+.zone.over{background:#dbeafe}.zone h4{margin:0 0 6px;font-size:.95rem;color:var(--blue2)}
+.zone .in{display:flex;flex-wrap:wrap;gap:6px}
+.scene{position:relative;background:linear-gradient(#f3f8ff,#e4eefc);border:2px solid var(--line);border-radius:16px;overflow:hidden;margin:10px 0}
+.scene svg{position:absolute;inset:0;width:100%;height:100%}
+.ln{stroke:var(--blue);stroke-width:3.5;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.ln.wl{stroke:var(--orange);stroke-dasharray:3 7}.ln.off{stroke:#b8c0cc;stroke-dasharray:2 8}.ln.tmp{stroke:#90a4ae;stroke-dasharray:5 5}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none;touch-action:none;padding:4px 8px;border-radius:12px;background:#fff;border:2px solid var(--line);min-width:66px;box-shadow:0 2px 6px rgba(0,0,0,.08);z-index:2}
+.node .ico{font-size:28px;line-height:1.15}.node .lbl{font-size:11.5px;font-weight:700;text-align:center;max-width:110px}
+.node.pick{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,138,0,.35)}
+.node.good{border-color:var(--ok);background:#e6f7ec}.node.dim{opacity:.35}.node.gone{opacity:.3;filter:grayscale(1);border-style:dashed}
+.node.selA{border-color:var(--blue);box-shadow:0 0 0 4px rgba(21,101,192,.3)}.node.selB{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,138,0,.35)}
+.node.selA::after,.node.selB::after{position:absolute;top:-12px;font-size:10px;font-weight:800;color:#fff;border-radius:6px;padding:0 6px}
+.node.selA::after{content:"GỬI";background:var(--blue)}.node.selB::after{content:"NHẬN";background:var(--orange)}
+.node.buzz{animation:shake .5s 4}
+.pkt{position:absolute;transform:translate(-50%,-50%);font-size:24px;z-index:5;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.file{position:absolute;transform:translate(-50%,-50%);z-index:4;background:#fff;border:2px solid var(--orange);border-radius:10px;padding:4px 10px;font-weight:700;font-size:.85rem;cursor:grab;white-space:nowrap}
+.file.pick{background:var(--orange);color:#fff}
+.bubble{position:absolute;transform:translate(-50%,-100%);background:#fff;border:2px solid var(--blue);border-radius:12px;padding:6px 10px;font-size:.82rem;font-weight:600;z-index:6;max-width:200px;animation:pop .3s}
+.city{width:100%;background:linear-gradient(#dff1ff,#e9f7e4);border-radius:16px;border:2px solid var(--line)}
+.city .roads path{stroke:#607d8b;stroke-width:12;stroke-linecap:round;fill:none;stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 1.6s}
+.city.on .roads path{stroke-dashoffset:0}
+.city .movers{opacity:0;transition:opacity .5s 1.4s}.city.on .movers{opacity:1}
+.bigwords{font-size:1.8rem;font-weight:800;text-align:center;color:var(--orange);animation:pop .6s}
+.sent{font-size:1.05rem;padding:10px;background:#f5f8fc;border-radius:12px;line-height:2.4}
+.slot{display:inline-flex;flex-wrap:wrap;gap:6px;min-width:120px;min-height:38px;border-bottom:3px solid var(--blue);vertical-align:middle;padding:2px}
+.situ{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center}.sico{font-size:44px;grid-row:span 3}
+.emo{display:flex;gap:8px;flex-wrap:wrap}.emo button{font:inherit;font-size:1.5rem;border:2px solid var(--line);background:#fff;border-radius:12px;padding:6px 12px;cursor:pointer}
+.emo button.sel{border-color:var(--orange);background:#fff3e0;transform:scale(1.1)}
+.mm{width:100%;aspect-ratio:1000/600;background:#fbfdff;border:2px solid var(--line);border-radius:16px;touch-action:none;user-select:none}
+.mm .mn{cursor:grab}.mm .mn.sel rect{stroke:#000;stroke-dasharray:5 3}
+.mmbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#f5f8fc;border-radius:12px;padding:8px;margin:8px 0;min-height:56px}
+.mmbar input{width:210px}.mmbar .ic,.mmbar .sw{font:inherit;border:2px solid transparent;background:#fff;border-radius:8px;cursor:pointer;padding:2px 5px}
+.mmbar .sw{width:24px;height:24px;border-radius:50%;padding:0}.mmbar .ic:hover,.mmbar .sw:hover{border-color:var(--ink)}
+#toasts{position:fixed;right:14px;bottom:14px;display:flex;flex-direction:column;gap:8px;z-index:99}
+.toast{background:var(--ink);color:#fff;padding:9px 16px;border-radius:12px;font-weight:700;animation:pop .3s;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.toast.xp{background:var(--orange)}.toast.bad{background:var(--bad)}
+#modal{position:fixed;inset:0;background:rgba(10,25,50,.55);z-index:50;overflow:auto;padding:20px}
+#modal .card{max-width:920px;margin:0 auto}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat{background:var(--sky);border-radius:14px;padding:12px;text-align:center}.stat b{display:block;font-size:1.6rem;color:var(--blue2)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}th,td{padding:7px 8px;border-bottom:1px solid #e3eaf3;text-align:left;vertical-align:top}th{background:var(--sky);position:sticky;top:0}
+.tw{overflow:auto;max-height:440px}
+.bar{display:flex;height:22px;border-radius:6px;overflow:hidden;background:#eef2f7}.bar span{display:block;height:100%}
+.lg{display:inline-flex;align-items:center;gap:4px;margin-right:12px;font-size:.8rem}.lg i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.filters{display:flex;flex-wrap:wrap;gap:10px}.filters>div{flex:1;min-width:150px}
+.tbtn{position:fixed;left:10px;bottom:10px;font-size:.75rem;opacity:.6;z-index:5}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:.78rem;font-weight:700;background:#eef2f7}
+.pill.g{background:#dff5e6;color:var(--ok)}.pill.o{background:#fff3e0;color:#b45f00}.pill.b{background:#dbeafe;color:var(--blue2)}
+@media(max-width:640px){.stg span{display:none}.hero h1{font-size:1.7rem}.node .ico{font-size:22px}.node{min-width:52px;padding:2px 4px}}
+</style>
+</head>
+<body>
+<div id="demoBar" hidden>🧪 CHẾ ĐỘ XEM THỬ – chưa cấu hình <code>APP_CONFIG.gasUrl</code>. Dữ liệu chỉ lưu tạm trên trình duyệt này, KHÔNG gửi về Google Sheets.</div>
+<header id="hdr" hidden></header>
+<main id="app"></main>
+<div id="toasts"></div>
+<div id="modal" hidden></div>
+
+<script>
+"use strict";
+/* ============================================================
+   CẤU HÌNH – chỉ cần sửa gasUrl
+   ============================================================ */
+const APP_CONFIG = {
+    teacherName: "Huỳnh Văn Diễn",
+    lessonTitle: "Bài 4. Mạng máy tính",
+    grade: "6",
+    schoolYear: "2026-2027",
+    gasUrl: "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE"
+};
+
+/* ============================================================
+   TIỆN ÍCH CHUNG
+   ============================================================ */
+const NS = "tinhoc6_bai4_";
+const DEMO = !/^https:\/\/script\.google\.com\//.test(APP_CONFIG.gasUrl);
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const app = $("#app"), hdr = $("#hdr"), modal = $("#modal");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const strip = s => String(s).replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === "x" ? r : (r & 3 | 8)).toString(16); }));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function mk(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function toast(msg, cls) { const t = mk("div", "toast " + (cls || "")); t.textContent = msg; $("#toasts").appendChild(t); setTimeout(() => t.remove(), 2600); }
+function lsGet(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } }
+function note(el, html, cls) { const d = mk("div", "note " + (cls || ""), html); el.appendChild(d); return d; }
+function nextBtn(el, label, fn) { const b = mk("button", "btn big orange"); b.type = "button"; b.textContent = label; b.onclick = () => { b.disabled = true; fn(); }; const w = mk("div", "center"); w.appendChild(b); el.appendChild(w); return b; }
+function seq(el, parts, onAll) { let i = 0; const go = () => { if (i >= parts.length) return onAll(); const d = mk("div", "part"); el.appendChild(d); const f = parts[i++]; f(d, go); if (i > 1 && d.scrollIntoView) d.scrollIntoView({ behavior: "smooth", block: "center" }); }; go(); }
+
+/* ============================================================
+   GỌI BACKEND (Google Apps Script) + CHẾ ĐỘ XEM THỬ
+   ============================================================ */
+async function api(action, payload) {
+    if (DEMO) { await sleep(120); return demoApi(action, payload || {}); }
+    const res = await fetch(APP_CONFIG.gasUrl, {
+        method: "POST", redirect: "follow",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },   // text/plain => không phát sinh preflight CORS
+        body: JSON.stringify(Object.assign({ action }, payload || {}))
+    });
+    if (!res.ok) throw new Error("NETWORK");
+    const j = await res.json();
+    if (!j.ok) { const e = new Error(j.error || "Lỗi máy chủ"); e.server = true; throw e; }
+    return j.data;
+}
+
+/* --- Backend giả lập, CHỈ dùng khi chưa cấu hình gasUrl để giáo viên xem thử --- */
+function demoApi(action, p) {
+    const K = NS + "DEMO_db", db = lsGet(K, { students: [], responses: [], tickets: [], classes: [], seen: {} });
+    const save = () => lsSet(K, db), now = () => new Date().toISOString();
+    const cls = (n, y) => db.classes.find(c => c.name === n && c.year === y);
+    const find = id => db.students.find(s => s.studentId === id);
+    const fail = m => { const e = new Error(m); e.server = true; throw e; };
+    const statusOk = (s, st) => { const t = db.tickets.some(x => x.studentId === s.studentId); return !st || (st === "s1no" && !s.s1) || (st === "s1yes" && s.s1) || (st === "s2no" && s.s1 && !s.s2Started) || (st === "s2doing" && s.s2Started && !s.completed) || (st === "done" && s.completed) || (st === "nomm" && !t); };
+    const flt = () => db.students.filter(s => (!p.schoolYear || s.schoolYear === p.schoolYear) && (!p.className || s.className === p.className));
+    switch (action) {
+        case "getClasses": return db.classes.filter(c => c.year === p.schoolYear).map(c => c.name);
+        case "registerStudent": {
+            const name = String(p.fullName || "").trim(), c = String(p.className || "").toUpperCase().replace(/\s+/g, "");
+            if (name.length < 2 || !c) fail("Thiếu họ tên hoặc lớp.");
+            let max = 0; db.students.forEach(s => { if (s.className === c && s.schoolYear === p.schoolYear) max = Math.max(max, +s.learningCode.split("-").pop()); });
+            const s = { studentId: uuid(), learningCode: c + "-" + String(max + 1).padStart(3, "0"), fullName: name, className: c, schoolYear: p.schoolYear, startTime: now(), s1: false, s1Time: "", s2Started: false, completed: false, completedTime: "", stage: "s1a", progress: 0, score: "", xp: 0, lastAccess: now() };
+            db.students.push(s); if (!cls(c, p.schoolYear)) db.classes.push({ name: c, year: p.schoolYear, active: true, unlocked: false }); save(); return s;
+        }
+        case "getStudentProgress": {
+            const code = String(p.learningCode || "").toUpperCase().trim(), s = db.students.slice().reverse().find(x => x.learningCode === code);
+            if (!s) fail("Không tìm thấy mã học tập này.");
+            const c = cls(s.className, s.schoolYear), t = db.tickets.find(x => x.studentId === s.studentId);
+            return { student: s, session2Unlocked: !!(c && c.unlocked), mindmapJSON: t ? t.mindmapJSON : "" };
+        }
+        case "checkClassSession": { const c = cls(p.className, p.schoolYear); return { session2Unlocked: !!(c && c.unlocked) }; }
+        case "syncBatch": {
+            (p.events || []).forEach(ev => {
+                if (db.seen[ev.eventId]) return; db.seen[ev.eventId] = 1;
+                const s = find(ev.StudentID), d = ev.Data || {}; if (!s || s.learningCode !== ev.LearningCode) return;
+                s.lastAccess = now();
+                const prog = () => { if (d.currentStage) s.stage = d.currentStage; s.progress = Math.max(s.progress, +d.progress || 0); s.xp = Math.max(s.xp, +d.xp || 0); if (d.totalScore !== undefined && d.totalScore !== "") s.score = d.totalScore; if (d.session2Started) s.s2Started = true; };
+                if (ev.action === "saveResponse") db.responses.push(Object.assign({ studentId: s.studentId, learningCode: s.learningCode, className: s.className, time: ev.Timestamp }, d));
+                else if (ev.action === "updateProgress") prog();
+                else if (ev.action === "completeSession1") { prog(); if (!s.s1) { s.s1 = true; s.s1Time = now(); } }
+                else if (ev.action === "submitExitTicket") { prog(); s.completed = true; s.completedTime = now(); s.progress = 100; db.tickets = db.tickets.filter(t => t.studentId !== s.studentId); db.tickets.push({ studentId: s.studentId, learningCode: s.learningCode, fullName: s.fullName, className: s.className, learned: d.learned, understanding: d.understanding, question: d.question, realLife: d.realLife, mindmapJSON: d.mindmapJSON, time: now() }); }
+            });
+            save(); return { processed: (p.events || []).length };
+        }
+        case "teacherLogin": if (!p.password) fail("Sai mật khẩu."); return { token: "demo-token" };
+        case "teacherLogout": return {};
+        case "getDashboard": {
+            const st = flt(), ids = new Set(st.map(s => s.studentId)), agg = {};
+            db.responses.forEach(r => { if (!ids.has(r.studentId) || r.correct === "") return; const k = r.activity + "|" + r.question, a = agg[k] || (agg[k] = { activity: r.activity, question: r.question, total: 0, wrong: 0 }); a.total++; if (!r.correct) a.wrong++; });
+            return { years: Array.from(new Set(db.classes.map(c => c.year))), classes: db.classes.filter(c => !p.schoolYear || c.year === p.schoolYear), students: st, tickets: db.tickets.filter(t => ids.has(t.studentId)).map(t => ({ studentId: t.studentId, understanding: t.understanding })), wrong: Object.values(agg).filter(a => a.wrong).sort((a, b) => b.wrong - a.wrong).slice(0, 8) };
+        }
+        case "getStudents": return flt().filter(s => statusOk(s, p.status)).map(s => Object.assign({ hasTicket: db.tickets.some(t => t.studentId === s.studentId) }, s));
+        case "getStudentDetail": return { student: find(p.studentId), responses: db.responses.filter(r => r.studentId === p.studentId), ticket: db.tickets.find(t => t.studentId === p.studentId) || null };
+        case "setSession2Unlocked": { let c = cls(p.className, p.schoolYear); if (!c) { c = { name: p.className, year: p.schoolYear, active: true, unlocked: false }; db.classes.push(c); } c.unlocked = !!p.unlocked; save(); return { className: c.name, unlocked: c.unlocked }; }
+    }
+    fail("Hành động không hợp lệ: " + action);
+}
+
+/* ============================================================
+   PHIÊN HỌC SINH + HÀNG ĐỢI ĐỒNG BỘ
+   S = phiên đang hoạt động (chỉ nằm trong bộ nhớ trang + sessionStorage)
+   ============================================================ */
+let S = null, flushing = false, netOk = true;
+const qGet = () => lsGet(NS + "queue", []);
+const qSet = q => lsSet(NS + "queue", q);
+function enqueue(action, data) {
+    if (!S) return;
+    const q = qGet();
+    q.push({ eventId: uuid(), action, StudentID: S.id, LearningCode: S.code, Activity: data.activity || action, Timestamp: new Date().toISOString(), Data: data });
+    qSet(q); syncBadge(); setTimeout(flush, 1200);
+}
+async function flush(all) {
+    if (flushing) return; flushing = true;
+    try {
+        do {
+            const batch = qGet().slice(0, 25); if (!batch.length) break;
+            await api("syncBatch", { events: batch });
+            const ids = new Set(batch.map(e => e.eventId));
+            qSet(qGet().filter(e => !ids.has(e.eventId))); netOk = true;
+        } while (all);
+    } catch (e) { netOk = false; }
+    finally { flushing = false; syncBadge(); if (qGet().length && !all) setTimeout(flush, netOk ? 800 : 7000); }
+}
+function syncBadge() { const b = $("#sync"); if (!b) return; const n = qGet().length; b.textContent = n ? (netOk ? "⏳ Đang lưu…" : "📴 Mất kết nối – còn " + n + " thao tác chờ gửi") : "☁️ Đã lưu"; }
+function saveCache() { if (!S) return; lsSet(NS + S.id + "_progress", { idx: S.idx, xp: S.xp, score: S.score, s1: S.s1, s2s: S.s2s, completed: S.completed, name: S.name, cls: S.cls, year: S.year, code: S.code }); lsSet(NS + "code_" + S.code, S.id); }
+function award(n) { if (!S || !n) return; S.xp += n; const x = $("#xpv"); if (x) x.textContent = S.xp; toast("+" + n + " XP ⭐", "xp"); }
+function logResp(activity, question, answer, correct, attempts, score, xp) {
+    if (!S) return;
+    enqueue("saveResponse", { session: S.completed ? 2 : STEPS[Math.min(S.idx, STEPS.length - 1)].ses, activity, question, answer: String(answer).slice(0, 500), correct, attempts: attempts || 1, score: score || 0, xp: xp || 0 });
+}
+const pct = () => !S ? 0 : S.completed ? 100 : Math.round(S.idx / STEPS.length * 100);
+function saveProgress(extra) { if (!S) return; saveCache(); enqueue("updateProgress", Object.assign({ currentStage: S.completed ? "done" : STEPS[S.idx].id, progress: pct(), xp: S.xp, totalScore: S.score, session2Started: S.s2s }, extra || {})); }
+function openSession(stu, extra) {
+    const idx = STEPS.findIndex(s => s.id === stu.stage);
+    S = { id: stu.studentId, code: stu.learningCode, name: stu.fullName, cls: stu.className, year: stu.schoolYear, idx: idx < 0 ? 0 : idx, xp: +stu.xp || 0, score: stu.score === undefined ? "" : stu.score, s1: !!stu.s1, s2s: !!stu.s2Started, completed: !!stu.completed, mind: null };
+    Object.assign(S, extra || {});
+    const c = lsGet(NS + S.id + "_progress", null);          // cache riêng của CHÍNH học sinh này (nếu máy này từng học dở)
+    if (c && !S.completed && c.idx > S.idx) { S.idx = Math.min(c.idx, STEPS.length - 1); S.xp = Math.max(S.xp, c.xp || 0); S.s1 = S.s1 || !!c.s1; S.s2s = S.s2s || !!c.s2s; if (c.score !== "" && c.score != null) S.score = c.score; }
+    try { sessionStorage.setItem("activeStudentId", S.id); sessionStorage.setItem("activeLearningCode", S.code); } catch (e) { }
+    saveCache(); renderHdr();
+}
+async function endSession() {
+    const b = $("#endBtn");
+    if (b && !b.dataset.c) { b.dataset.c = "1"; b.textContent = "Bấm lần nữa để xác nhận"; setTimeout(() => { if (b.isConnected) { delete b.dataset.c; b.textContent = "🚪 Kết thúc phiên"; } }, 3000); return; }
+    saveCache();
+    app.innerHTML = '<div class="card center"><h2>⏳ Đang lưu và đồng bộ dữ liệu…</h2></div>';
+    await Promise.race([(async () => { while (flushing) await sleep(150); await flush(true); })(), sleep(9000)]);
+    const left = qGet().length;
+    try { sessionStorage.removeItem("activeStudentId"); sessionStorage.removeItem("activeLearningCode"); } catch (e) { }
+    S = null; renderHdr();
+    viewWelcome(left ? "📴 Còn " + left + " thao tác chưa gửi được – sẽ tự gửi khi có mạng. Đừng xoá dữ liệu trình duyệt nhé!" : "✅ Đã lưu bài và kết thúc phiên. Hẹn gặp lại em!");
+}
+
+/* ============================================================
+   KHUNG BÀI HỌC
+   ============================================================ */
+const STAGES = ["🌐 Mạng lưới quanh em", "🤝 Mạng máy tính & chia sẻ", "🖥️ Ai là ai trong mạng?", "🔌 Kết nối mạng – Thử thách kỹ sư", "🧠 Quiz + Mindmap"];
+const STEPS = [
+    { id: "s1a", stage: 1, ses: 1, fn: stepCity },
+    { id: "s1b", stage: 1, ses: 1, fn: stepMatch },
+    { id: "s1c", stage: 1, ses: 1, fn: stepCommon },
+    { id: "s2a", stage: 2, ses: 1, fn: stepFile },
+    { id: "s2b", stage: 2, ses: 1, fn: stepPrinter },
+    { id: "s2c", stage: 2, ses: 1, fn: stepTalk },
+    { id: "s2d", stage: 2, ses: 1, fn: stepRobot },
+    { id: "cp", stage: 2, ses: 1, fn: stepCheckpoint },
+    { id: "recall", stage: 3, ses: 2, fn: stepRecall },
+    { id: "s3a", stage: 3, ses: 2, fn: stepDevices },
+    { id: "s3b", stage: 3, ses: 2, fn: stepFlow },
+    { id: "s4a", stage: 4, ses: 2, fn: stepWire },
+    { id: "s4b", stage: 4, ses: 2, fn: stepBuilder },
+    { id: "s4c", stage: 4, ses: 2, fn: stepAn },
+    { id: "quiz", stage: 5, ses: 2, fn: stepQuiz },
+    { id: "mind", stage: 5, ses: 2, fn: stepMind }
+];
+function renderHdr() {
+    if (!S) { hdr.hidden = true; hdr.innerHTML = ""; return; }
+    const cur = S.completed ? 6 : STEPS[S.idx].stage;
+    hdr.hidden = false;
+    hdr.innerHTML = `<div class="hrow"><span>👤 ${esc(S.name)}</span><span>🏫 ${esc(S.cls)}</span><span>🎫 ${esc(S.code)}</span><span>⭐ <b id="xpv">${S.xp}</b> XP</span><span>🔥 ${pct()}%</span><span id="sync" class="sync"></span><button type="button" class="btn ghost sm" id="endBtn">🚪 Kết thúc phiên</button></div><div class="stages">${STAGES.map((s, i) => `<div class="stg ${i + 1 < cur ? "done" : i + 1 === cur ? "cur" : ""}" title="${s}"><i>${i + 1 < cur ? "✓" : i + 1}</i><span>${s}</span></div>`).join("")}</div>`;
+    $("#endBtn").onclick = endSession; syncBadge();
+}
+function renderStep() {
+    if (!S) return;
+    const st = STEPS[S.idx]; renderHdr();
+    app.innerHTML = `<section class="card"><div class="crumb">Tiết ${st.ses} · Chặng ${st.stage} – ${STAGES[st.stage - 1]}</div><div id="stepBody"></div></section>`;
+    window.scrollTo(0, 0);
+    st.fn($("#stepBody"), next);
+}
+function next() {
+    if (!S) return;
+    const prev = STEPS[S.idx].id;
+    S.idx++;
+    if (S.idx >= STEPS.length) { S.idx = STEPS.length - 1; return; }
+    saveProgress();
+    if (prev === "cp") return viewEnd1();
+    renderStep();
+}
+
+/* ============================================================
+   MÀN HÌNH CHÀO / ĐĂNG KÝ / TIẾP TỤC
+   ============================================================ */
+function viewWelcome(msg) {
+    renderHdr();
+    app.innerHTML = `<div class="hero"><div class="dots"></div><div style="position:relative">
+    <div style="font-weight:800;letter-spacing:3px">TIN HỌC ${esc(APP_CONFIG.grade)}</div>
+    <div class="tag">CHỦ ĐỀ 2 · MẠNG MÁY TÍNH VÀ INTERNET</div>
+    <h1>BÀI 4<br>MẠNG MÁY TÍNH</h1>
+    <div style="font-size:2.2rem">💻 ⋯ 🔀 ⋯ 🖨️ ⋯ 📡 ⋯ 📱</div>
+    <p>👨‍🏫 Giáo viên: <b>${esc(APP_CONFIG.teacherName.toUpperCase())}</b></p></div></div>
+    ${msg ? `<div class="note ok">${esc(msg)}</div>` : ""}
+    <div class="card center" style="margin-top:16px">
+      <button type="button" class="btn big orange" id="bNew">🚀 HỌC LẦN ĐẦU</button>
+      <button type="button" class="btn big" id="bRes">🔄 TIẾP TỤC BÀI HỌC</button>
+      <p class="hint">Lần đầu vào bài: chọn <b>Học lần đầu</b>. Đã có mã học tập: chọn <b>Tiếp tục bài học</b>.</p>
+    </div>
+    <button type="button" class="btn ghost sm tbtn" id="bT">👨‍🏫 Teacher Mode</button>`;
+    $("#bNew").onclick = viewRegister; $("#bRes").onclick = viewResume; $("#bT").onclick = tLogin;
+}
+function viewRegister() {
+    const pre = (new URLSearchParams(location.search).get("class") || "").toUpperCase().replace(/[^A-Z0-9\/.\-]/g, "").slice(0, 8);
+    app.innerHTML = `<div class="card" style="max-width:520px;margin:0 auto"><h2>🚀 Học lần đầu</h2>
+    <label for="fn">HỌ VÀ TÊN</label><input type="text" id="fn" maxlength="60" placeholder="Ví dụ: Nguyễn Minh Anh" autocomplete="off">
+    <label for="fc">LỚP</label><input type="text" id="fc" maxlength="8" placeholder="Ví dụ: 6A1" value="${esc(pre)}" list="clsList" autocomplete="off"><datalist id="clsList"></datalist>
+    <div class="fb bad" id="rfb"></div>
+    <div class="center"><button type="button" class="btn big orange" id="go">🚀 BẮT ĐẦU KHÁM PHÁ</button><br><button type="button" class="btn ghost sm" id="back">← Quay lại</button></div></div>`;
+    $("#back").onclick = () => viewWelcome();
+    api("getClasses", { schoolYear: APP_CONFIG.schoolYear }).then(l => { const d = $("#clsList"); if (d) d.innerHTML = (l || []).map(c => `<option value="${esc(c)}">`).join(""); }).catch(() => { });
+    const reqId = uuid();
+    $("#go").onclick = async () => {
+        const name = $("#fn").value.replace(/\s+/g, " ").trim(), cls = $("#fc").value.toUpperCase().replace(/\s+/g, ""), fb = $("#rfb");
+        if (name.length < 3 || !/\s/.test(name)) { fb.textContent = "Em hãy nhập đầy đủ họ và tên."; return; }
+        if (!/^[A-Z0-9][A-Z0-9\/.\-]{0,7}$/.test(cls)) { fb.textContent = "Em hãy nhập đúng tên lớp, ví dụ 6A1."; return; }
+        $("#go").disabled = true; fb.textContent = "";
+        try {
+            const stu = await api("registerStudent", { fullName: name, className: cls, schoolYear: APP_CONFIG.schoolYear, requestId: reqId });
+            openSession(stu); viewCode();
+        } catch (e) { $("#go").disabled = false; fb.textContent = e.server ? e.message : "Không kết nối được máy chủ. Em kiểm tra mạng hoặc báo thầy nhé."; }
+    };
+}
+function viewCode() {
+    app.innerHTML = `<div class="card center" style="max-width:520px;margin:0 auto"><h2>🎫 MÃ HỌC TẬP CỦA EM</h2><div class="code" id="cd">${esc(S.code)}</div>
+    <p><b>${esc(S.name)}</b><br>Lớp ${esc(S.cls)}</p>
+    <div class="note warn">✍️ Hãy ghi nhớ (hoặc chép vào vở) mã này để tiếp tục bài học ở tiết sau.</div>
+    <button type="button" class="btn ghost" id="cp">📋 SAO CHÉP MÃ</button><button type="button" class="btn big orange" id="st">🚀 BẮT ĐẦU</button></div>`;
+    $("#cp").onclick = () => { const done = () => toast("Đã sao chép mã " + S.code); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(S.code).then(done, () => toast("Em hãy tự chép mã vào vở nhé", "bad")); else toast("Em hãy tự chép mã vào vở nhé", "bad"); };
+    $("#st").onclick = renderStep;
+}
+function viewResume() {
+    app.innerHTML = `<div class="card" style="max-width:520px;margin:0 auto"><h2>🔄 Tiếp tục bài học</h2>
+    <label for="lc">MÃ HỌC TẬP</label><input type="text" id="lc" maxlength="14" placeholder="Ví dụ: 6A1-017" autocomplete="off" style="text-transform:uppercase;font-size:1.3rem;font-weight:700;text-align:center">
+    <div class="fb bad" id="rfb"></div>
+    <div class="center"><button type="button" class="btn big" id="go">🔎 TÌM BÀI CỦA EM</button><br><button type="button" class="btn ghost sm" id="back">← Quay lại</button></div></div>`;
+    $("#back").onclick = () => viewWelcome();
+    const go = async () => {
+        const code = $("#lc").value.toUpperCase().replace(/\s+/g, ""), fb = $("#rfb");
+        if (code.length < 3) { fb.textContent = "Em hãy nhập mã học tập."; return; }
+        $("#go").disabled = true; fb.textContent = "";
+        try {
+            const r = await api("getStudentProgress", { learningCode: code });
+            openSession(r.student, { unlocked: !!r.session2Unlocked, mind: r.mindmapJSON ? mmParse(r.mindmapJSON) : null });
+            viewBack();
+        } catch (e) {
+            const id = lsGet(NS + "code_" + code, null), c = id && lsGet(NS + id + "_progress", null);
+            if (!e.server && c) {                         // mất mạng nhưng máy này có cache của đúng mã vừa nhập
+                openSession({ studentId: id, learningCode: code, fullName: c.name, className: c.cls, schoolYear: c.year, stage: STEPS[Math.min(c.idx, STEPS.length - 1)].id, xp: c.xp, score: c.score, s1: c.s1, s2Started: c.s2s, completed: c.completed }, { unlocked: !!c.s2s, offline: true });
+                viewBack(); return;
+            }
+            $("#go").disabled = false; fb.textContent = e.server ? e.message : "Không kết nối được máy chủ. Em kiểm tra mạng hoặc báo thầy nhé.";
+        }
+    };
+    $("#go").onclick = go; $("#lc").onkeydown = e => { if (e.key === "Enter") go(); };
+}
+function viewBack() {
+    if (S.completed) return viewDone();
+    const st = STEPS[S.idx], doneList = [];
+    if (S.idx >= 3) doneList.push("Mạng lưới quanh em");
+    if (S.idx >= 6) doneList.push("Mạng máy tính");
+    if (S.idx >= 8) doneList.push("Lợi ích của mạng");
+    if (S.idx >= 11) doneList.push("Các thành phần của mạng");
+    if (S.idx >= 14) doneList.push("Có dây / không dây – Xây dựng mạng");
+    const locked = st.ses === 2 && !S.unlocked && !S.s2s;
+    app.innerHTML = `<div class="card center" style="max-width:560px;margin:0 auto"><h2>👋 CHÀO MỪNG ${esc(S.name.toUpperCase())} TRỞ LẠI!</h2>
+    <p>Lớp: <b>${esc(S.cls)}</b> · Tiến độ: <b>${pct()}%</b> · ⭐ <b>${S.xp} XP</b></p>
+    ${S.offline ? '<div class="note warn">📴 Đang dùng bản lưu trên máy này vì chưa kết nối được máy chủ.</div>' : ""}
+    ${doneList.length ? `<div class="note" style="text-align:left"><b>Đã hoàn thành:</b><br>${doneList.map(d => "✅ " + d).join("<br>")}</div>` : ""}
+    <div id="gate"></div></div>`;
+    const g = $("#gate");
+    const cont = () => { g.innerHTML = `<button type="button" class="btn big orange" id="ct">▶ TIẾP TỤC TIẾT ${st.ses}</button>`; $("#ct").onclick = () => { if (st.ses === 2 && !S.s2s) { S.s2s = true; saveProgress(); } renderStep(); }; };
+    if (!locked) return cont();
+    g.innerHTML = `<div class="note warn"><b>🎉 Em đã hoàn thành Tiết 1.</b><br>Tiết 2 chưa được mở.<br>Hẹn gặp em trong buổi học tiếp theo!</div><button type="button" class="btn" id="rc">🔄 Kiểm tra lại</button>`;
+    $("#rc").onclick = async () => { try { const r = await api("checkClassSession", { className: S.cls, schoolYear: S.year }); if (r.session2Unlocked) { S.unlocked = true; cont(); } else toast("Thầy chưa mở Tiết 2 cho lớp " + S.cls); } catch (e) { toast("Chưa kết nối được máy chủ", "bad"); } };
+}
+function viewEnd1() {
+    renderHdr();
+    app.innerHTML = `<div class="card center" style="max-width:560px;margin:0 auto"><div style="font-size:4rem">🎉</div><h2>HOÀN THÀNH TIẾT 1</h2>
+    <p>Mã học tập của em:</p><div class="code">${esc(S.code)}</div>
+    <div class="note">👷 Tiết sau chúng ta sẽ trở thành <b>KỸ SƯ MẠNG</b> và tự kết nối một hệ thống máy tính.</div>
+    <p class="hint">Em hãy chép mã vào vở, rồi bấm nút bên dưới để lưu bài và rời máy.</p>
+    <button type="button" class="btn big" id="e1">🚪 LƯU & KẾT THÚC PHIÊN</button></div>`;
+    $("#e1").onclick = () => { const b = $("#endBtn"); if (b) b.dataset.c = "1"; endSession(); };
+    window.scrollTo(0, 0); flush();
+}
+function viewDone() {
+    renderHdr();
+    app.innerHTML = `<div class="card center"><div style="font-size:4rem">🏁</div><h2>EM ĐÃ HOÀN THÀNH BÀI 4 – MẠNG MÁY TÍNH!</h2>
+    <p>⭐ <b>${S.xp} XP</b>${S.score !== "" && S.score != null ? ` · 📊 Quiz: <b>${esc(S.score)}/10</b>` : ""}</p>
+    ${S.mind ? '<h3>🌳 Sơ đồ tư duy của em</h3><svg class="mm" id="mmDone" viewBox="0 0 1000 600"></svg>' : ""}
+    <p class="hint">Bấm nút bên dưới để lưu bài và rời máy.</p>
+    <button type="button" class="btn big" id="e1">🚪 KẾT THÚC PHIÊN</button></div>`;
+    if (S.mind) mmRender($("#mmDone"), S.mind);
+    $("#e1").onclick = () => { const b = $("#endBtn"); if (b) b.dataset.c = "1"; endSession(); };
+    window.scrollTo(0, 0); flush();
+}
+
+/* ============================================================
+   THÀNH PHẦN TƯƠNG TÁC DÙNG CHUNG
+   ============================================================ */
+/* Trắc nghiệm: không lộ đáp án trước, cho thử lại, ghi số lần thử */
+function mcq(el, c) {
+    const L = "ABCDEF", box = mk("div", "mcq");
+    box.innerHTML = `<p class="q">${c.q}</p>${c.multi ? '<p class="hint">☑️ Có thể chọn nhiều đáp án, rồi bấm Kiểm tra.</p>' : ""}<div class="opts">${c.opts.map((o, i) => `<button type="button" class="opt"><b>${L[i]}.</b> ${o}</button>`).join("")}</div>${c.multi ? '<button type="button" class="btn chk">Kiểm tra</button>' : ""}<div class="fb"></div>`;
+    el.appendChild(box);
+    const ans = new Set(c.ans), tries = c.tries || 2, fb = $(".fb", box), opts = $$(".opt", box); let n = 0, fin = false;
+    const end = (ok, ch) => {
+        fin = true; opts.forEach((b, i) => { b.disabled = true; if (ans.has(i)) b.classList.add("right"); else if (ch.includes(i)) b.classList.add("wrong"); });
+        const ck = $(".chk", box); if (ck) ck.remove();
+        const first = ok && n === 1, xp = ok ? (first ? (c.xp || 0) : Math.floor((c.xp || 0) / 2)) : 0;
+        fb.className = "fb " + (ok ? "ok" : "bad"); fb.innerHTML = (ok ? "✅ Chính xác! " : "💡 Đáp án đúng được tô xanh. ") + (c.explain || "");
+        logResp(c.act || "MCQ", strip(c.q), ch.map(i => L[i]).join(","), first, n, first ? 1 : 0, xp); award(xp);
+        if (c.onDone) c.onDone(first, n, ch);
+    };
+    const judge = ch => { n++; const ok = ch.length === ans.size && ch.every(i => ans.has(i)); if (ok || n >= tries) { end(ok, ch); return true; } fb.className = "fb bad"; fb.textContent = "❌ Chưa đúng, em suy nghĩ và thử lại nhé!"; return false; };
+    opts.forEach((b, i) => b.onclick = () => { if (fin) return; if (c.multi) b.classList.toggle("sel"); else if (!judge([i])) { b.classList.add("wrong"); b.disabled = true; } });
+    if (c.multi) $(".chk", box).onclick = () => { const ch = opts.map((b, i) => b.classList.contains("sel") ? i : -1).filter(i => i >= 0); if (!ch.length) { fb.className = "fb bad"; fb.textContent = "Em hãy chọn ít nhất một đáp án."; return; } judge(ch); };
+}
+/* Câu hỏi dự đoán: không chấm đúng/sai */
+function predict(el, q, opts, act, cb) {
+    const box = mk("div", "mcq", `<p class="q">🤔 ${q}</p><div class="opts">${opts.map(o => `<button type="button" class="opt">${o}</button>`).join("")}</div>`);
+    el.appendChild(box);
+    $$(".opt", box).forEach((b, i) => b.onclick = () => { $$(".opt", box).forEach(x => x.disabled = true); b.classList.add("sel"); logResp(act, q, opts[i], "", 1, 0, 0); cb(i); });
+}
+/* Kéo thả phân loại: kéo thẻ vào ô, hoặc bấm thẻ rồi bấm ô. Phản hồi ngay. */
+function classify(el, cfg) {
+    const box = mk("div", "", `<p class="hint">🖱️ Kéo thẻ vào ô phù hợp (hoặc bấm vào thẻ rồi bấm vào ô).</p><div class="pool"></div><div class="zones">${cfg.zones.map(z => `<div class="zone" data-z="${z.id}"><h4>${z.label}</h4><div class="in"></div></div>`).join("")}</div><div class="fb"></div>`);
+    el.appendChild(box);
+    const pool = $(".pool", box), fb = $(".fb", box); let sel = null, wrong = 0, left = cfg.items.length;
+    shuffle(cfg.items).forEach(it => {
+        const c = mk("div", "chip"); c.textContent = it.label; c.draggable = true; c._it = it; pool.appendChild(c);
+        c.ondragstart = e => { sel = c; try { e.dataTransfer.setData("text/plain", it.id); } catch (x) { } };
+        c.onclick = e => { if (c.classList.contains("placed")) return; e.stopPropagation(); if (sel) sel.classList.remove("pick"); sel = sel === c ? null : c; if (sel) sel.classList.add("pick"); };
+    });
+    const place = z => {
+        if (!sel || sel.classList.contains("placed")) return; const c = sel, it = c._it; sel = null; c.classList.remove("pick");
+        const ok = [].concat(it.zone).includes(z.dataset.z);
+        if (ok) { c.classList.add("placed"); c.draggable = false; $(".in", z).appendChild(c); fb.className = "fb ok"; fb.textContent = "✅ " + (it.ok || "Đúng rồi!"); if (--left === 0) { logResp(cfg.act, cfg.title || cfg.act, "Số lần đặt sai: " + wrong, wrong === 0, wrong + 1, wrong === 0 ? 1 : 0, 0); cfg.onDone(wrong); } }
+        else { wrong++; c.classList.add("shake"); setTimeout(() => c.classList.remove("shake"), 450); fb.className = "fb bad"; fb.textContent = "❌ " + (it.no || "Chưa đúng, em thử ô khác nhé!"); }
+    };
+    $$(".zone", box).forEach(z => { z.ondragover = e => { e.preventDefault(); z.classList.add("over"); }; z.ondragleave = () => z.classList.remove("over"); z.ondrop = e => { e.preventDefault(); z.classList.remove("over"); place(z); }; z.onclick = () => place(z); });
+}
+/* Sân mô phỏng mạng: thiết bị (node) + dây nối + gói dữ liệu chạy trên dây */
+function scene(el, nodes, h) {
+    const SV = "http://www.w3.org/2000/svg", box = mk("div", "scene"); box.style.height = (h || 300) + "px";
+    const svg = document.createElementNS(SV, "svg"); svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "none"); box.appendChild(svg); el.appendChild(box);
+    const N = {}, L = new Map(); let linking = null, onNode = null, pick = null, dragFrom = null, tmp = null;
+    const key = (a, b) => a < b ? a + "|" + b : b + "|" + a;
+    const mkLine = (a, b, cls) => { const l = document.createElementNS(SV, "line"); l.setAttribute("x1", a.x); l.setAttribute("y1", a.y); l.setAttribute("x2", b.x); l.setAttribute("y2", b.y); l.setAttribute("class", "ln " + (cls || "")); svg.appendChild(l); return l; };
+    const sc = {
+        box, N, L,
+        addNode(n) { const d = mk("div", "node " + (n.cls || ""), `<span class="ico">${n.icon}</span><span class="lbl">${n.label || ""}</span>`); d.dataset.id = n.id; d.style.left = n.x + "%"; d.style.top = n.y + "%"; box.appendChild(d); N[n.id] = Object.assign({ el: d }, n); d.addEventListener("click", () => click(n.id)); },
+        removeNode(id) { if (!N[id]) return; Array.from(L.values()).forEach(l => { if (l.a === id || l.b === id) sc.unlink(l.a, l.b); }); N[id].el.remove(); delete N[id]; },
+        link(a, b, cls) { const k = key(a, b); if (L.has(k) || !N[a] || !N[b]) return; L.set(k, { a, b, el: mkLine(N[a], N[b], cls) }); },
+        unlink(a, b) { const k = key(a, b), l = L.get(k); if (l) { l.el.remove(); L.delete(k); } },
+        has: (a, b) => L.has(key(a, b)),
+        clear() { Array.from(L.values()).forEach(l => sc.unlink(l.a, l.b)); unpick(); },
+        path(a, b) { const prev = { [a]: null }, q = [a]; while (q.length) { const u = q.shift(); if (u === b) { const p = []; for (let x = b; x != null; x = prev[x]) p.unshift(x); return p; } L.forEach(l => { const v = l.a === u ? l.b : l.b === u ? l.a : null; if (v && !(v in prev)) { prev[v] = u; q.push(v); } }); } return null; },
+        send(ids, emoji, per) { const p = mk("div", "pkt"); p.textContent = emoji || "📦"; p.style.left = N[ids[0]].x + "%"; p.style.top = N[ids[0]].y + "%"; box.appendChild(p); if (ids.length < 2 || !p.animate) return sleep(300).then(() => p); const an = p.animate(ids.map(i => ({ left: N[i].x + "%", top: N[i].y + "%" })), { duration: (per || 650) * (ids.length - 1), easing: "linear", fill: "forwards" }); return (an.finished || sleep((per || 650) * (ids.length - 1))).then(() => p); },
+        setLinking(o) { linking = o; unpick(); },
+        onNode(f) { onNode = f; },
+        bubble(id, text, ms) { const b = mk("div", "bubble"); b.textContent = text; b.style.left = N[id].x + "%"; b.style.top = (N[id].y - 14) + "%"; box.appendChild(b); setTimeout(() => b.remove(), ms || 3500); }
+    };
+    function unpick() { if (pick && N[pick]) N[pick].el.classList.remove("pick"); pick = null; }
+    function toggle(a, b) { if (linking.can && linking.can(a, b) === false) return; sc.has(a, b) ? sc.unlink(a, b) : sc.link(a, b, linking.cls); if (linking.change) linking.change(); }
+    function click(id) { if (linking) { if (!pick) { pick = id; N[id].el.classList.add("pick"); } else if (pick === id) unpick(); else { const a = pick; unpick(); toggle(a, id); } } else if (onNode) onNode(id, N[id]); }
+    box.addEventListener("pointerdown", e => { const nd = e.target.closest && e.target.closest(".node"); if (linking && nd) dragFrom = nd.dataset.id; });
+    box.addEventListener("pointermove", e => { if (!dragFrom || !N[dragFrom]) return; const r = box.getBoundingClientRect(), p = { x: (e.clientX - r.left) / r.width * 100, y: (e.clientY - r.top) / r.height * 100 }; if (!tmp) tmp = mkLine(N[dragFrom], p, "tmp"); else { tmp.setAttribute("x2", p.x); tmp.setAttribute("y2", p.y); } });
+    const up = e => { if (!dragFrom) return; const a = dragFrom; dragFrom = null; if (tmp) { tmp.remove(); tmp = null; } const t = document.elementFromPoint ? document.elementFromPoint(e.clientX, e.clientY) : null, nd = t && t.closest && t.closest(".node"); if (linking && nd && box.contains(nd) && nd.dataset.id !== a && N[a]) { unpick(); toggle(a, nd.dataset.id); } };
+    box.addEventListener("pointerup", up); box.addEventListener("pointercancel", () => { dragFrom = null; if (tmp) { tmp.remove(); tmp = null; } });
+    nodes.forEach(sc.addNode);
+    return sc;
+}
+/* Tệp có thể kéo từ máy này sang máy kia (hoặc bấm tệp rồi bấm máy nhận) */
+function fileChip(sc, from, to, label, onTry) {
+    const c = mk("div", "file"); c.textContent = label; c.draggable = true; c.style.left = sc.N[from].x + "%"; c.style.top = (sc.N[from].y + 24) + "%"; sc.box.appendChild(c);
+    let sel = false; const t = sc.N[to].el;
+    const go = () => { sel = false; c.classList.remove("pick"); onTry(c); };
+    c.onclick = () => { sel = !sel; c.classList.toggle("pick", sel); };
+    c.ondragstart = e => { sel = true; try { e.dataTransfer.setData("text/plain", "file"); } catch (x) { } };
+    t.ondragover = e => e.preventDefault(); t.ondrop = e => { e.preventDefault(); go(); };
+    t.addEventListener("click", () => { if (sel) go(); });
+    return c;
+}
+
+/* ============================================================
+   TIẾT 1 · CHẶNG 1 – MẠNG LƯỚI QUANH EM
+   ============================================================ */
+function stepCity(el, done) {
+    el.innerHTML = `<h2>🏙️ Thành phố chưa có đường</h2><p>Thành phố nhỏ này có nhà, trường học, bệnh viện, cửa hàng… nhưng <b>chưa có con đường nào</b>.</p>
+    <svg class="city" viewBox="0 0 600 280"><g class="roads"><path d="M90,75 L300,150"/><path d="M510,75 L300,150"/><path d="M90,225 L300,150"/><path d="M510,225 L300,150"/><path d="M90,75 L510,75"/><path d="M90,225 L510,225"/></g>
+    <g class="movers" font-size="22" text-anchor="middle"></g>
+    <g font-size="40" text-anchor="middle"><text x="90" y="72">🏠</text><text x="510" y="72">🏫</text><text x="90" y="222">🏥</text><text x="510" y="222">🛒</text></g>
+    <g font-size="13" font-weight="700" text-anchor="middle" fill="#1b2a41"><text x="90" y="98">Nhà</text><text x="510" y="98">Trường</text><text x="90" y="250">Bệnh viện</text><text x="510" y="250">Cửa hàng</text></g></svg><div id="cq"></div>`;
+    predict($("#cq", el), "Nếu không có những con đường kết nối, chuyện gì xảy ra?", ["Mọi người vẫn đi lại, mua bán bình thường.", "Người và hàng hoá không thể di chuyển giữa các nơi.", "Các ngôi nhà sẽ tự chuyển lại gần nhau."], "C1-DuDoan", () => {
+        $(".city", el).classList.add("on");
+        $(".movers", el).innerHTML = `<text>🚗<animateMotion dur="6s" repeatCount="indefinite" path="M90,68 L300,143 L510,218"/></text><text>🚚<animateMotion dur="7s" repeatCount="indefinite" path="M510,218 L90,218 L300,143 L510,68"/></text><text>🚶<animateMotion dur="11s" repeatCount="indefinite" path="M90,68 L510,68"/></text><text>🚌<animateMotion dur="8s" repeatCount="indefinite" path="M510,68 L300,143 L90,218"/></text>`;
+        setTimeout(() => {
+            note(el, "🛣️ Khi có đường nối, <b>NGƯỜI</b>, <b>HÀNG HOÁ</b> và <b>PHƯƠNG TIỆN</b> đi lại được giữa các nơi. Các con đường đan với nhau tạo thành <b>mạng lưới giao thông</b>.", "ok");
+            award(10); nextBtn(el, "Còn những mạng lưới nào nữa? →", done);
+        }, 1800);
+    });
+}
+function stepMatch(el, done) {
+    el.innerHTML = `<h2>🕸️ Mạng lưới quanh em</h2><p class="q">Mỗi mạng lưới dưới đây vận chuyển thứ gì? Hãy ghép cho đúng.</p><div id="cz"></div>`;
+    classify($("#cz", el), {
+        act: "C1-GhepMangLuoi", title: "Ghép mạng lưới với thứ được vận chuyển",
+        zones: [{ id: "gt", label: "🚗 Mạng giao thông đường bộ" }, { id: "ds", label: "🚆 Mạng đường sắt" }, { id: "nuoc", label: "🚰 Mạng ống nước" }, { id: "dien", label: "⚡ Mạng điện" }, { id: "hk", label: "✈️ Mạng hàng không" }],
+        items: [{ id: 1, label: "Ô tô, xe máy chở người và hàng", zone: "gt" }, { id: 2, label: "Đoàn tàu chở khách, chở hàng", zone: "ds" }, { id: 3, label: "Nước sạch", zone: "nuoc" }, { id: 4, label: "Điện năng", zone: "dien" }, { id: 5, label: "Máy bay chở khách, chở hàng", zone: "hk" }],
+        onDone() { award(10); note(el, "👏 Mỗi mạng lưới đều <b>vận chuyển</b> một thứ gì đó giữa nhiều nơi.", "ok"); nextBtn(el, "Vậy chúng có điểm gì chung? →", done); }
+    });
+}
+function stepCommon(el, done) {
+    const opts = ["Có nhiều thành viên.", "Chia sẻ tài nguyên.", "Kết nối các thành viên.", "Có nhiều đường cắt nhau."], L = "ABCD";
+    el.innerHTML = `<h2>🔍 Điểm chung của các mạng lưới</h2><p class="q">Theo em, điểm chung của các mạng lưới (giao thông, đường sắt, ống nước, điện…) là gì?</p><p class="hint">☑️ Có thể chọn nhiều phương án.</p><div class="opts">${opts.map((o, i) => `<button type="button" class="opt"><b>${L[i]}.</b> ${o}</button>`).join("")}</div><button type="button" class="btn" id="lock">Chốt lựa chọn</button><div id="res"></div>`;
+    const bs = $$(".opt", el); bs.forEach(b => b.onclick = () => b.classList.toggle("sel"));
+    $("#lock", el).onclick = () => {
+        const ch = bs.map((b, i) => b.classList.contains("sel") ? i : -1).filter(i => i >= 0);
+        if (!ch.length) { toast("Em hãy chọn ít nhất một phương án"); return; }
+        $("#lock", el).remove(); bs.forEach(b => b.disabled = true);
+        const ok = ch.length === 2 && ch.includes(1) && ch.includes(2), res = $("#res", el);
+        logResp("C1-DiemChung", "Điểm chung của các mạng lưới là gì?", ch.map(i => L[i]).join(","), ok, 1, ok ? 1 : 0, ok ? 10 : 5);
+        setTimeout(() => { bs[1].classList.add("glow"); bs[2].classList.add("glow"); }, 400);
+        setTimeout(() => {
+            res.innerHTML = `<div class="bigwords">🔗 KẾT NỐI &nbsp;+&nbsp; 🤝 CHIA SẺ</div>`;
+            note(res, `Em đã chọn: <b>${ch.map(i => L[i]).join(", ")}</b>. Hai điểm chung quan trọng nhất là <b>B</b> và <b>C</b>:<br>🔗 <b>Kết nối</b> – một đoạn đường bị sạt lở là giao thông ngưng trệ: mạng chỉ hoạt động khi được kết nối.<br>🤝 <b>Chia sẻ</b> – cùng một con đường, rất nhiều người dùng chung.`, ok ? "ok" : "");
+            award(ok ? 10 : 5);
+            note(res, "💭 <b>Nếu các máy tính cũng được kết nối với nhau thì sao?</b>", "warn");
+            nextBtn(res, "💻 KHÁM PHÁ MẠNG MÁY TÍNH →", done);
+        }, 1500);
+    };
+}
+
+/* ============================================================
+   TIẾT 1 · CHẶNG 2 – MẠNG MÁY TÍNH & CHIA SẺ
+   ============================================================ */
+function stepFile(el, done) {
+    el.innerHTML = `<h2>🧪 Thử nghiệm 1 – Gửi tệp</h2><p>Phòng Tin học mini có <b>Máy A</b>, <b>Máy B</b> và một máy in. Máy A có tệp <b>baitap.docx</b>. Em hãy <b>kéo tệp sang Máy B</b> (hoặc bấm vào tệp rồi bấm Máy B).</p><div id="sc"></div><div class="fb" id="st"></div><div id="act" class="center"></div>`;
+    const sc = scene($("#sc", el), [{ id: "A", x: 20, y: 38, icon: "💻", label: "Máy A" }, { id: "B", x: 80, y: 38, icon: "💻", label: "Máy B" }, { id: "P", x: 50, y: 82, icon: "🖨️", label: "Máy in", cls: "dim" }]);
+    const st = $("#st", el); let linked = false, fails = 0, busy = false;
+    fileChip(sc, "A", "B", "📄 baitap.docx", async chip => {
+        if (busy) return;
+        if (!linked) {
+            fails++; chip.classList.add("shake"); setTimeout(() => chip.classList.remove("shake"), 450);
+            st.className = "fb bad"; st.textContent = "❌ KHÔNG THỂ GỬI – hai máy chưa được kết nối với nhau.";
+            if (fails === 1) { const b = mk("button", "btn big"); b.type = "button"; b.textContent = "🔗 KẾT NỐI"; $("#act", el).appendChild(b); b.onclick = () => { linked = true; sc.link("A", "B"); b.remove(); st.className = "fb ok"; st.textContent = "🔗 Hai máy đã được kết nối. Em thử gửi tệp lại nhé!"; }; }
+            return;
+        }
+        busy = true; chip.style.visibility = "hidden"; await sc.send(["A", "B"], "📄", 1100);
+        $(".lbl", sc.N.B.el).textContent = "Máy B · 📄 đã nhận";
+        st.className = "fb ok"; st.textContent = "✅ TRAO ĐỔI DỮ LIỆU THÀNH CÔNG";
+        logResp("C2-TN1-GuiTep", "Gửi tệp từ Máy A sang Máy B", "Thử khi chưa nối: " + fails + " lần", "", 1, 0, 10); award(10);
+        note(el, "💡 Chỉ cần <b>hai máy tính kết nối với nhau</b> là đã có thể <b>trao đổi dữ liệu</b>.", "ok"); nextBtn(el, "Thử nghiệm tiếp theo →", done);
+    });
+}
+function stepPrinter(el, done) {
+    el.innerHTML = `<h2>🧪 Thử nghiệm 2 – Dùng chung máy in</h2><p>Có hai máy tính nhưng <b>chỉ có một máy in</b>. Em hãy <b>nối dây</b> để tạo thành mạng: bấm lần lượt vào hai thiết bị (hoặc kéo từ thiết bị này sang thiết bị kia). Sau đó thử in từ từng máy.</p><div id="sc"></div><div class="center"><button type="button" class="btn" data-p="A">🖨️ IN TỪ MÁY A</button><button type="button" class="btn" data-p="B">🖨️ IN TỪ MÁY B</button><button type="button" class="btn ghost sm" id="clr">🧹 Xoá dây</button></div><div class="fb" id="st"></div>`;
+    const sc = scene($("#sc", el), [{ id: "A", x: 20, y: 28, icon: "💻", label: "Máy A" }, { id: "B", x: 80, y: 28, icon: "💻", label: "Máy B" }, { id: "P", x: 50, y: 78, icon: "🖨️", label: "Máy in" }]);
+    sc.setLinking({}); const st = $("#st", el), ok = {}; let busy = false, fin = false;
+    $("#clr", el).onclick = () => sc.clear();
+    $$("[data-p]", el).forEach(b => b.onclick = async () => {
+        if (busy) return; const m = b.dataset.p, p = sc.path(m, "P");
+        if (!p) { st.className = "fb bad"; st.textContent = "❌ Máy " + m + " chưa được nối tới máy in."; return; }
+        busy = true; const k = await sc.send(p, "📄"); k.remove(); busy = false;
+        ok[m] = 1; sc.bubble("P", "🖨️ Đang in bài của Máy " + m, 2000); st.className = "fb ok"; st.textContent = "✅ Máy in đã in bài của Máy " + m + ".";
+        if (ok.A && ok.B && !fin) { fin = true; logResp("C2-TN2-MayIn", "Hai máy dùng chung một máy in", "Số dây nối: " + sc.L.size, "", 1, 0, 10); award(10); note(el, "💡 <b>DÙNG CHUNG THIẾT BỊ.</b> Chỉ có một máy in, nhưng máy nào trong mạng cũng in được.", "ok"); nextBtn(el, "Thử nghiệm tiếp theo →", done); }
+    });
+}
+function stepTalk(el, done) {
+    el.innerHTML = `<h2>🧪 Thử nghiệm 3 – Liên lạc</h2><p>An và Khoa ngồi ở hai máy tính đã nối mạng. Em hãy thử cả hai cách liên lạc.</p><div id="sc"></div><div class="center"><button type="button" class="btn" data-k="mail">📧 Gửi email</button><button type="button" class="btn" data-k="chat">💬 Gửi tin nhắn</button></div>`;
+    const sc = scene($("#sc", el), [{ id: "A", x: 20, y: 55, icon: "👧💻", label: "An" }, { id: "B", x: 80, y: 55, icon: "👦💻", label: "Khoa" }], 240);
+    sc.link("A", "B"); const ok = {}; let busy = false, dir = 0, fin = false;
+    $$("[data-k]", el).forEach(b => b.onclick = async () => {
+        if (busy) return; busy = true; const k = b.dataset.k, p = dir++ % 2 ? ["B", "A"] : ["A", "B"];
+        const pk = await sc.send(p, k === "mail" ? "✉️" : "💬", 1000); pk.remove(); busy = false;
+        sc.bubble(p[1], k === "mail" ? "📧 Thư mới: “Mai nhớ mang vở Tin học nhé!”" : "💬 “Tối nay học nhóm không?”"); ok[k] = 1;
+        if (ok.mail && ok.chat && !fin) {
+            fin = true; logResp("C2-TN3-LienLac", "Gửi email và tin nhắn qua mạng", "Đã thử cả hai", "", 1, 0, 10); award(10);
+            note(el, `<h3>🌐 MẠNG MÁY TÍNH</h3><p>Hai hay nhiều máy tính và các thiết bị được kết nối để truyền thông tin cho nhau tạo thành một mạng máy tính.</p><b>LỢI ÍCH:</b><div class="ben"><div>💬 Trao đổi thông tin</div><div>📁 Chia sẻ dữ liệu</div><div>🖨️ Dùng chung thiết bị</div><div>🤝 Liên lạc</div></div>`, "kc");
+            nextBtn(el, "Một tình huống thú vị →", done);
+        }
+    });
+}
+function stepRobot(el, done) {
+    el.innerHTML = `<h2>🤖 Robot hút bụi thông minh</h2><p>Nhà bạn Minh có một robot hút bụi nối Wi-Fi. Em hãy thử ra lệnh cho robot từ điện thoại.</p><div id="sc"></div><div class="center"><button type="button" class="btn" id="cmd">📱 Ra lệnh: “Hút bụi phòng khách”</button></div><div id="qs"></div>`;
+    const sc = scene($("#sc", el), [{ id: "P", x: 15, y: 55, icon: "📱", label: "Điện thoại" }, { id: "R", x: 50, y: 55, icon: "📡", label: "Bộ định tuyến Wi-Fi" }, { id: "B", x: 85, y: 55, icon: "🤖", label: "Robot hút bụi" }], 220);
+    sc.link("P", "R", "wl"); sc.link("R", "B", "wl"); let fin = false;
+    $("#cmd", el).onclick = async e => {
+        e.target.disabled = true; const pk = await sc.send(["P", "R", "B"], "📦"); pk.remove(); sc.N.B.el.classList.add("buzz"); sc.bubble("B", "🤖 Đã nhận lệnh – bắt đầu hút bụi!"); e.target.disabled = false;
+        if (fin) return; fin = true;
+        seq($("#qs", el), [
+            (d, go) => mcq(d, { act: "C2-Robot-1", q: "Robot kết nối Wi-Fi để làm gì?", opts: ["Để nhận lệnh điều khiển từ xa từ điện thoại của con người.", "Để tự sạc pin.", "Để hút bụi mạnh hơn."], ans: [0], xp: 5, explain: "Robot là một thiết bị trong mạng: lệnh đi từ điện thoại qua Wi-Fi tới robot.", onDone: go }),
+            (d, go) => mcq(d, { act: "C2-Robot-2", q: "Ai quyết định robot hoạt động như thế nào?", opts: ["Robot tự quyết định mọi thứ.", "Con người tạo ra, lập trình và điều khiển hệ thống."], ans: [1], tries: 1, xp: 5, explain: "", onDone: go })
+        ], () => { note(el, "🧑‍💻 Robot thông minh có thể nhận lệnh qua mạng, nhưng <b>con người</b> vẫn là người thiết kế, lập trình và quyết định việc sử dụng nó.", "ok"); nextBtn(el, "🎯 Đến Checkpoint Tiết 1 →", done); });
+    };
+}
+function stepCheckpoint(el, done) {
+    el.innerHTML = `<h2>🎯 CHECKPOINT – HẸN GẶP LẠI TIẾT SAU</h2><div id="cp"></div>`;
+    seq($("#cp", el), [
+        (d, go) => {
+            const right = ["hai hay nhiều máy tính và thiết bị", "được kết nối", "để truyền thông tin cho nhau"];
+            d.innerHTML = `<p class="q">Câu 1. Ghép các mảnh để trả lời: Mạng máy tính là gì?</p><p class="hint">Bấm vào mảnh để đưa lên câu; bấm lại để gỡ xuống. Có một mảnh thừa!</p><div class="sent"><span class="slot"></span> tạo thành một <b>mạng máy tính</b>.</div><div class="pool"></div><button type="button" class="btn chk">Kiểm tra</button><div class="fb"></div>`;
+            const slot = $(".slot", d), pool = $(".pool", d), fb = $(".fb", d); let n = 0;
+            shuffle(right.concat("để tiết kiệm điện")).forEach(t => { const c = mk("div", "chip"); c.textContent = t; c.onclick = () => { if (c.dataset.lock) return; (c.parentNode === pool ? slot : pool).appendChild(c); }; pool.appendChild(c); });
+            $(".chk", d).onclick = () => {
+                n++; const cur = $$(".chip", slot).map(c => c.textContent), ok = cur.join("|") === right.join("|");
+                if (!ok && n < 3) { fb.className = "fb bad"; fb.textContent = "❌ Chưa đúng. Em xem lại thứ tự và mảnh thừa nhé!"; return; }
+                if (!ok) { slot.innerHTML = ""; right.forEach(t => { const c = mk("div", "chip placed"); c.textContent = t; slot.appendChild(c); }); }
+                $$(".chip", d).forEach(c => { c.dataset.lock = 1; }); $(".chk", d).remove();
+                fb.className = "fb " + (ok ? "ok" : "bad"); fb.textContent = ok ? "✅ Chính xác!" : "💡 Đây là câu đúng, em đọc lại nhé.";
+                const xp = ok ? (n === 1 ? 10 : 5) : 0; logResp("CP-1-KhaiNiem", "Ghép câu: Mạng máy tính là gì?", cur.join(" / "), ok && n === 1, n, ok && n === 1 ? 1 : 0, xp); award(xp); go();
+            };
+        },
+        (d, go) => mcq(d, { act: "CP-2-LoiIch", q: "Câu 2. Mạng máy tính mang lại những lợi ích nào?", multi: true, opts: ["Trao đổi thông tin", "Chia sẻ dữ liệu", "Dùng chung thiết bị", "Làm máy tính tự tăng dung lượng ổ cứng"], ans: [0, 1, 2], xp: 10, explain: "Nối mạng không làm ổ cứng lớn hơn.", onDone: go }),
+        (d, go) => mcq(d, { act: "CP-3-MayIn", q: "Câu 3. Hai máy tính cùng dùng chung một máy in qua mạng – đó là lợi ích gì?", opts: ["Dùng chung thiết bị", "Tăng tốc độ máy tính", "Tiết kiệm pin"], ans: [0], xp: 10, onDone: go }),
+        (d, go) => {
+            d.innerHTML = `<p class="q">Câu 4. Điều em thấy thú vị nhất ở Tiết 1?</p><input type="text" maxlength="150" placeholder="Viết ngắn gọn một câu…"><button type="button" class="btn">Gửi</button><div class="fb bad"></div>`;
+            $("button", d).onclick = () => { const v = $("input", d).value.trim(); if (v.length < 3) { $(".fb", d).textContent = "Em viết thêm một chút nhé."; return; } $("input", d).disabled = true; $("button", d).remove(); $(".fb", d).textContent = ""; logResp("CP-4-ThuVi", "Điều em thấy thú vị nhất ở Tiết 1?", v, "", 1, 0, 5); award(5); go(); };
+        }
+    ], () => {
+        S.s1 = true;
+        enqueue("completeSession1", { currentStage: "recall", progress: Math.round((S.idx + 1) / STEPS.length * 100), xp: S.xp });
+        nextBtn(el, "🎉 HOÀN THÀNH TIẾT 1", done);
+    });
+}
+
+/* ============================================================
+   TIẾT 2 · RECALL + CHẶNG 3 – AI LÀ AI TRONG MẠNG?
+   ============================================================ */
+function stepRecall(el, done) {
+    el.innerHTML = `<h2>🧠 BẠN CÒN NHỚ KHÔNG?</h2><p class="hint">4 thử thách nhanh để khởi động trí nhớ.</p><div id="rc"></div>`;
+    seq($("#rc", el), [
+        (d, go) => {
+            d.innerHTML = `<p class="q">1. Kéo 📄 FILE từ máy A sang máy B.</p><div class="s"></div><div class="m"></div>`;
+            const sc = scene($(".s", d), [{ id: "A", x: 22, y: 38, icon: "💻", label: "Máy A" }, { id: "B", x: 78, y: 38, icon: "💻", label: "Máy B" }], 190); sc.link("A", "B"); let sent = false;
+            fileChip(sc, "A", "B", "📄 FILE", async chip => { if (sent) return; sent = true; chip.style.visibility = "hidden"; await sc.send(["A", "B"], "📄", 900); mcq($(".m", d), { act: "RC-1", q: "Đây thể hiện lợi ích nào của mạng?", opts: ["Dùng chung thiết bị", "Chia sẻ dữ liệu", "Tiết kiệm điện"], ans: [1], xp: 5, onDone: go }); });
+        },
+        (d, go) => { d.innerHTML = `<div class="center" style="font-size:2.4rem">💻 ⟶ 🖨️ ⟵ 💻</div>`; mcq(d, { act: "RC-2", q: "2. Hai máy tính cùng dùng một máy in. Đây là lợi ích nào?", opts: ["Chia sẻ dữ liệu", "Liên lạc", "Dùng chung thiết bị"], ans: [2], xp: 5, onDone: go }); },
+        (d, go) => {
+            d.innerHTML = `<p class="q">3. Chọn từ còn thiếu:</p><div class="sent"><select><option value="">…</option><option>Một</option><option>Hai</option><option>Mười</option></select> hay nhiều máy tính và thiết bị được <select><option value="">…</option><option>tắt nguồn</option><option>kết nối</option><option>sửa chữa</option></select> để truyền thông tin cho nhau tạo thành mạng máy tính.</div><button type="button" class="btn chk">Kiểm tra</button><div class="fb"></div>`;
+            const ss = $$("select", d); ss.forEach(s => s.style.width = "auto"); let n = 0;
+            $(".chk", d).onclick = () => { n++; const ok = ss[0].value === "Hai" && ss[1].value === "kết nối", fb = $(".fb", d); if (!ok && n < 3) { fb.className = "fb bad"; fb.textContent = "❌ Chưa đúng, em thử lại nhé!"; return; } const ans = ss.map(s => s.value).join(", "); ss[0].value = "Hai"; ss[1].value = "kết nối"; ss.forEach(s => s.disabled = true); $(".chk", d).remove(); fb.className = "fb " + (ok ? "ok" : "bad"); fb.textContent = ok ? "✅ Chính xác!" : "💡 Từ đúng: Hai – kết nối."; logResp("RC-3", "Điền từ: … hay nhiều máy tính … được … để truyền thông tin", ans, ok && n === 1, n, ok && n === 1 ? 1 : 0, ok ? 5 : 0); award(ok ? 5 : 0); go(); };
+        },
+        (d, go) => mcq(d, { act: "RC-4", q: "4. Email hoạt động dựa trên:", opts: ["Kết nối mạng.", "Pin máy tính.", "Máy in."], ans: [0], xp: 5, onDone: go })
+    ], () => { note(el, "<b>🎉 TRÍ NHỚ ĐÃ ĐƯỢC KHỞI ĐỘNG!</b>", "ok"); nextBtn(el, "→ BẮT ĐẦU TIẾT 2", done); });
+}
+const NET = [
+    { id: "SW", x: 42, y: 50, icon: "🔀", label: "Bộ chuyển mạch (Switch)" }, { id: "PC1", x: 13, y: 16, icon: "🖥️", label: "Máy tính để bàn 1" }, { id: "PC2", x: 44, y: 13, icon: "🖥️", label: "Máy tính để bàn 2" },
+    { id: "SV", x: 10, y: 60, icon: "🗄️", label: "Máy chủ" }, { id: "PR", x: 28, y: 87, icon: "🖨️", label: "Máy in" }, { id: "WR", x: 68, y: 66, icon: "📡", label: "Bộ định tuyến không dây" },
+    { id: "LP", x: 88, y: 34, icon: "💻", label: "Máy tính xách tay" }, { id: "PH", x: 90, y: 85, icon: "📱", label: "Điện thoại" }
+];
+function netLinks(sc) { ["PC1", "PC2", "SV", "PR", "WR"].forEach(i => sc.link(i, "SW")); sc.link("LP", "WR", "wl"); sc.link("PH", "WR", "wl"); }
+function stepDevices(el, done) {
+    el.innerHTML = `<h2>🖥️ Ai là ai trong mạng?</h2><p class="q">Hoạt động 1 – Nhận diện: bấm vào <b>từng thiết bị</b> để biết tên của nó.</p><p class="hint">Nét liền = nối bằng dây · Nét đứt màu cam = nối không dây. <span id="cnt"></span></p><div id="sc"></div><div id="cl"></div>`;
+    const nodes = NET.concat({ id: "SC", x: 72, y: 12, icon: "📠", label: "Máy quét" }).map(n => Object.assign({}, n, { name: n.label, label: "❓" }));
+    const sc = scene($("#sc", el), nodes, 360); netLinks(sc); sc.link("SC", "PC2");
+    const seen = new Set(), cnt = $("#cnt", el), up = () => cnt.textContent = "Đã khám phá: " + seen.size + "/" + nodes.length; up();
+    sc.onNode((id, n) => {
+        $(".lbl", n.el).textContent = n.name; n.el.classList.add("good"); if (seen.has(id)) return; seen.add(id); up();
+        if (seen.size < nodes.length) return;
+        sc.onNode(null); award(10); const cl = $("#cl", el);
+        cl.innerHTML = `<div class="part"><p class="q">Hoạt động 2 – Kéo mỗi thẻ vào đúng nhóm.</p><div id="cz"></div></div>`; cl.scrollIntoView && cl.scrollIntoView({ behavior: "smooth" });
+        const dc = "Thiết bị kết nối dùng để NỐI các thiết bị khác; còn thiết bị này là nơi gửi/nhận thông tin.", kn = "Thiết bị này không phải điểm gửi/nhận cuối cùng – nó giúp NỐI các thiết bị lại với nhau.", pm = "Đây không phải vật cầm nắm được – nó là chương trình chạy trên thiết bị.";
+        classify($("#cz", cl), {
+            act: "C3-PhanLoai", title: "Phân loại 3 nhóm thành phần mạng",
+            zones: [{ id: "dc", label: "🖥️ THIẾT BỊ ĐẦU CUỐI" }, { id: "kn", label: "🔌 THIẾT BỊ KẾT NỐI" }, { id: "pm", label: "💻 PHẦN MỀM MẠNG" }],
+            items: [["Máy tính để bàn", "dc", dc], ["Laptop", "dc", dc], ["Điện thoại", "dc", dc], ["Máy in", "dc", dc], ["Máy quét", "dc", dc], ["Máy chủ", "dc", dc], ["Switch", "kn", kn], ["Router", "kn", kn], ["Cáp mạng", "kn", kn], ["Email", "pm", pm], ["Ứng dụng nhắn tin (Zalo…)", "pm", pm]].map((a, i) => ({ id: i, label: a[0], zone: a[1], no: a[2] })),
+            onDone(w) {
+                award(w === 0 ? 10 : 5);
+                note(el, `<h3>MẠNG MÁY TÍNH GỒM 3 NHÓM CHÍNH</h3><p>🖥️ <b>THIẾT BỊ ĐẦU CUỐI</b> → nơi gửi, nhận hoặc xử lí thông tin.</p><p>🔌 <b>THIẾT BỊ KẾT NỐI / ĐƯỜNG TRUYỀN</b> → giúp các thiết bị kết nối và truyền dữ liệu.</p><p>💻 <b>PHẦN MỀM MẠNG</b> → ứng dụng truyền thông và phần mềm điều khiển quá trình truyền dữ liệu.</p>`, "kc");
+                nextBtn(el, "Xem dữ liệu chạy trong mạng →", done);
+            }
+        });
+    });
+}
+function stepFlow(el, done) {
+    el.innerHTML = `<h2>📦 Dòng chảy dữ liệu</h2><p>Bấm chọn <b>máy gửi</b>, rồi bấm chọn <b>máy nhận</b>, sau đó bấm <b>Gửi dữ liệu</b>. Tiếp theo, hãy thử <b>tháo</b> một thiết bị kết nối xem chuyện gì xảy ra!</p><div id="sc"></div>
+    <div class="center"><button type="button" class="btn big" id="send">📨 GỬI DỮ LIỆU</button><button type="button" class="btn ghost" data-t="SW">🔧 Tháo Switch</button><button type="button" class="btn ghost" data-t="WR">🔧 Tháo Router không dây</button></div><div class="fb" id="st"></div>
+    <p class="hint" id="todo"></p><div id="qs"></div>`;
+    const sc = scene($("#sc", el), NET, 360); netLinks(sc);
+    const term = ["PC1", "PC2", "SV", "PR", "LP", "PH"], off = new Set(), st = $("#st", el); let A = null, B = null, busy = false, okSend = false, brk = false, fin = false;
+    const todo = () => $("#todo", el).innerHTML = `Nhiệm vụ: ${okSend ? "✅" : "⬜"} Gửi thành công một lần &nbsp; ${brk ? "✅" : "⬜"} Tháo một thiết bị kết nối rồi gửi thử`; todo();
+    const mark = () => term.forEach(t => { sc.N[t].el.classList.toggle("selA", t === A); sc.N[t].el.classList.toggle("selB", t === B); });
+    sc.onNode(id => { if (!term.includes(id)) { st.className = "fb"; st.textContent = "ℹ️ " + sc.N[id].label + " là thiết bị kết nối – hãy chọn một thiết bị đầu cuối."; return; } if (!A || (A && B)) { A = id; B = null; } else if (id !== A) B = id; mark(); });
+    $$("[data-t]", el).forEach(b => b.onclick = () => { const id = b.dataset.t, name = id === "SW" ? "Switch" : "Router không dây"; if (off.has(id)) { off.delete(id); b.textContent = "🔧 Tháo " + name; } else { off.add(id); b.textContent = "🔩 Lắp lại " + name; } sc.N[id].el.classList.toggle("gone", off.has(id)); sc.L.forEach(l => l.el.classList.toggle("off", off.has(l.a) || off.has(l.b))); });
+    $("#send", el).onclick = async () => {
+        if (busy) return; if (!A || !B) { st.className = "fb bad"; st.textContent = "Em hãy chọn máy gửi và máy nhận trước."; return; }
+        const p = sc.path(A, B), cut = p.findIndex(i => off.has(i)); busy = true; st.className = "fb"; st.textContent = "📦 Đang gửi…";
+        if (cut < 0) { const k = await sc.send(p, "📦"); k.remove(); st.className = "fb ok"; st.textContent = "✅ Đã tới nơi! Đường đi: " + p.map(i => sc.N[i].label).join(" → "); okSend = true; }
+        else { const k = await sc.send(p.slice(0, cut), "📦"); k.textContent = "⚠️"; await sleep(900); k.remove(); st.className = "fb bad"; st.textContent = "⚠️ ĐƯỜNG KẾT NỐI BỊ GIÁN ĐOẠN – gói dữ liệu dừng lại vì thiếu " + sc.N[p[cut]].label + "."; brk = true; }
+        busy = false; todo();
+        if (okSend && brk && !fin) { fin = true; logResp("C3-DongChay", "Mô phỏng gửi dữ liệu và tháo thiết bị kết nối", "Hoàn thành", "", 1, 0, 10); award(10); mcq($("#qs", el), { act: "C3-VaiTroSwitch", q: "Vậy Switch và Router có vai trò gì trong mạng?", opts: ["Là nơi lưu trữ tất cả tệp tin.", "Là thiết bị trung gian, giúp dữ liệu đi từ máy gửi đến máy nhận.", "Giúp màn hình hiển thị đẹp hơn."], ans: [1], xp: 10, explain: "Thiếu thiết bị kết nối, dữ liệu không có đường để đi.", onDone: () => nextBtn(el, "🔌 Sang Chặng 4 →", done) }); }
+    };
+}
+
+/* ============================================================
+   TIẾT 2 · CHẶNG 4 – KẾT NỐI MẠNG, THỬ THÁCH KỸ SƯ
+   ============================================================ */
+function situ(el, c, go) {
+    const box = mk("div", "situ", `<div class="sico">${c.icon}</div><p class="q">${c.text}</p><div class="opts row">${c.ch.map(o => `<button type="button" class="opt">${o.l}</button>`).join("")}</div><div class="fb"></div>`); el.appendChild(box);
+    const fb = $(".fb", box), bs = $$(".opt", box); let n = 0;
+    bs.forEach((b, i) => b.onclick = () => {
+        n++; const o = c.ch[i]; fb.className = "fb " + (o.ok ? "ok" : "bad"); fb.textContent = (o.ok ? "✅ " : "🤔 ") + o.fb;
+        if (!o.ok) { b.classList.add("wrong"); b.disabled = true; return; }
+        bs.forEach(x => x.disabled = true); b.classList.add("right");
+        const fin = why => { const xp = n === 1 ? 5 : 2; logResp(c.act, strip(c.text), o.l + (why ? " – vì: " + why : ""), n === 1, n, n === 1 ? 1 : 0, xp); award(xp); go(); };
+        if (!c.why) return fin("");
+        const w = mk("div", "", `<label>Vì sao em chọn như vậy? (viết ngắn)</label><input type="text" maxlength="100"><button type="button" class="btn sm">Gửi</button>`); w.style.gridColumn = "1/-1"; box.appendChild(w);
+        $("button", w).onclick = () => { const v = $("input", w).value.trim(); if (v.length < 3) { toast("Em viết thêm một chút nhé"); return; } $("input", w).disabled = true; $("button", w).remove(); fin(v); };
+    });
+}
+function stepWire(el, done) {
+    el.innerHTML = `<h2>🔌 Có dây hay 📶 không dây?</h2><p class="q">Kéo mỗi cách kết nối vào đúng nhóm.</p><div id="cz"></div><div id="sq"></div>`;
+    classify($("#cz", el), {
+        act: "C4-CoDayKhongDay", title: "Phân loại kết nối có dây / không dây",
+        zones: [{ id: "w", label: "🔌 CÓ DÂY" }, { id: "l", label: "📶 KHÔNG DÂY" }],
+        items: [{ id: 1, label: "Cáp mạng", zone: "w" }, { id: 2, label: "Cáp quang", zone: "w", no: "Cáp quang là một loại dây truyền dữ liệu bằng ánh sáng." }, { id: 3, label: "Wi-Fi", zone: "l", no: "Wi-Fi truyền bằng sóng vô tuyến, không nhìn thấy dây." }, { id: 4, label: "Bluetooth", zone: "l", no: "Bluetooth truyền bằng sóng vô tuyến." }, { id: 5, label: "Sóng 4G/5G", zone: "l" }],
+        onDone(w) {
+            award(w === 0 ? 10 : 5);
+            const sq = $("#sq", el); sq.innerHTML = `<div class="part"><h3>🧩 Thử thách tình huống</h3><div id="sl"></div></div>`;
+            seq($("#sl", sq), [
+                (d, go) => situ(d, { act: "C4-TH1", icon: "🖥️", text: "Tình huống 1: Máy tính để bàn trong phòng Tin học nên kết nối kiểu nào?", why: true, ch: [{ l: "🔌 Có dây", ok: true, fb: "Hợp lí! Máy để bàn đặt cố định, cáp mạng cho kết nối ổn định." }, { l: "📶 Không dây", ok: true, fb: "Cũng được nếu máy có bộ thu Wi-Fi – nhưng máy đặt cố định thường dùng cáp cho ổn định." }] }, go),
+                (d, go) => situ(d, { act: "C4-TH2", icon: "💻", text: "Tình huống 2: Laptop của giáo viên cần di chuyển khắp lớp.", ch: [{ l: "🔌 Có dây", ok: false, fb: "Kéo dây theo khắp lớp sẽ rất vướng. Em nghĩ lại nhé!" }, { l: "📶 Không dây", ok: true, fb: "Đúng! Không dây giúp đổi vị trí mà vẫn giữ kết nối." }] }, go),
+                (d, go) => situ(d, { act: "C4-TH3", icon: "📱", text: "Tình huống 3: Điện thoại đang dùng trên xe khách khi đi du lịch.", ch: [{ l: "🔌 Có dây", ok: false, fb: "Trên xe đang chạy thì không thể cắm dây mạng được." }, { l: "📶 Không dây (Wi-Fi, 4G/5G)", ok: true, fb: "Chính xác! Đây là ví dụ mạng không dây tiện hơn hẳn mạng có dây." }] }, go),
+                (d, go) => situ(d, { act: "C4-TH4", icon: "🛠️", text: "Tình huống 4: Wi-Fi trong nhà bị hỏng. Thiết bị nào có thể chuyển sang nối bằng cáp mạng nếu có cổng/phụ kiện phù hợp?", ch: [{ l: "📱 Điện thoại", ok: false, fb: "Điện thoại thường không có cổng cắm cáp mạng nên sẽ mất kết nối." }, { l: "💻 Laptop", ok: true, fb: "Đúng! Laptop có thể cắm cáp mạng LAN để tiếp tục truy cập." }] }, go)
+            ], () => { note(el, "💡 Không có kiểu kết nối nào “tốt nhất” cho mọi lúc – ta <b>chọn kiểu phù hợp</b> với thiết bị và tình huống.", "ok"); nextBtn(el, "🛠️ Thử thách Kỹ sư mạng →", done); });
+        }
+    });
+}
+function stepBuilder(el, done) {
+    el.innerHTML = `<h2>🛠️ Xây dựng mạng cho thư viện</h2><p>Thư viện trường có <b>5 máy tính</b> cần kết nối thành một mạng. Có nhiều cách nối! Em hãy làm lần lượt 2 cách.</p><div class="note" id="goal"></div>
+    <p class="hint">Nối dây: bấm lần lượt hai thiết bị, hoặc kéo từ thiết bị này sang thiết bị kia. Nối lại lần nữa để gỡ dây.</p><div id="sc"></div>
+    <div class="center"><button type="button" class="btn ghost" id="sw">➕ Thêm Switch</button><button type="button" class="btn ghost sm" id="clr">🧹 Xoá hết dây</button><button type="button" class="btn big green" id="chk">✅ Kiểm tra mạng</button></div><div class="fb" id="st"></div>`;
+    const pos = [[50, 13], [83, 40], [70, 84], [30, 84], [17, 40]], pcs = pos.map((p, i) => ({ id: "P" + (i + 1), x: p[0], y: p[1], icon: "🖥️", label: "PC" + (i + 1) }));
+    const sc = scene($("#sc", el), pcs, 380); sc.setLinking({}); const st = $("#st", el); let mode = "star", tries = 0;
+    const goal = () => $("#goal", el).innerHTML = mode === "star" ? "⭐ <b>Cách 1 – HÌNH SAO:</b> thêm một Switch vào giữa rồi nối <b>mỗi máy</b> với Switch." : "⭕ <b>Cách 2 – HÌNH VÒNG:</b> không dùng Switch. Nối các máy thành <b>một vòng tròn khép kín</b>."; goal();
+    $("#sw", el).onclick = () => { if (sc.N.SW) { sc.removeNode("SW"); $("#sw", el).textContent = "➕ Thêm Switch"; } else { sc.addNode({ id: "SW", x: 50, y: 50, icon: "🔀", label: "Switch" }); $("#sw", el).textContent = "➖ Bỏ Switch"; } };
+    $("#clr", el).onclick = () => sc.clear();
+    const star = () => { if (!sc.N.SW) return "Mạng hình sao cần một thiết bị ở giữa. Em hãy thêm Switch!"; for (const p of pcs) if (!sc.has(p.id, "SW")) return p.label + " chưa nối với Switch."; if (sc.L.size !== 5) return "Còn dây thừa giữa các máy tính. Trong hình sao, mỗi máy chỉ nối với Switch."; return ""; };
+    const ring = () => { if (sc.N.SW) return "Hình vòng không cần Switch. Em hãy bỏ Switch đi."; const deg = {}; sc.L.forEach(l => { deg[l.a] = (deg[l.a] || 0) + 1; deg[l.b] = (deg[l.b] || 0) + 1; }); for (const p of pcs) if ((deg[p.id] || 0) !== 2) return p.label + " đang nối với " + (deg[p.id] || 0) + " máy. Trong hình vòng, mỗi máy nối với đúng 2 máy."; for (const p of pcs) if (!sc.path("P1", p.id)) return "Các máy chưa tạo thành MỘT vòng khép kín."; return ""; };
+    $("#chk", el).onclick = async () => {
+        tries++; const err = mode === "star" ? star() : ring();
+        if (err) { st.className = "fb bad"; st.textContent = "❌ " + err; return; }
+        logResp(mode === "star" ? "C4-HinhSao" : "C4-HinhVong", "Xây dựng mạng 5 máy tính thư viện", "Số lần kiểm tra: " + tries, tries === 1, tries, tries === 1 ? 1 : 0, 20); award(20);
+        if (mode === "star") {
+            st.className = "fb ok"; st.textContent = "⭐ MẠNG HÌNH SAO HOÀN THÀNH! Dữ liệu từ PC1 sang PC3 đi qua Switch…";
+            const k = await sc.send(["P1", "SW", "P3"], "📦"); k.remove(); await sleep(600);
+            mode = "ring"; tries = 0; sc.clear(); sc.removeNode("SW"); $("#sw", el).textContent = "➕ Thêm Switch"; goal(); st.textContent = "Giờ em thử cách thứ hai nhé!";
+        } else {
+            st.className = "fb ok"; st.textContent = "⭕ MẠNG HÌNH VÒNG HOÀN THÀNH!"; sc.setLinking(null); $("#chk", el).disabled = true;
+            note(el, "👷 Tuyệt vời, kỹ sư mạng! Cùng 5 máy tính nhưng có <b>nhiều cách kết nối</b> thành mạng (hình sao, hình vòng, cách ở Hình 2.3 trong SGK…).", "ok"); nextBtn(el, "🏠 Ghé nhà bạn An →", done);
+        }
+    };
+}
+function pickNodes(el, sc, c, go) {
+    const d = mk("div", "mcq", `<p class="q">${c.q}</p><p class="hint">👆 Bấm trực tiếp lên các thiết bị trong sơ đồ phía trên, rồi bấm Kiểm tra.</p><button type="button" class="btn chk">Kiểm tra</button><div class="fb"></div>`); el.appendChild(d);
+    const sel = new Set(), fb = $(".fb", d); let n = 0;
+    sc.onNode(id => { sel.has(id) ? sel.delete(id) : sel.add(id); sc.N[id].el.classList.toggle("pick", sel.has(id)); });
+    $(".chk", d).onclick = () => {
+        n++; const ok = sel.size === c.ans.length && c.ans.every(a => sel.has(a));
+        if (!ok && n < 3) { fb.className = "fb bad"; fb.textContent = "❌ Chưa đúng. " + (sel.has("NET") ? "Internet là mạng ở bên ngoài, không phải một thiết bị trong nhà. " : "") + c.hint; return; }
+        sc.onNode(null); Object.values(sc.N).forEach(x => x.el.classList.remove("pick")); $(".chk", d).remove();
+        fb.className = "fb " + (ok ? "ok" : "bad"); fb.textContent = (ok ? "✅ Chính xác! " : "💡 ") + c.explain;
+        const xp = ok ? (n === 1 ? 10 : 5) : 0; logResp(c.act, strip(c.q), Array.from(sel).map(i => sc.N[i].label).join(", "), ok && n === 1, n, ok && n === 1 ? 1 : 0, xp); award(xp); go();
+    };
+}
+function stepAn(el, done) {
+    el.innerHTML = `<h2>🏠 Nhà bạn An</h2><p>Nhà bạn An có điện thoại của bố, điện thoại của mẹ và một máy tính xách tay đang cùng truy cập Internet.</p><div id="sc"></div><div id="qs"></div>`;
+    const sc = scene($("#sc", el), [{ id: "B", x: 14, y: 22, icon: "📱", label: "Điện thoại bố" }, { id: "M", x: 14, y: 78, icon: "📱", label: "Điện thoại mẹ" }, { id: "L", x: 40, y: 50, icon: "💻", label: "Laptop" }, { id: "R", x: 68, y: 50, icon: "📡", label: "Wi-Fi Router" }, { id: "NET", x: 90, y: 50, icon: "🌐", label: "Internet" }], 280);
+    ["B", "M", "L"].forEach(i => sc.link(i, "R", "wl")); sc.link("R", "NET");
+    seq($("#qs", el), [
+        (d, go) => mcq(d, { act: "C4-An-1", q: "1. Các thiết bị trong nhà An có đang tạo thành một mạng máy tính không?", opts: ["Có – chúng được kết nối với nhau qua Wi-Fi Router.", "Không – vì không có sợi dây nào nối giữa chúng."], ans: [0], tries: 1, xp: 10, explain: "Kết nối không dây cũng tạo thành mạng máy tính.", onDone: go }),
+        (d, go) => pickNodes(d, sc, { act: "C4-An-2", q: "2. Hãy chỉ ra tất cả THIẾT BỊ ĐẦU CUỐI.", ans: ["B", "M", "L"], hint: "Thiết bị đầu cuối là nơi con người gửi/nhận thông tin.", explain: "Thiết bị đầu cuối: hai điện thoại và laptop." }, go),
+        (d, go) => pickNodes(d, sc, { act: "C4-An-3", q: "3. Hãy chỉ ra THIẾT BỊ KẾT NỐI.", ans: ["R"], hint: "Thiết bị nào đứng giữa, nối các thiết bị còn lại?", explain: "Thiết bị kết nối: Wi-Fi Router (bộ định tuyến không dây)." }, go),
+        (d, go) => {
+            d.innerHTML = `<p class="q">4. Nếu Wi-Fi Router ngừng hoạt động thì chuyện gì xảy ra?</p><button type="button" class="btn ghost">⚡ Thử tắt Wi-Fi Router</button><div class="m"></div>`;
+            $("button", d).onclick = e => { e.target.remove(); sc.N.R.el.classList.add("gone"); sc.L.forEach(l => l.el.classList.add("off")); mcq($(".m", d), { act: "C4-An-4", q: "Em quan sát sơ đồ và chọn:", opts: ["Các thiết bị vẫn truy cập Internet bình thường.", "Điện thoại và laptop mất kết nối với nhau và với Internet.", "Chỉ có Internet bị chậm đi."], ans: [1], xp: 10, explain: "Thiếu thiết bị kết nối thì mạng bị gián đoạn.", onDone: go }); };
+        },
+        (d, go) => mcq(d, { act: "C4-An-5", q: "5. Giả sử chỉ phần phát sóng Wi-Fi bị hỏng. Laptop có thể chuyển sang kết nối có dây không?", opts: ["Không thể, laptop chỉ dùng được Wi-Fi.", "Có – cắm cáp mạng LAN từ laptop vào bộ định tuyến, nếu có cổng/phụ kiện phù hợp."], ans: [1], tries: 1, xp: 10, explain: "Điện thoại thì mất kết nối, còn laptop có thể chủ động chuyển sang dùng dây.", onDone: () => { sc.N.R.el.classList.remove("gone"); sc.unlink("L", "R"); sc.link("L", "R"); sc.L.forEach(l => l.el.classList.toggle("off", l.a !== "L" && l.b !== "L" && l.b !== "NET" && l.a !== "NET")); go(); } })
+    ], () => nextBtn(el, "🧠 Sang Chặng 5 – Quiz →", done));
+}
+
+/* ============================================================
+   TIẾT 2 · CHẶNG 5 – QUIZ + MINDMAP EXIT TICKET
+   ============================================================ */
+function stepQuiz(el, done) {
+    const Q = [
+        { q: "Máy tính kết nối với nhau để:", multi: true, opts: ["Chia sẻ thiết bị.", "Tiết kiệm điện.", "Trao đổi dữ liệu.", "Thuận lợi cho sửa chữa."], ans: [0, 2], explain: "Lợi ích chính của mạng: trao đổi dữ liệu và dùng chung thiết bị." },
+        { q: "Thiết bị nào thường là thiết bị đầu cuối?", multi: true, opts: ["Laptop", "Điện thoại", "Switch", "Router"], ans: [0, 1], explain: "Switch và Router là thiết bị kết nối." },
+        { q: "Thiết bị nào giúp kết nối nhiều thiết bị trong mạng?", opts: ["Switch", "Máy in", "Scanner (máy quét)", "Word"], ans: [0], explain: "Switch (bộ chuyển mạch) là thiết bị kết nối." },
+        { q: "Kết nối nào là không dây?", multi: true, opts: ["Wi-Fi", "Bluetooth", "Cáp mạng", "Cáp quang"], ans: [0, 1], explain: "Wi-Fi và Bluetooth truyền dữ liệu bằng sóng vô tuyến." },
+        { q: "Hai máy tính cùng sử dụng một máy in qua mạng là ví dụ của:", opts: ["Chia sẻ thiết bị.", "Tăng bộ nhớ.", "Tiết kiệm pin.", "Lập trình."], ans: [0], explain: "Một máy in – nhiều máy cùng dùng." },
+        { q: "Email, Zalo hoặc Facebook có thể hoạt động nhờ:", opts: ["Kết nối mạng.", "Máy in.", "USB.", "Loa."], ans: [0], explain: "Đây đều là phần mềm mạng, chạy trên nền kết nối của mạng máy tính." }
+    ];
+    el.innerHTML = `<h2>📝 Mini Quiz</h2><p class="hint" id="qn"></p><div id="qb"></div>`; let i = 0, good = 0;
+    const show = () => {
+        $("#qn", el).textContent = "Câu " + (i + 1) + "/" + Q.length; const qb = $("#qb", el); qb.innerHTML = ""; const c = Q[i];
+        mcq(qb, Object.assign({}, c, { act: "QUIZ-" + (i + 1), q: "Câu " + (i + 1) + ". " + c.q, xp: 10, onDone(first) { if (first) good++; i++; const last = i >= Q.length; nextBtn(qb, last ? "Xem kết quả →" : "Câu tiếp theo →", () => { if (!last) return show(); S.score = Math.round(good / Q.length * 100) / 10; qb.innerHTML = ""; $("#qn", el).textContent = ""; note(qb, `<h3>📊 Kết quả Quiz</h3>Em trả lời đúng ngay lần đầu <b>${good}/${Q.length}</b> câu → <b>${S.score}/10 điểm</b>.`, good >= 4 ? "ok" : "warn"); nextBtn(qb, "🧠 Vẽ sơ đồ tư duy →", done); }); } }));
+    };
+    show();
+}
+
+/* ---------- Mindmap: mô hình dữ liệu + vẽ (dùng chung cho học sinh và giáo viên) ---------- */
+const MM_COLORS = ["#1565c0", "#ff8a00", "#1b9e4b", "#8e24aa", "#d93025", "#00897b"];
+const MM_ICONS = ["", "💻", "🖥️", "📱", "🖨️", "📡", "🔀", "🔌", "📶", "📁", "💬", "📧", "🤝", "🌐", "💡", "⭐"];
+function mmNew() { return { v: 1, nodes: [{ id: "r", p: "", t: "MẠNG MÁY TÍNH", i: "🌐", x: 500, y: 300 }, { id: "b1", p: "r", t: "LÀ GÌ?", i: "💡", c: MM_COLORS[0], x: 320, y: 150 }, { id: "b2", p: "r", t: "LỢI ÍCH", i: "🤝", c: MM_COLORS[1], x: 680, y: 150 }, { id: "b3", p: "r", t: "THÀNH PHẦN", i: "🖥️", c: MM_COLORS[2], x: 320, y: 450 }, { id: "b4", p: "r", t: "KẾT NỐI", i: "🔌", c: MM_COLORS[3], x: 680, y: 450 }] }; }
+function mmParse(json) {      // làm sạch dữ liệu trước khi vẽ (kể cả dữ liệu đọc về từ Google Sheets)
+    try {
+        const d = typeof json === "string" ? JSON.parse(json) : json; if (!d || !Array.isArray(d.nodes)) return null;
+        const nodes = d.nodes.slice(0, 80).map(n => ({ id: String(n.id).replace(/[^\w-]/g, "").slice(0, 20), p: String(n.p || "").replace(/[^\w-]/g, "").slice(0, 20), t: String(n.t || "").slice(0, 30), i: Array.from(String(n.i || "")).slice(0, 2).join(""), c: /^#[0-9a-f]{6}$/i.test(n.c) ? n.c : "", x: clamp(+n.x || 0, 0, 1000), y: clamp(+n.y || 0, 0, 600) }));
+        return nodes.some(n => n.id === "r") ? { v: 1, nodes } : null;
+    } catch (e) { return null; }
+}
+function mmRender(svg, data, selId) {
+    const by = {}; data.nodes.forEach(n => by[n.id] = n);
+    const col = n => { if (n.id === "r") return "#0d47a1"; let c = n, g = 0; while (c && c.p && c.p !== "r" && g++ < 20) c = by[c.p]; return (c && c.c) || "#607d8b"; };
+    const txt = n => (n.i ? n.i + " " : "") + (n.t || "…"), w = n => Math.max(64, Array.from(txt(n)).length * (n.id === "r" ? 11 : 8.8) + 28);
+    let s = "";
+    data.nodes.forEach(n => { const p = by[n.p]; if (!p) return; const mx = (p.x + n.x) / 2; s += `<path d="M${p.x},${p.y} C${mx},${p.y} ${mx},${n.y} ${n.x},${n.y}" fill="none" stroke="${col(n)}" stroke-width="${n.p === "r" ? 6 : 3}" stroke-linecap="round" opacity=".85"/>`; });
+    data.nodes.forEach(n => {
+        const W = w(n), root = n.id === "r", main = n.p === "r", H = root ? 50 : main ? 40 : 32, c = col(n), solid = root || main;
+        s += `<g class="mn${selId === n.id ? " sel" : ""}" data-id="${esc(n.id)}" transform="translate(${n.x},${n.y})"><rect x="${-W / 2}" y="${-H / 2}" width="${W}" height="${H}" rx="${H / 2}" fill="${solid ? c : "#fff"}" stroke="${c}" stroke-width="2.5"/><text text-anchor="middle" dy="5" fill="${solid ? "#fff" : "#1b2a41"}" font-size="${root ? 18 : main ? 15 : 14}" font-weight="${solid ? 800 : 600}">${esc(txt(n))}</text></g>`;
+    });
+    svg.innerHTML = s;
+}
+function stepMind(el, done) {
+    const HINTS = ["Mạng máy tính cần ít nhất những gì được kết nối?", "Em đã dùng mạng để chia sẻ những gì?", "Mạng máy tính có những nhóm thành phần chính nào?", "Switch và Router thuộc nhóm nào?", "Wi-Fi thuộc kiểu kết nối nào?"];
+    const key = NS + S.id + "_mindmap", M = mmParse(lsGet(key, null)) || mmNew(); let sel = null, drag = null, hint = 0, und = 0;
+    el.innerHTML = `<h2>🧠 Mindmap Exit Ticket</h2><p>Hãy tự hoàn thiện <b>sơ đồ tư duy</b> về Mạng máy tính. Bấm vào một nhánh rồi bấm <b>➕ Thêm nhánh con</b>. Ghi <b>ít chữ – từ khoá – có biểu tượng</b>. Kéo các ô để sắp xếp cho đẹp.</p>
+    <div class="mmbar" id="bar"></div><svg class="mm" id="mm" viewBox="0 0 1000 600"></svg>
+    <div><button type="button" class="btn ghost" id="hb">💡 GỢI Ý</button><span class="hint" id="ht"></span></div>
+    <div class="part"><h3>✍️ Tự đánh giá</h3>
+    <label>1. Điều quan trọng nhất em học được hôm nay:</label><input type="text" id="e1" maxlength="200">
+    <label>2. Em tự đánh giá mức độ hiểu bài:</label><div class="emo" id="e2">${["😕", "🙂", "😊", "😄", "🤩"].map((e, i) => `<button type="button" data-v="${i + 1}">${e} ${i + 1}</button>`).join("")}</div>
+    <label>3. Điều em vẫn còn thắc mắc:</label><input type="text" id="e3" maxlength="200" placeholder="Nếu không có, em ghi “Không”">
+    <label>4. Một nơi em thấy mạng máy tính được sử dụng trong thực tế:</label><input type="text" id="e4" maxlength="200">
+    <div class="fb bad" id="efb"></div><div class="center"><button type="button" class="btn big orange" id="sub">📤 NỘP EXIT TICKET</button></div></div>`;
+    const svg = $("#mm", el), bar = $("#bar", el), by = id => M.nodes.find(n => n.id === id);
+    const draw = () => { mmRender(svg, M, sel); lsSet(key, M); };
+    const mainOf = n => { let c = n, g = 0; while (c && c.p && c.p !== "r" && g++ < 20) c = by(c.p); return c; };
+    function barDraw() {
+        const n = by(sel);
+        if (!n) { bar.innerHTML = '<span class="hint">👆 Bấm vào một ô trong sơ đồ để sửa, thêm nhánh con, đổi biểu tượng hoặc màu.</span>'; return; }
+        const fixed = n.id === "r" || n.p === "r" && /^b[1-4]$/.test(n.id);
+        bar.innerHTML = `<input type="text" id="mt" maxlength="22" value="${esc(n.t)}" ${n.id === "r" ? "disabled" : ""} placeholder="Từ khoá (tối đa 22 kí tự)"><button type="button" class="btn sm" id="ma">➕ Thêm nhánh con</button>${fixed ? "" : '<button type="button" class="btn sm red" id="md">🗑 Xoá</button>'}<span>${MM_ICONS.map(i => `<button type="button" class="ic" data-i="${i}">${i || "∅"}</button>`).join("")}</span>${n.id === "r" ? "" : `<span>${MM_COLORS.map(c => `<button type="button" class="sw" data-c="${c}" style="background:${c}" title="Đổi màu nhánh"></button>`).join("")}</span>`}`;
+        $("#mt", bar).oninput = e => { n.t = e.target.value; draw(); };
+        $("#ma", bar).onclick = () => {
+            if (M.nodes.length >= 40) { toast("Sơ đồ đã đủ nhiều nhánh rồi!"); return; }
+            const kids = M.nodes.filter(k => k.p === n.id), side = n.id === "r" ? (kids.filter(k => k.x < 500).length <= kids.filter(k => k.x >= 500).length ? -1 : 1) : (n.x < 500 ? -1 : 1);
+            const c = { id: "n" + Date.now().toString(36) + Math.floor(Math.random() * 99), p: n.id, t: "", i: "", x: clamp(n.x + side * (n.id === "r" ? 300 : 185), 70, 930), y: clamp(n.id === "r" ? 300 : n.y - 55 + kids.length * 44, 25, 575) };
+            if (n.id === "r") c.c = MM_COLORS[(kids.length) % MM_COLORS.length];
+            M.nodes.push(c); sel = c.id; draw(); barDraw(); const t = $("#mt", bar); if (t) t.focus();
+        };
+        const del = $("#md", bar); if (del) del.onclick = () => { const kill = new Set([n.id]); let more = true; while (more) { more = false; M.nodes.forEach(k => { if (kill.has(k.p) && !kill.has(k.id)) { kill.add(k.id); more = true; } }); } M.nodes = M.nodes.filter(k => !kill.has(k.id)); sel = null; draw(); barDraw(); };
+        $$(".ic", bar).forEach(b => b.onclick = () => { n.i = b.dataset.i; draw(); });
+        $$(".sw", bar).forEach(b => b.onclick = () => { const m = mainOf(n); if (m) { m.c = b.dataset.c; draw(); } });
+    }
+    const pt = e => { const r = svg.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * 1000, y: (e.clientY - r.top) / r.height * 600 }; };
+    svg.addEventListener("pointerdown", e => { const g = e.target.closest && e.target.closest(".mn"); if (!g) { sel = null; draw(); barDraw(); return; } const n = by(g.dataset.id), p = pt(e); if (sel !== n.id) { sel = n.id; barDraw(); } drag = { n, dx: n.x - p.x, dy: n.y - p.y }; draw(); });
+    svg.addEventListener("pointermove", e => { if (!drag) return; const p = pt(e); drag.n.x = Math.round(clamp(p.x + drag.dx, 40, 960)); drag.n.y = Math.round(clamp(p.y + drag.dy, 20, 580)); mmRender(svg, M, sel); });
+    const stop = () => { if (drag) { drag = null; lsSet(key, M); } }; svg.addEventListener("pointerup", stop); svg.addEventListener("pointerleave", stop); svg.addEventListener("pointercancel", stop);
+    $("#hb", el).onclick = () => { $("#ht", el).textContent = " " + (hint % 5 + 1) + "/5: " + HINTS[hint % 5]; hint++; };
+    $$("#e2 button", el).forEach(b => b.onclick = () => { und = +b.dataset.v; $$("#e2 button", el).forEach(x => x.classList.toggle("sel", x === b)); });
+    $("#sub", el).onclick = () => {
+        const fb = $("#efb", el), main = M.nodes.filter(n => n.p === "r"), blank = M.nodes.filter(n => !n.t.trim());
+        const thin = main.filter(m => /^b[1-4]$/.test(m.id) && M.nodes.filter(n => n.p === m.id).length < 2);
+        const v1 = $("#e1", el).value.trim(), v3 = $("#e3", el).value.trim(), v4 = $("#e4", el).value.trim();
+        if (blank.length) { fb.textContent = "Sơ đồ còn " + blank.length + " ô chưa có chữ. Em điền từ khoá hoặc xoá ô đó nhé."; sel = blank[0].id; draw(); barDraw(); return; }
+        if (thin.length) { fb.textContent = "Nhánh “" + thin[0].t + "” cần ít nhất 2 nhánh con. Em bổ sung thêm nhé!"; return; }
+        if (v1.length < 3) { fb.textContent = "Em hãy viết điều quan trọng nhất em học được (mục 1)."; return; }
+        if (!und) { fb.textContent = "Em hãy chọn mức độ hiểu bài (mục 2)."; return; }
+        if (v4.length < 3) { fb.textContent = "Em hãy nêu một nơi dùng mạng máy tính trong thực tế (mục 4)."; return; }
+        $("#sub", el).disabled = true; fb.textContent = ""; award(30);
+        S.completed = true; S.mind = M; saveCache();
+        enqueue("submitExitTicket", { activity: "ExitTicket", learned: v1, understanding: und, question: v3, realLife: v4, mindmapJSON: JSON.stringify(M), currentStage: "done", progress: 100, xp: S.xp, totalScore: S.score, session2Started: true });
+        viewDone();
+    };
+    draw(); barDraw();
+}
+
+/* ============================================================
+   TEACHER MODE (token chỉ nằm trong bộ nhớ trang, không lưu xuống máy)
+   ============================================================ */
+let T = null;
+function tLogin() {
+    app.innerHTML = `<div class="card" style="max-width:440px;margin:0 auto"><h2>👨‍🏫 Teacher Mode</h2><label for="tp">Mật khẩu giáo viên</label><input type="password" id="tp" autocomplete="off"><div class="fb bad" id="tfb"></div>
+    <div class="center"><button type="button" class="btn big" id="tg">Đăng nhập</button><br><button type="button" class="btn ghost sm" id="tb">← Quay lại</button></div>${DEMO ? '<p class="hint">Chế độ xem thử: nhập mật khẩu bất kì.</p>' : ""}</div>`;
+    $("#tb").onclick = () => viewWelcome();
+    const go = async () => { $("#tg").disabled = true; try { const r = await api("teacherLogin", { password: $("#tp").value }); T = { token: r.token, year: APP_CONFIG.schoolYear, cls: "", status: "" }; tDash(); } catch (e) { $("#tg").disabled = false; $("#tfb").textContent = e.server ? e.message : "Không kết nối được máy chủ."; } };
+    $("#tg").onclick = go; $("#tp").onkeydown = e => { if (e.key === "Enter") go(); }; $("#tp").focus();
+}
+async function tCall(action, p) { try { return await api(action, Object.assign({ token: T.token }, p || {})); } catch (e) { if (e.server && /đăng nhập|token/i.test(e.message)) { T = null; toast("Phiên giáo viên đã hết hạn", "bad"); viewWelcome(); } throw e; } }
+const ST_LABEL = s => s.completed ? '<span class="pill g">Hoàn thành</span>' : s.s2Started ? '<span class="pill b">Đang học Tiết 2</span>' : s.s1 ? '<span class="pill o">Xong Tiết 1</span>' : '<span class="pill">Đang học Tiết 1</span>';
+async function tDash() {
+    app.innerHTML = `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap"><h2>👨‍🏫 Bảng điều khiển – ${esc(APP_CONFIG.lessonTitle)}</h2><span><button type="button" class="btn ghost sm" id="trf">🔄 Tải lại</button><button type="button" class="btn sm red" id="tout">Đăng xuất</button></span></div>
+    <div class="filters"><div><label>NĂM HỌC</label><select id="fy"></select></div><div><label>LỚP</label><select id="fc"></select></div><div><label>TRẠNG THÁI</label><select id="fs"><option value="">Tất cả</option><option value="s1no">Chưa hoàn thành Tiết 1</option><option value="s1yes">Đã hoàn thành Tiết 1</option><option value="s2no">Chưa học Tiết 2</option><option value="s2doing">Đang học Tiết 2</option><option value="done">Hoàn thành</option><option value="nomm">Chưa nộp Mindmap</option></select></div></div></div>
+    <div id="tbody"><div class="card center">⏳ Đang tải dữ liệu…</div></div>`;
+    $("#tout").onclick = async () => { try { await api("teacherLogout", { token: T.token }); } catch (e) { } T = null; viewWelcome(); };
+    $("#trf").onclick = tLoad; $("#fs").value = T.status;
+    $("#fy").onchange = e => { T.year = e.target.value; T.cls = ""; tLoad(); }; $("#fc").onchange = e => { T.cls = e.target.value; tLoad(); }; $("#fs").onchange = e => { T.status = e.target.value; tLoad(); };
+    tLoad();
+}
+async function tLoad() {
+    const body = $("#tbody"); if (!body || !T) return;
+    let D, list;
+    try { [D, list] = await Promise.all([tCall("getDashboard", { schoolYear: T.year, className: T.cls }), tCall("getStudents", { schoolYear: T.year, className: T.cls, status: T.status })]); }
+    catch (e) { if (T && body.isConnected) body.innerHTML = `<div class="card note bad">Không tải được dữ liệu: ${esc(e.message)}</div>`; return; }
+    const years = Array.from(new Set([T.year].concat(D.years || []))).filter(Boolean).sort();
+    $("#fy").innerHTML = years.map(y => `<option ${y === T.year ? "selected" : ""}>${esc(y)}</option>`).join("");
+    $("#fc").innerHTML = '<option value="">Tất cả lớp</option>' + D.classes.map(c => `<option ${c.name === T.cls ? "selected" : ""}>${esc(c.name)}</option>`).join("");
+    const st = D.students, n = st.length, avg = a => a.length ? (a.reduce((x, y) => x + (+y || 0), 0) / a.length).toFixed(1) : "–";
+    const sc = st.filter(s => s.score !== "" && s.score != null).map(s => s.score), un = D.tickets.map(t => t.understanding).filter(Boolean);
+    const stat = (i, l, v) => `<div class="stat">${i}<b>${v}</b>${l}</div>`;
+    const per = {}; st.forEach(s => { const p = per[s.className] || (per[s.className] = [0, 0, 0, 0]); p[s.completed ? 3 : s.s2Started ? 2 : s.s1 ? 1 : 0]++; });
+    const COL = ["#c9d3e0", "#ffb74d", "#42a5f5", "#1b9e4b"], LBL = ["Đang học Tiết 1", "Xong Tiết 1", "Đang học Tiết 2", "Hoàn thành"];
+    body.innerHTML = `<div class="card"><div class="stats">${stat("👨‍🎓", "Tổng học sinh", n)}${stat("✅", "Hoàn thành Tiết 1", st.filter(s => s.s1).length)}${stat("🔄", "Đang học Tiết 2", st.filter(s => s.s2Started && !s.completed).length)}${stat("🏁", "Hoàn thành bài", st.filter(s => s.completed).length)}${stat("🧠", "Nộp Mindmap", D.tickets.length)}${stat("📊", "Quiz trung bình", avg(sc))}${stat("⭐", "XP trung bình", avg(st.map(s => s.xp)))}${stat("😊", "Mức độ hiểu TB", avg(un))}</div></div>
+    <div class="card"><h3>📈 Tiến độ theo lớp & mở Tiết 2</h3><p>${LBL.map((l, i) => `<span class="lg"><i style="background:${COL[i]}"></i>${l}</span>`).join("")}</p>
+    <table><tr><th>Lớp</th><th>Sĩ số</th><th style="width:45%">Tiến độ</th><th>Tiết 2</th><th></th></tr>${D.classes.map(c => { const p = per[c.name] || [0, 0, 0, 0], t = p[0] + p[1] + p[2] + p[3]; return `<tr><td><b>${esc(c.name)}</b></td><td>${t}</td><td><div class="bar">${p.map((v, i) => `<span style="width:${t ? v / t * 100 : 0}%;background:${COL[i]}" title="${LBL[i]}: ${v}"></span>`).join("")}</div></td><td>${c.unlocked ? '<span class="pill g">🔓 OPEN</span>' : '<span class="pill">🔒 LOCKED</span>'}</td><td><button type="button" class="btn sm ${c.unlocked ? "ghost" : "green"}" data-cls="${esc(c.name)}" data-u="${c.unlocked ? 0 : 1}">${c.unlocked ? "🔒 KHOÁ TIẾT 2" : "🔓 MỞ TIẾT 2"}</button></td></tr>`; }).join("") || '<tr><td colspan="5" class="hint">Chưa có lớp nào. Lớp sẽ tự xuất hiện khi học sinh đầu tiên đăng ký.</td></tr>'}</table></div>
+    <div class="card"><h3>⚠️ Câu học sinh sai nhiều nhất</h3>${D.wrong.length ? `<table><tr><th>Hoạt động</th><th>Câu hỏi</th><th>Sai lần đầu</th></tr>${D.wrong.map(w => `<tr><td>${esc(w.activity)}</td><td>${esc(w.question)}</td><td><b>${w.wrong}/${w.total}</b> (${Math.round(w.wrong / w.total * 100)}%)</td></tr>`).join("")}</table>` : '<p class="hint">Chưa có dữ liệu.</p>'}</div>
+    <div class="card"><h3>📋 Danh sách học sinh (${list.length})</h3><div class="tw"><table><tr><th>Mã</th><th>Họ tên</th><th>Lớp</th><th>Tiến độ</th><th>XP</th><th>Quiz</th><th>Trạng thái</th><th>Mindmap</th><th></th></tr>${list.map(s => `<tr><td>${esc(s.learningCode)}</td><td>${esc(s.fullName)}</td><td>${esc(s.className)}</td><td>${+s.progress || 0}%</td><td>${+s.xp || 0}</td><td>${s.score === "" || s.score == null ? "–" : esc(s.score)}</td><td>${ST_LABEL(s)}</td><td>${s.hasTicket ? "✅" : "–"}</td><td><button type="button" class="btn sm ghost" data-sid="${esc(s.studentId)}">Xem</button></td></tr>`).join("") || '<tr><td colspan="9" class="hint">Không có học sinh phù hợp bộ lọc.</td></tr>'}</table></div></div>`;
+    $$("[data-cls]", body).forEach(b => b.onclick = async () => { b.disabled = true; try { await tCall("setSession2Unlocked", { className: b.dataset.cls, schoolYear: T.year, unlocked: b.dataset.u === "1" }); toast((b.dataset.u === "1" ? "Đã MỞ" : "Đã KHOÁ") + " Tiết 2 cho lớp " + b.dataset.cls); tLoad(); } catch (e) { b.disabled = false; toast(e.message, "bad"); } });
+    $$("[data-sid]", body).forEach(b => b.onclick = () => tDetail(b.dataset.sid));
+}
+async function tDetail(id) {
+    modal.hidden = false; modal.innerHTML = '<div class="card center">⏳ Đang tải…</div>';
+    const close = () => { modal.hidden = true; modal.innerHTML = ""; }; modal.onclick = e => { if (e.target === modal) close(); };
+    let d; try { d = await tCall("getStudentDetail", { studentId: id }); } catch (e) { modal.innerHTML = `<div class="card note bad">${esc(e.message)}</div>`; return; }
+    const s = d.student, t = d.ticket, mm = t && mmParse(t.mindmapJSON), okc = r => r.correct === "" || r.correct == null ? "–" : (r.correct === true || String(r.correct).toUpperCase() === "TRUE") ? "✅" : "❌";
+    modal.innerHTML = `<div class="card"><div style="display:flex;justify-content:space-between"><h2>👤 ${esc(s.fullName)} – ${esc(s.className)}</h2><button type="button" class="btn ghost sm" id="mx">✕ Đóng</button></div>
+    <p>🎫 <b>${esc(s.learningCode)}</b> · StudentID: <code>${esc(s.studentId)}</code></p>
+    <p>🔥 Tiến độ <b>${+s.progress || 0}%</b> · ⭐ <b>${+s.xp || 0} XP</b> · 📊 Quiz <b>${s.score === "" || s.score == null ? "–" : esc(s.score) + "/10"}</b> · ${ST_LABEL(s)}</p>
+    <p>Tiết 1: ${s.s1 ? "✅ " + esc(s.s1Time) : "chưa xong"} · Tiết 2: ${s.completed ? "✅ " + esc(s.completedTime) : s.s2Started ? "đang học" : "chưa học"} · Truy cập cuối: ${esc(s.lastAccess)}</p>
+    <h3>📝 Exit Ticket</h3>${t ? `<p><b>Điều quan trọng nhất:</b> ${esc(t.learned)}</p><p><b>Tự đánh giá:</b> ${esc(t.understanding)}/5</p><p><b>Còn thắc mắc:</b> ${esc(t.question) || "–"}</p><p><b>Ví dụ thực tế:</b> ${esc(t.realLife)}</p>` : '<p class="hint">Chưa nộp.</p>'}
+    <h3>🌳 Mindmap của học sinh</h3>${mm ? '<svg class="mm" id="tmm" viewBox="0 0 1000 600"></svg>' : '<p class="hint">Chưa có Mindmap.</p>'}
+    <h3>🧩 Các hoạt động & Quiz (${d.responses.length})</h3><div class="tw"><table><tr><th>Tiết</th><th>Hoạt động</th><th>Câu hỏi</th><th>Trả lời</th><th>Đúng lần đầu</th><th>Số lần thử</th><th>XP</th><th>Thời gian</th></tr>${d.responses.map(r => `<tr><td>${esc(r.session)}</td><td>${esc(r.activity)}</td><td>${esc(r.question)}</td><td>${esc(r.answer)}</td><td>${okc(r)}</td><td>${esc(r.attempts)}</td><td>${esc(r.xp)}</td><td>${esc(String(r.time || "").replace("T", " ").slice(0, 19))}</td></tr>`).join("")}</table></div></div>`;
+    $("#mx").onclick = close; if (mm) mmRender($("#tmm"), mm);
+}
+
+/* ============================================================
+   KHỞI ĐỘNG – luôn về màn hình chào, KHÔNG tự mở học sinh trước
+   ============================================================ */
+(function init() {
+    $("#demoBar").hidden = !DEMO;
+    try { sessionStorage.removeItem("activeStudentId"); sessionStorage.removeItem("activeLearningCode"); } catch (e) { }
+    viewWelcome();
+    flush();                                     // gửi nốt các thao tác còn chờ từ phiên trước (mỗi bản ghi tự mang StudentID riêng)
+    window.addEventListener("online", () => flush());
+    window.addEventListener("beforeunload", () => { if (S) saveCache(); });
+})();
+</script>
+</body>
+</html>
